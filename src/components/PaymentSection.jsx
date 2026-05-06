@@ -66,7 +66,7 @@ export default function PaymentSection() {
             <div className="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-8">
               <div className="text-sm text-white/50 font-inter mb-2">Ежемесячная зарплата</div>
               <div className="text-3xl sm:text-4xl text-white font-mono font-bold">
-                210 000 – 260 000 ₽
+                155 000 – 320 000 ₽
               </div>
               <div className="text-white/40 font-inter text-sm mt-2">
                 в зависимости от специализации и квалификации
