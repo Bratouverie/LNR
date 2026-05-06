@@ -16,7 +16,9 @@ export default function Footer() {
   return (
     <footer className="bg-primary text-primary-foreground py-12 pb-24">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex flex-col sm:flex-row items-center justify-between gap-8">
+
+        {/* Top: logo + nav */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-8 mb-10">
           <div className="flex items-center gap-3">
             <img
               src="https://media.base44.com/images/public/user_69f4a60c5f6a1719d380566c/d2da9e18f_IMG_1680.PNG"
@@ -42,7 +44,63 @@ export default function Footer() {
           </nav>
         </div>
 
-        <div className="mt-8 pt-8 border-t border-white/10 text-center space-y-2">
+        {/* Info grid */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 py-8 border-t border-b border-white/10">
+
+          {/* Company */}
+          <div>
+            <div className="font-inter font-bold text-xs text-white/40 uppercase tracking-widest mb-3">Подрядчик</div>
+            <div className="font-inter font-semibold text-sm text-white mb-2">ООО «Братоуверие-СНБ»</div>
+            <div className="space-y-1 text-xs text-white/50 font-inter">
+              <div>ИНН: 2511135442</div>
+              <div>ОГРН: 1132511007591</div>
+              <div>Ген. директор: Ануфриев Я.Е.</div>
+              <div className="pt-1">Юр. адрес: Приморский край, г. Уссурийск, пер. Мирный, д. 1</div>
+              <div>Факт. адрес: г. Хабаровск, ул. Карла Маркса, д. 66</div>
+            </div>
+          </div>
+
+          {/* Contacts */}
+          <div>
+            <div className="font-inter font-bold text-xs text-white/40 uppercase tracking-widest mb-3">Контакты</div>
+            <div className="space-y-2 text-xs text-white/50 font-inter">
+              <div><a href="tel:+79842620936" className="hover:text-white transition-colors">+7 984 262-09-36</a></div>
+              <div><a href="tel:+79191072244" className="hover:text-white transition-colors">+7 919 107-22-44</a></div>
+              <div><a href="mailto:bratouverie@gmail.com" className="hover:text-white transition-colors">bratouverie@gmail.com</a></div>
+              <div className="pt-1">Часы работы: Пн–Пт 09:00–18:00</div>
+              <div>Сб 10:00–14:00</div>
+            </div>
+          </div>
+
+          {/* Legal basis */}
+          <div>
+            <div className="font-inter font-bold text-xs text-white/40 uppercase tracking-widest mb-3">Правовая основа</div>
+            <div className="space-y-1.5 text-xs text-white/50 font-inter">
+              <div>ТК РФ — ст. 56, 59, 115, 153, 184, 217–229</div>
+              <div>ФЗ №152-ФЗ — защита перс. данных</div>
+              <div>ФЗ №125-ФЗ — обяз. соц. страхование</div>
+              <div>Пост. Прав. РФ №2255 от 22.12.2023</div>
+              <div>Указ Президента №121 от 01.03.2022</div>
+              <div>Указ Президента №372 от 05.05.2023</div>
+            </div>
+          </div>
+
+          {/* Dispute resolution */}
+          <div>
+            <div className="font-inter font-bold text-xs text-white/40 uppercase tracking-widest mb-3">Разрешение споров</div>
+            <div className="space-y-1.5 text-xs text-white/50 font-inter">
+              <div>1. Внутреннее разрешение — 10–15 раб. дней</div>
+              <div>2. Обращение в профсоюз</div>
+              <div>3. Судебное разбирательство (Хабаровский край)</div>
+              <div className="pt-1">Досрочное расторжение:</div>
+              <div>По инициативе работника — уведомление за 2 недели</div>
+              <div>Бесплатный билет домой + доставка вещей до 50 кг</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Bottom */}
+        <div className="mt-6 text-center space-y-2">
           <p className="text-xs text-white/30 font-inter">
             © {new Date().getFullYear()} Администрация города Хабаровска. Все права защищены.
           </p>
@@ -50,6 +108,7 @@ export default function Footer() {
             Политика конфиденциальности
           </a>
         </div>
+
       </div>
     </footer>
   );
