@@ -133,11 +133,28 @@ export default function ProjectStatusSection() {
               </div>
             ))}
           </div>
-          <div className="mt-5 bg-primary/5 border border-primary/20 rounded-xl p-4 text-center">
-            <p className="font-inter text-sm text-foreground">
+          <div className="mt-5 bg-primary/5 border border-primary/20 rounded-xl p-4">
+            <p className="font-inter text-sm text-foreground text-center mb-4">
               <span className="font-bold">Политическая поддержка:</span>{" "}
               Одобрение Президента РФ · Поддержка Совета Федерации и Государственной Думы · Широкое освещение в государственных СМИ
             </p>
+            <div className="grid sm:grid-cols-2 gap-3">
+              {[
+                { url: "https://dan-news.ru/interview/pomoch-vsej-stranoj-vsem-mirom.-kak-rossija-vosstanavlivaet-novye-regiony/", source: "dan-news.ru", text: "В работе по восстановлению новых регионов участвуют все министерства и федеральные службы. Минстрой — координатор работы." },
+                { url: "https://ura.news/news/1052574442", source: "ura.news", text: "Россия планирует восстановить территорию ДНР и ЛНР до 2035 года — вице-премьер РФ Марат Хуснуллин." },
+                { url: "https://vm.ru/society/973211-masshtabnaya-strojka-bolee-15-regionov-rossii-vzyali-shefstvo-nad-razrushennymi-rajonami-donbassa", source: "vm.ru", text: "Более 15 регионов России взяли шефство над разрушенными районами Донбасса." },
+                { url: "https://rtvi.com/stories/tam-poka-ochen-napryazhennaya-obstanovka-bolee-30-regionov-podklyuchili-k-vosstanovleniyu-donbassa/", source: "rtvi.com", text: "Восстановление Донбасса оплачивается за счёт регионального бюджета, федеральных субсидий и частных спонсоров." },
+              ].map((item) => (
+                <a key={item.url} href={item.url} target="_blank" rel="noopener noreferrer"
+                  className="flex items-start gap-3 bg-card border border-border rounded-xl p-3 hover:border-accent/40 hover:shadow-md transition-all group">
+                  <div className="shrink-0 mt-0.5 w-2 h-2 rounded-full bg-accent mt-2" />
+                  <div>
+                    <div className="font-mono text-xs text-accent font-semibold group-hover:underline mb-1">{item.source}</div>
+                    <div className="font-inter text-xs text-muted-foreground leading-relaxed">{item.text}</div>
+                  </div>
+                </a>
+              ))}
+            </div>
           </div>
         </div>
 
