@@ -42,10 +42,13 @@ export default function Footer() {
           </nav>
         </div>
 
-        <div className="mt-8 pt-8 border-t border-white/10 text-center">
+        <div className="mt-8 pt-8 border-t border-white/10 text-center space-y-2">
           <p className="text-xs text-white/30 font-inter">
             © {new Date().getFullYear()} Администрация города Хабаровска. Все права защищены.
           </p>
+          <a href="/privacy" className="text-xs text-white/40 hover:text-white font-inter transition-colors underline">
+            Политика конфиденциальности
+          </a>
         </div>
       </div>
     </footer>
