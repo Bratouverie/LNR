@@ -308,6 +308,7 @@ export const VACANCIES_DATA = [
   {
     id: "vzryvotekhnik",
     title: "Взрывотехник",
+    contractUrl: "https://media.base44.com/files/public/69f4a665db2c72a42818d397/bb81f1f41_Vzrivotehnik.pdf",
     category: "Инженерия",
     salaryMin: 280000,
     salaryMax: 320000,
