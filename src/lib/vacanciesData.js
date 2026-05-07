@@ -1,7 +1,6 @@
 export const VACANCIES_DATA = [
   {
     id: "raznorabochiy",
-    contractUrl: "https://media.base44.com/files/public/69f4a665db2c72a42818d397/d86ff70be_Raznorabochiy.pdf",
     title: "Разнорабочий",
     category: "Строительство",
     salaryMin: 185000,
@@ -53,7 +52,6 @@ export const VACANCIES_DATA = [
   },
   {
     id: "stroitel",
-    contractUrl: "https://media.base44.com/files/public/69f4a665db2c72a42818d397/2b4dd90da_Stroitel.pdf",
     title: "Строитель",
     category: "Строительство",
     salaryMin: 210000,
@@ -155,7 +153,6 @@ export const VACANCIES_DATA = [
   },
   {
     id: "voditel",
-    contractUrl: "https://media.base44.com/files/public/69f4a665db2c72a42818d397/551e279f5_Voditel.pdf",
     title: "Водитель",
     category: "Транспорт",
     salaryMin: 155000,

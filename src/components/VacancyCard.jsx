@@ -1,5 +1,4 @@
 import { Link } from "react-router-dom";
-import { FileText } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Wrench, Truck, Radio, Bomb, Stethoscope, Plane, ShieldCheck, HardHat, HardHatIcon, Building2, ArrowRight } from "lucide-react";
 
@@ -49,17 +48,6 @@ export default function VacancyCard({ vacancy, onApply }) {
         ))}
       </ul>
 
-      {vacancy.contractUrl && (
-        <a
-          href={vacancy.contractUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex items-center gap-1.5 text-xs text-accent hover:text-accent/80 font-inter mb-3 transition-colors"
-        >
-          <FileText className="h-3.5 w-3.5" />
-          Ознакомительный договор (PDF)
-        </a>
-      )}
       <div className="flex gap-2">
         <Button
           onClick={() => onApply(vacancy.title)}
