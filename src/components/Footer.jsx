@@ -21,12 +21,12 @@ export default function Footer() {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-8 mb-10">
           <div className="flex items-center gap-3">
             <img
-              src="https://media.base44.com/images/public/user_69f4a60c5f6a1719d380566c/d2da9e18f_IMG_1680.PNG"
-              alt="Герб Хабаровска"
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Coat_of_Arms_of_the_Russian_Federation.svg/120px-Coat_of_Arms_of_the_Russian_Federation.svg.png"
+              alt="Герб РФ"
               className="h-12 w-12 object-contain"
             />
             <div>
-              <div className="font-inter font-bold text-sm">Администрация Хабаровска</div>
+              <div className="font-inter font-bold text-sm">Правительство РФ</div>
               <div className="font-inter text-xs text-white/50">Программа восстановления ЛНР и ДНР</div>
             </div>
           </div>
@@ -65,14 +65,15 @@ export default function Footer() {
           <div>
             <div className="font-inter font-bold text-xs text-white/40 uppercase tracking-widest mb-3">Контакты</div>
             <div className="space-y-2 text-xs text-white/50 font-inter">
-              <div><a href="tel:+79842620936" className="hover:text-white transition-colors">+7 984 262-09-36</a></div>
-              <div><a href="tel:+79191072244" className="hover:text-white transition-colors">+7 919 107-22-44</a></div>
-              <div><a href="tel:+74996861317" className="hover:text-white transition-colors">+7 (499) 686-13-17</a></div>
-              <div><a href="tel:+74212515930" className="hover:text-white transition-colors">+7 (4212) 51-59-30</a></div>
-              <div><a href="mailto:bratouverie@gmail.com" className="hover:text-white transition-colors">bratouverie@gmail.com</a></div>
-              <div><a href="mailto:contact@bratouverie.ru" className="hover:text-white transition-colors">contact@bratouverie.ru</a></div>
-              <div className="pt-1">Часы работы: Пн–Пт 09:00–18:00</div>
-              <div>Сб 10:00–14:00</div>
+              <div><a href="tel:88000010101" className="hover:text-white transition-colors font-semibold">8-800-001-01-01 (бесплатно)</a></div>
+              <div className="text-white/30">Единый номер приёма заявок</div>
+              <div className="pt-1"><a href="mailto:hh@vosstanovim-dnr.ru" className="hover:text-white transition-colors">hh@vosstanovim-dnr.ru</a></div>
+              <div className="text-white/30">Трудоустройство граждан</div>
+              <div className="pt-1"><a href="mailto:partner@bratouverie-snb.ru" className="hover:text-white transition-colors">partner@bratouverie-snb.ru</a></div>
+              <div className="text-white/30">Сотрудничество с агентствами</div>
+              <div className="pt-1"><a href="mailto:support@vosstanovim-dnr.ru" className="hover:text-white transition-colors">support@vosstanovim-dnr.ru</a></div>
+              <div className="text-white/30">Поддержка</div>
+              <div className="pt-1">Часы работы: Пн–Пт 09:00–18:00, Сб 10:00–14:00</div>
             </div>
           </div>
 
@@ -106,7 +107,7 @@ export default function Footer() {
         {/* Bottom */}
         <div className="mt-6 text-center space-y-2">
           <p className="text-xs text-white/30 font-inter">
-            © {new Date().getFullYear()} Администрация города Хабаровска. Все права защищены.
+            © {new Date().getFullYear()} Правительство РФ · ООО «Братоуверие-СНБ». Все права защищены.
           </p>
           <p className="text-xs text-white/30 font-inter">
             <a href="https://vosstanovim-dnr.ru" className="hover:text-white transition-colors">https://vosstanovim-dnr.ru</a>

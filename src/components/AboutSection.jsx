@@ -1,7 +1,7 @@
 import { Shield, Banknote, Heart, TrendingUp } from "lucide-react";
 
 const FEATURES = [
-{ icon: Shield, title: "Безопасность", desc: "Работа под охраной ВС РФ, круглосуточный контроль" },
+{ icon: Shield, title: "Безопасность", desc: "Работа на освобождённых территориях ЛНР/ДНР под защитой спецподразделений ВС РФ" },
 { icon: Banknote, title: "Стабильный доход", desc: "300 000–470 000 ₽/мес + 2.5 млн подъёмных" },
 { icon: Heart, title: "Соцподдержка", desc: "Жильё, питание, медицина, соцпакет" },
 { icon: TrendingUp, title: "Карьерный рост", desc: "Обучение, сертификация, перспективы" }];
@@ -24,8 +24,7 @@ export default function AboutSection({ teamImg }) {
             </p>
             <p className="text-muted-foreground font-inter leading-relaxed mb-4">
               Вы не просто выполняете работу — вы помогаете вернуть мирную жизнь тысячам людей.
-              Государство и администрация республик обеспечивают всем необходимым для комфортной
-              и безопасной работы.
+              Все объекты расположены на освобождённых территориях ЛНР и ДНР под защитой и обеспечением безопасности специальных подразделений Вооружённых Сил РФ.
             </p>
             <div className="flex flex-wrap gap-2 mb-8">
               <span className="text-sm font-inter font-semibold text-foreground">Города работы:</span>

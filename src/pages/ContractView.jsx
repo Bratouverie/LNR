@@ -107,7 +107,7 @@ export default function ContractView() {
             {/* 2. Предмет договора */}
             <ContractSection num="2" title="ПРЕДМЕТ И УСЛОВИЯ ДОГОВОРА">
               <SubSection title="2.1 Должность и трудовые функции">
-                <p>Работник принимается на должность <strong>{extra.fullTitle}</strong> на период одной календарной вахты продолжительностью {CONTRACT_COMMON.vacancyDays} дней (далее — «вахтовая смена»). Начало вахты: <strong>{CONTRACT_COMMON.vacancyStart}</strong>. Окончание вахты: <strong>{CONTRACT_COMMON.vacancyEnd}</strong>.</p>
+                <p>Работник принимается на должность <strong>{extra.fullTitle}</strong> на период одной календарной вахты продолжительностью {CONTRACT_COMMON.vacancyDays} дней (далее — «вахтовая смена»). Ориентировочное начало вахты: <strong>{CONTRACT_COMMON.vacancyStart}</strong> (в зависимости от формирования группы). Срок вахты: 1 год.</p>
               </SubSection>
 
               <SubSection title="2.2 Основные трудовые обязанности">
@@ -233,6 +233,7 @@ export default function ContractView() {
             {/* 8. Безопасность */}
             <ContractSection num="8" title="БЕЗОПАСНОСТЬ И ОХРАНА ТРУДА">
               <SubSection title="8.1 Обеспечение безопасности">
+                <p className="mb-2">Работа осуществляется на освобождённых территориях ЛНР и ДНР под защитой и обеспечением безопасности специальных подразделений Вооружённых Сил Российской Федерации.</p>
                 <BulletList items={CONTRACT_COMMON.security} />
               </SubSection>
               <SubSection title="8.2 Обязанности работника в области охраны труда">

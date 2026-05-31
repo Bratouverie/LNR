@@ -7,7 +7,9 @@ const NAV_LINKS = [
   { label: "Вакансии", href: "#vacancies" },
   { label: "Условия", href: "#conditions" },
   { label: "Оплата", href: "#payment" },
+  { label: "Льготы", href: "#benefits" },
   { label: "Как вступить", href: "#how-to-join" },
+  { label: "FAQ", href: "#faq" },
   { label: "Контакты", href: "#contacts" },
 ];
 
@@ -26,12 +28,14 @@ export default function Navbar({ onOpenApplication }) {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center gap-3">
             <img
-              src="https://media.base44.com/images/public/user_69f4a60c5f6a1719d380566c/d2da9e18f_IMG_1680.PNG"
-              alt="Герб Хабаровска"
+              src="https://upload.wikimedia.org/wikipedia/commons/thumb/f/f3/Coat_of_Arms_of_the_Russian_Federation.svg/120px-Coat_of_Arms_of_the_Russian_Federation.svg.png"
+              alt="Герб РФ"
               className="h-10 w-10 object-contain"
             />
             <span className="text-white font-inter font-bold text-sm sm:text-base tracking-tight leading-tight">
-              Программа<br className="sm:hidden" /> Правительства РФ
+              Правительство РФ<br className="sm:hidden" />
+              <span className="hidden sm:inline"> · </span>
+              <span className="text-white/60 font-normal text-xs sm:text-sm">Программа восстановления</span>
             </span>
           </div>
 
@@ -48,8 +52,8 @@ export default function Navbar({ onOpenApplication }) {
           </div>
 
           <div className="hidden lg:flex items-center gap-3">
-            <a href="tel:+79223120735" className="text-white/70 hover:text-white transition-colors">
-              <Phone className="h-4 w-4" />
+            <a href="tel:88000010101" className="text-white/70 hover:text-white font-mono text-sm transition-colors">
+              8-800-001-01-01
             </a>
             <Button
               onClick={onOpenApplication}

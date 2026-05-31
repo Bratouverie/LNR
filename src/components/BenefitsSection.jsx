@@ -25,7 +25,7 @@ const VETERAN_REGIONAL = [
   "Льготы на лекарства (скидка на рецептурные препараты)",
   "Доступ к региональным программам поддержки",
   "Приоритет при трудоустройстве в государственных учреждениях",
-  "Возможность получения грантов на развитие собственного бизнеса",
+  "Выдача грантов на развитие собственного бизнеса (300 000 руб.)",
 ];
 
 const LAND_INFO = [
@@ -71,7 +71,9 @@ const MORTGAGE = [
 const MORTGAGE_BANKS = ["Сбербанк России", "ВТБ", "Альфа-банк", "Другие государственные банки"];
 
 const FAMILY_CHILDREN = [
-  "Ежемесячное пособие на каждого ребёнка — 5 000–10 000 руб./мес.",
+  "Ежемесячная выплата на каждого малолетнего ребёнка в семье — 20 000 руб./мес.",
+  "Покрытие ипотеки государством на период вахты — до 400 000 руб.",
+  "Сохранение рабочего места по основному месту работы (не нужно увольняться)",
   "Единовременное пособие при рождении ребёнка — 25 000 рублей",
 ];
 
@@ -144,7 +146,7 @@ export default function BenefitsSection() {
                 </ul>
               </div>
               <div className="bg-card border border-border rounded-2xl p-5">
-                <div className="font-inter font-bold text-sm text-foreground mb-4">Региональные льготы (Хабаровский край)</div>
+                <div className="font-inter font-bold text-sm text-foreground mb-4">Региональные льготы</div>
                 <ul className="space-y-2">
                   {VETERAN_REGIONAL.map((item, i) => (
                     <li key={i} className="flex items-start gap-2 text-sm font-inter text-muted-foreground">

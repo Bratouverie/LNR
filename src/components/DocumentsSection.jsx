@@ -31,14 +31,14 @@ const SPECIAL_DOCS = [
 
 const CHANNELS = [
   {
-    icon: Mail,
-    title: "По e-mail",
-    details: ["bratouverie@gmail.com", "Тема: [ФИО] — Заявка на программу ЛНР/ДНР", "Документы архивом ZIP (если >5 файлов)"],
+  icon: Mail,
+  title: "По e-mail",
+  details: ["hh@vosstanovim-dnr.ru", "Тема: [ФИО] — Заявка на программу ЛНР/ДНР", "Документы архивом ZIP (если >5 файлов)"],
   },
   {
-    icon: Phone,
-    title: "По телефону",
-    details: ["+7 984 262-09-36", "+7 919 107-22-44", "Консультация + список документов для вашей должности"],
+  icon: Phone,
+  title: "По телефону",
+  details: ["8-800-001-01-01 (бесплатно)", "Единый номер приёма заявок", "Консультация + список документов для вашей должности"],
   },
   {
     icon: MapPin,
@@ -77,27 +77,7 @@ export default function DocumentsSection() {
           </p>
         </div>
 
-        {/* Main Contract Download */}
-        <div className="bg-primary text-primary-foreground rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-4">
-            <div className="w-14 h-14 rounded-xl bg-white/10 flex items-center justify-center shrink-0">
-              <FileText className="h-7 w-7 text-accent" />
-            </div>
-            <div>
-              <div className="font-inter font-bold text-lg text-white">Контракт о выполнении работ по восстановлению городов ДНР и ЛНР</div>
-              <div className="text-white/60 font-inter text-sm mt-1">Ознакомительная версия · Срок 1 год · Министерство Обороны РФ</div>
-            </div>
-          </div>
-          <a
-            href="https://media.base44.com/files/public/69f4a665db2c72a42818d397/1112633f7_Kontract-DNR-LNR.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="shrink-0 flex items-center gap-2 bg-accent hover:bg-accent/90 text-white font-inter font-semibold px-6 py-3 rounded-xl transition-colors"
-          >
-            <Download className="h-5 w-5" />
-            Скачать контракт
-          </a>
-        </div>
+
 
         {/* Legal Basis Download */}
         <div className="bg-secondary/60 border border-border rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between gap-6">
@@ -241,7 +221,7 @@ export default function DocumentsSection() {
               </table>
             </div>
             <div className="mt-4 bg-primary/5 border border-primary/20 rounded-xl p-4 text-sm font-inter text-foreground text-center">
-              <span className="font-bold">Ускоренный процесс:</span> В период активного набора (25 мая – 25 июня) сроки могут быть сокращены до 2–3 недель.
+              <span className="font-bold">Ускоренный процесс:</span> В период активного набора (8 июня – 6 июля) сроки могут быть сокращены до 2–3 недель.
             </div>
           </div>
         )}

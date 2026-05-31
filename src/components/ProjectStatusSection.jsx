@@ -174,29 +174,21 @@ export default function ProjectStatusSection() {
               <div className="p-5 border-b md:border-b-0 md:border-r border-border">
                 <h4 className="font-inter font-bold text-sm text-foreground mb-4">Контакты</h4>
                 <div className="space-y-3">
-                  <a href="tel:+79842620936" className="flex items-center gap-3 text-sm font-inter text-foreground hover:text-accent transition-colors">
+                  <a href="tel:88000010101" className="flex items-center gap-3 text-sm font-inter text-foreground hover:text-accent transition-colors font-semibold">
                     <Phone className="h-4 w-4 text-accent" />
-                    +7 984 262-09-36
+                    8-800-001-01-01 (бесплатно)
                   </a>
-                  <a href="tel:+79191072244" className="flex items-center gap-3 text-sm font-inter text-foreground hover:text-accent transition-colors">
-                    <Phone className="h-4 w-4 text-accent" />
-                    +7 919 107-22-44
-                  </a>
-                  <a href="tel:+74996861317" className="flex items-center gap-3 text-sm font-inter text-foreground hover:text-accent transition-colors">
-                    <Phone className="h-4 w-4 text-accent" />
-                    +7 (499) 686-13-17
-                  </a>
-                  <a href="tel:+74212515930" className="flex items-center gap-3 text-sm font-inter text-foreground hover:text-accent transition-colors">
-                    <Phone className="h-4 w-4 text-accent" />
-                    +7 (4212) 51-59-30
-                  </a>
-                  <a href="mailto:bratouverie@gmail.com" className="flex items-center gap-3 text-sm font-inter text-foreground hover:text-accent transition-colors">
+                  <a href="mailto:hh@vosstanovim-dnr.ru" className="flex items-center gap-3 text-sm font-inter text-foreground hover:text-accent transition-colors">
                     <Mail className="h-4 w-4 text-accent" />
-                    bratouverie@gmail.com
+                    hh@vosstanovim-dnr.ru
                   </a>
-                  <a href="mailto:contact@bratouverie.ru" className="flex items-center gap-3 text-sm font-inter text-foreground hover:text-accent transition-colors">
+                  <a href="mailto:partner@bratouverie-snb.ru" className="flex items-center gap-3 text-sm font-inter text-foreground hover:text-accent transition-colors">
                     <Mail className="h-4 w-4 text-accent" />
-                    contact@bratouverie.ru
+                    partner@bratouverie-snb.ru
+                  </a>
+                  <a href="mailto:support@vosstanovim-dnr.ru" className="flex items-center gap-3 text-sm font-inter text-foreground hover:text-accent transition-colors">
+                    <Mail className="h-4 w-4 text-accent" />
+                    support@vosstanovim-dnr.ru
                   </a>
                   <div className="flex items-start gap-3 text-sm font-inter text-muted-foreground">
                     <MapPin className="h-4 w-4 text-accent shrink-0 mt-0.5" />

@@ -2,108 +2,102 @@ import { Phone, MapPin, MessageSquare, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 export default function ContactsSection({ onCallback }) {
-  const mapUrl = "https://www.openstreetmap.org/export/embed.html?bbox=135.0550%2C48.4700%2C135.0850%2C48.4900&layer=mapnik&marker=48.4800%2C135.0700";
-
   return (
     <section id="contacts" className="py-24 sm:py-32 bg-background">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
-          <span className="text-accent font-mono text-sm font-semibold tracking-widest uppercase">Контакты</span>
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
+          <span className="text-accent font-mono text-sm font-semibold tracking-widest uppercase">Связь</span>
           <h2 className="text-3xl sm:text-4xl font-inter font-black text-foreground mt-3 tracking-tight">
-            Свяжитесь с нами
+            Приём заявок и сотрудничество
           </h2>
           <p className="text-muted-foreground font-inter mt-4 max-w-xl mx-auto">
-            Отбор специалистов ведёт ООО «БРАТОУВЕРИЕ-СНБ»
+            Программу реализует ООО «БРАТОУВЕРИЕ-СНБ» по поручению Правительства РФ
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-12">
-          <div className="bg-card border border-border rounded-2xl p-6 hover:shadow-xl hover:border-accent/30 transition-all">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-inter font-bold text-lg">ИА</span>
-              </div>
-              <div>
-                <div className="font-inter font-bold text-foreground">Игорь Андреевич</div>
-                <div className="font-mono text-sm text-muted-foreground">Специалист по отбору</div>
-              </div>
-            </div>
+        {/* Единый телефон */}
+        <div className="bg-primary text-primary-foreground rounded-2xl p-6 sm:p-8 text-center mb-8">
+          <div className="text-white/60 font-inter text-sm mb-2">Единый телефон приёма заявок</div>
+          <a href="tel:88000010101" className="text-3xl sm:text-4xl font-mono font-black text-accent hover:text-accent/80 transition-colors">
+            8-800-001-01-01
+          </a>
+          <div className="text-white/60 font-inter text-sm mt-2">По вопросам трудоустройства граждан и сотрудничества с кадровыми агентствами · Звонок бесплатный</div>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-6">
             <a
-              href="tel:+79223120735"
-              className="flex items-center gap-3 bg-accent/5 hover:bg-accent/10 text-foreground rounded-lg px-4 py-3 transition-colors"
+              href="https://max.ru/u/f9LHodD0cOLnAxokVgBK1HcwEnGhlBy0W7dVL4IAtZFgqRBl5Imbli5RDlY"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-lg font-inter font-semibold transition-colors"
             >
-              <Phone className="h-4 w-4 text-accent" />
-              <span className="font-mono text-sm font-medium">+7 922 312-07-35</span>
+              <MessageSquare className="h-4 w-4" />
+              Написать в Макс
             </a>
-          </div>
-
-          <div className="bg-card border border-border rounded-2xl p-6 hover:shadow-xl hover:border-accent/30 transition-all">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-12 h-12 rounded-full bg-primary flex items-center justify-center">
-                <span className="text-primary-foreground font-inter font-bold text-lg">ЯЕ</span>
-              </div>
-              <div>
-                <div className="font-inter font-bold text-foreground">Яков Евгеньевич</div>
-                <div className="font-mono text-sm text-muted-foreground">Специалист по отбору</div>
-              </div>
-            </div>
-            <a
-              href="tel:+79191072244"
-              className="flex items-center gap-3 bg-accent/5 hover:bg-accent/10 text-foreground rounded-lg px-4 py-3 transition-colors"
+            <Button
+              onClick={onCallback}
+              variant="outline"
+              className="border-accent text-accent hover:bg-accent hover:text-accent-foreground font-inter font-semibold px-6 py-3"
             >
-              <Phone className="h-4 w-4 text-accent" />
-              <span className="font-mono text-sm font-medium">+7 919 107-22-44</span>
-            </a>
+              <Phone className="h-4 w-4 mr-2" />
+              Заказать обратный звонок
+            </Button>
           </div>
         </div>
 
-        {/* Additional contacts */}
-        <div className="flex flex-wrap justify-center gap-4 mb-8">
-          <a href="tel:+74996861317" className="flex items-center gap-2 bg-card border border-border rounded-lg px-4 py-3 hover:border-accent/30 transition-colors font-mono text-sm font-medium text-foreground">
-            <Phone className="h-4 w-4 text-accent" />+7 (499) 686-13-17
-          </a>
-          <a href="tel:+74212515930" className="flex items-center gap-2 bg-card border border-border rounded-lg px-4 py-3 hover:border-accent/30 transition-colors font-mono text-sm font-medium text-foreground">
-            <Phone className="h-4 w-4 text-accent" />+7 (4212) 51-59-30
-          </a>
-          <a href="mailto:contact@bratouverie.ru" className="flex items-center gap-2 bg-card border border-border rounded-lg px-4 py-3 hover:border-accent/30 transition-colors font-mono text-sm font-medium text-foreground">
-            <MapPin className="h-4 w-4 text-accent" />contact@bratouverie.ru
-          </a>
+        {/* Email блоки */}
+        <div className="grid sm:grid-cols-2 gap-5 mb-8">
+          <div className="bg-card border border-border rounded-2xl p-6 hover:border-accent/30 transition-all">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center shrink-0">
+                <Mail className="h-5 w-5 text-accent" />
+              </div>
+              <div>
+                <div className="font-inter font-bold text-foreground text-sm">Сотрудничество с кадровыми агентствами</div>
+                <div className="text-xs text-muted-foreground">Приём заявок от агентств, партнёрские программы</div>
+              </div>
+            </div>
+            <a href="mailto:partner@bratouverie-snb.ru" className="block text-accent font-mono text-sm font-semibold hover:underline">
+              partner@bratouverie-snb.ru
+            </a>
+            <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
+              По вопросам партнёрства, агентских договоров и передачи кандидатов от кадровых агентств направляйте письма на указанный адрес.
+            </p>
+          </div>
+
+          <div className="bg-card border border-border rounded-2xl p-6 hover:border-accent/30 transition-all">
+            <div className="flex items-center gap-3 mb-3">
+              <div className="w-10 h-10 rounded-xl bg-accent/10 flex items-center justify-center shrink-0">
+                <Mail className="h-5 w-5 text-accent" />
+              </div>
+              <div>
+                <div className="font-inter font-bold text-foreground text-sm">Трудоустройство граждан</div>
+                <div className="text-xs text-muted-foreground">Приём резюме, вопросы по трудоустройству</div>
+              </div>
+            </div>
+            <a href="mailto:hh@vosstanovim-dnr.ru" className="block text-accent font-mono text-sm font-semibold hover:underline">
+              hh@vosstanovim-dnr.ru
+            </a>
+            <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
+              Для подачи заявки на участие в программе, вопросов о вакансиях, условиях труда и порядке трудоустройства направляйте письма на указанный адрес.
+            </p>
+          </div>
         </div>
 
-        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
-          <a
-            href="https://max.ru/u/f9LHodD0cOLnAxokVgBK1HcwEnGhlBy0W7dVL4IAtZFgqRBl5Imbli5RDlY"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground px-6 py-3 rounded-lg font-inter font-semibold transition-colors"
-          >
-            <MessageSquare className="h-4 w-4" />
-            Написать в Макс
-          </a>
-          <Button
-            onClick={onCallback}
-            variant="outline"
-            className="border-accent text-accent hover:bg-accent hover:text-accent-foreground font-inter font-semibold px-6 py-3"
-          >
-            <Phone className="h-4 w-4 mr-2" />
-            Заказать обратный звонок
-          </Button>
-        </div>
-
+        {/* Адреса офисов */}
         <div className="bg-card border border-border rounded-2xl overflow-hidden">
-          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 px-6 py-4 border-b border-border">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 px-6 py-4 border-b border-border flex-wrap">
             <div className="flex items-center gap-3">
               <MapPin className="h-5 w-5 text-accent shrink-0" />
-              <span className="font-inter font-medium text-foreground">г. Хабаровск, ул. Карла Маркса, д. 66</span>
+              <span className="font-inter font-medium text-foreground text-sm">г. Хабаровск, ул. Карла Маркса, д. 66</span>
             </div>
             <div className="flex items-center gap-3">
               <MapPin className="h-5 w-5 text-accent shrink-0" />
-              <span className="font-inter font-medium text-foreground">г. Тамбов, ул. Коммунальная, 6</span>
+              <span className="font-inter font-medium text-foreground text-sm">г. Тамбов, ул. Коммунальная, 6</span>
             </div>
+            <span className="text-xs text-muted-foreground font-inter">Пн–Пт 09:00–18:00, Сб 10:00–14:00</span>
           </div>
           <div className="h-64 sm:h-80 bg-muted">
             <iframe
-              src={mapUrl}
+              src="https://www.openstreetmap.org/export/embed.html?bbox=135.0550%2C48.4700%2C135.0850%2C48.4900&layer=mapnik&marker=48.4800%2C135.0700"
               className="w-full h-full border-0"
               title="Карта"
               loading="lazy"
