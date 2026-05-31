@@ -1,4 +1,4 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { ArrowLeft, Banknote, Calendar, MapPin, Users, Shield, GraduationCap, TrendingUp, CheckCircle, Clock, AlertTriangle, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -7,6 +7,7 @@ import ApplicationModal from "../components/ApplicationModal";
 
 export default function VacancyDetail() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const vacancy = VACANCIES_DATA.find((v) => v.id === id);
   const [appOpen, setAppOpen] = useState(false);
 
@@ -14,9 +15,7 @@ export default function VacancyDetail() {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-4">
         <p className="text-muted-foreground font-inter">Вакансия не найдена</p>
-        <Link to="/#vacancies">
-          <Button variant="outline">← Назад к вакансиям</Button>
-        </Link>
+        <Button variant="outline" onClick={() => navigate("/", { state: { scrollTo: "vacancies" } })}>← Назад к вакансиям</Button>
       </div>
     );
   }
@@ -26,13 +25,13 @@ export default function VacancyDetail() {
       {/* Header */}
       <div className="bg-primary pt-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <Link
-            to="/#vacancies"
+          <button
+            onClick={() => navigate("/", { state: { scrollTo: "vacancies" } })}
             className="inline-flex items-center gap-2 text-white/60 hover:text-white font-inter text-sm mb-8 transition-colors"
           >
             <ArrowLeft className="h-4 w-4" />
             Все вакансии
-          </Link>
+          </button>
 
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
             <div>

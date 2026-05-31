@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import HeroSection from "../components/HeroSection";
 import AboutSection from "../components/AboutSection";
@@ -38,6 +39,14 @@ export default function Home() {
   const [appModalOpen, setAppModalOpen] = useState(false);
   const [callbackOpen, setCallbackOpen] = useState(false);
   const [selectedVacancy, setSelectedVacancy] = useState("");
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.scrollTo) {
+      const el = document.getElementById(location.state.scrollTo);
+      if (el) setTimeout(() => el.scrollIntoView({ behavior: "smooth" }), 100);
+    }
+  }, [location.state]);
 
   const openApplication = (vacancy) => {
     setSelectedVacancy(typeof vacancy === "string" ? vacancy : "");
