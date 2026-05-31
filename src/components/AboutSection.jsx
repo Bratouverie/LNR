@@ -2,7 +2,7 @@ import { Shield, Banknote, Heart, TrendingUp } from "lucide-react";
 
 const FEATURES = [
 { icon: Shield, title: "Безопасность", desc: "Работа под охраной ВС РФ, круглосуточный контроль" },
-{ icon: Banknote, title: "Стабильный доход", desc: "До 260 000 ₽/мес + 2.5 млн подъёмных" },
+{ icon: Banknote, title: "Стабильный доход", desc: "300 000–470 000 ₽/мес + 2.5 млн подъёмных" },
 { icon: Heart, title: "Соцподдержка", desc: "Жильё, питание, медицина, соцпакет" },
 { icon: TrendingUp, title: "Карьерный рост", desc: "Обучение, сертификация, перспективы" }];
 

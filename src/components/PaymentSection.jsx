@@ -66,7 +66,7 @@ export default function PaymentSection() {
             <div className="bg-white/5 border border-white/10 rounded-2xl p-6 sm:p-8">
               <div className="text-sm text-white/50 font-inter mb-2">Ежемесячная зарплата</div>
               <div className="text-3xl sm:text-4xl text-white font-mono font-bold">
-                260 000 – 470 000 ₽
+                300 000 – 470 000 ₽
               </div>
               <div className="text-white/40 font-inter text-sm mt-2">
                 в зависимости от специализации и квалификации
@@ -76,7 +76,7 @@ export default function PaymentSection() {
             <div className="bg-accent/10 border border-accent/20 rounded-2xl p-6 sm:p-8">
               <div className="text-sm text-accent font-inter font-semibold mb-2">Итого за год вахты</div>
               <div className="text-3xl sm:text-4xl text-accent">
-                <AnimatedCounter target={5620000} suffix="" prefix="" />
+                <AnimatedCounter target={6100000} suffix="" prefix="" />
                 <span className="text-2xl sm:text-3xl"> – </span>
                 <AnimatedCounter target={8140000} suffix=" ₽" prefix="" />
               </div>
@@ -93,17 +93,17 @@ export default function PaymentSection() {
           <div className="grid sm:grid-cols-3 gap-4">
             <div className="bg-white/5 rounded-xl p-4 text-center">
               <div className="text-xs text-white/40 font-inter mb-1">1-й месяц</div>
-              <div className="font-mono font-bold text-xl text-white">2 865 000 ₽</div>
-              <div className="text-xs text-white/40 font-inter mt-1">2 500К + 365К зарплата</div>
+              <div className="font-mono font-bold text-xl text-white">2 885 000 ₽</div>
+              <div className="text-xs text-white/40 font-inter mt-1">2 500К + 385К зарплата</div>
             </div>
             <div className="bg-white/5 rounded-xl p-4 text-center">
               <div className="text-xs text-white/40 font-inter mb-1">2–12 месяцы</div>
-              <div className="font-mono font-bold text-xl text-white">4 015 000 ₽</div>
-              <div className="text-xs text-white/40 font-inter mt-1">365К × 11 месяцев</div>
+              <div className="font-mono font-bold text-xl text-white">4 235 000 ₽</div>
+              <div className="text-xs text-white/40 font-inter mt-1">385К × 11 месяцев</div>
             </div>
             <div className="bg-accent/20 rounded-xl p-4 text-center border border-accent/30">
               <div className="text-xs text-accent font-inter font-semibold mb-1">Итого за год</div>
-              <div className="font-mono font-bold text-xl text-accent">6 880 000 ₽</div>
+              <div className="font-mono font-bold text-xl text-accent">7 120 000 ₽</div>
               <div className="text-xs text-white/40 font-inter mt-1">при средних показателях</div>
             </div>
           </div>
