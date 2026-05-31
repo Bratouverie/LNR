@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Award, MapPin, GraduationCap, Home, Users, CheckCircle } from "lucide-react";
+import { Award, MapPin, GraduationCap, Home, Users, CheckCircle, ShieldCheck } from "lucide-react";
 
 const TABS = [
   { id: "veteran", label: "Программа ветеранов", icon: Award },
@@ -79,6 +79,12 @@ const FAMILY_DEATH = [
   "Единовременное пособие семье — 500 000–1 000 000 рублей",
   "Ежемесячная пенсия по потере кормильца (дети и жена)",
   "Помощь в организации похорон (полная оплата расходов)",
+];
+
+const INSURANCE_INFO = [
+  "Страховка от НС при производственной травме — не менее 1 500 000 ₽",
+  "Страховка при установлении группы инвалидности вследствие производственной травмы или профзаболевания — не менее 9 000 000 ₽",
+  "Максимальная страховая выплата — 14 700 000 ₽",
 ];
 
 export default function BenefitsSection() {
@@ -243,7 +249,21 @@ export default function BenefitsSection() {
 
         {/* Family */}
         {active === "family" && (
-          <div className="grid sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
+          <div className="space-y-5 max-w-3xl mx-auto">
+            <div className="bg-accent/10 border border-accent/30 rounded-2xl p-5">
+              <div className="flex items-center gap-2 mb-3">
+                <ShieldCheck className="h-5 w-5 text-accent" />
+                <div className="font-inter font-bold text-sm text-foreground">Страховка от несчастных случаев на производстве</div>
+              </div>
+              <ul className="space-y-2">
+                {INSURANCE_INFO.map((item, i) => (
+                  <li key={i} className="flex items-start gap-2 text-sm font-inter text-muted-foreground">
+                    <CheckCircle className="h-4 w-4 text-accent shrink-0 mt-0.5" />{item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="grid sm:grid-cols-2 gap-5">
             <div className="bg-card border border-border rounded-2xl p-5">
               <div className="font-inter font-bold text-sm text-foreground mb-4">Пособия на детей</div>
               <ul className="space-y-2">
@@ -263,6 +283,7 @@ export default function BenefitsSection() {
                   </li>
                 ))}
               </ul>
+            </div>
             </div>
           </div>
         )}
