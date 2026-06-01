@@ -53,7 +53,6 @@ const REQUISITES = [
   { label: "ИНН", value: "2511135442" },
   { label: "КПП", value: "251101001" },
   { label: "ОГРН", value: "1132511007591" },
-  { label: "Дата регистрации", value: "2011 г." },
   { label: "Юридический адрес", value: "Приморский край, г. Уссурийск, пер. Мирный, д. 1" },
   { label: "Фактический адрес", value: "г. Хабаровск, ул. Карла Маркса, д. 66" },
   { label: "Банк", value: "Филиал «Хабаровский» АО «Альфа-Банк»" },
@@ -151,7 +150,7 @@ export default function PrivacyPolicy() {
           </ul>
           <div className="bg-accent/5 border border-accent/20 rounded-lg p-3 text-sm text-foreground">
             По вопросам защиты данных обращайтесь:{" "}
-            <a href="mailto:legal@bratouvernie.ru" className="text-accent hover:underline font-medium">legal@bratouvernie.ru</a>
+            <a href="mailto:support@vosstanovim-dnr.ru" className="text-accent hover:underline font-medium">support@vosstanovim-dnr.ru</a>
           </div>
         </div>
 

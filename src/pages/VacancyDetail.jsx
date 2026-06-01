@@ -1,6 +1,6 @@
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import { ArrowLeft, Banknote, Calendar, MapPin, Users, Shield, GraduationCap, TrendingUp, CheckCircle, Clock, AlertTriangle, Download } from "lucide-react";
+import { ArrowLeft, Banknote, Calendar, MapPin, Users, Shield, GraduationCap, TrendingUp, CheckCircle, Clock, AlertTriangle, Download, Route } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { VACANCIES_DATA } from "@/lib/vacanciesData";
 import ApplicationModal from "../components/ApplicationModal";
@@ -10,6 +10,7 @@ export default function VacancyDetail() {
   const navigate = useNavigate();
   const vacancy = VACANCIES_DATA.find((v) => v.id === id);
   const [appOpen, setAppOpen] = useState(false);
+  const [routeMapOpen, setRouteMapOpen] = useState(false);
 
   if (!vacancy) {
     return (
@@ -74,8 +75,8 @@ export default function VacancyDetail() {
             <span className="text-white/50"> · от {vacancy.salaryMin.toLocaleString("ru-RU")} ₽/мес</span>
           </div>
           <div className="flex items-center gap-3 ml-auto">
-            <a href="tel:+79223120735" className="text-white/60 hover:text-white font-inter text-sm transition-colors">
-              +7 922 312-07-35
+            <a href="tel:88000010101" className="text-white/60 hover:text-white font-inter text-sm transition-colors">
+              8-800-001-01-01
             </a>
             <Button
               onClick={() => setAppOpen(true)}
@@ -240,10 +241,10 @@ export default function VacancyDetail() {
               </p>
               <Link
                 to={`/contract/${vacancy.id}`}
-                className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-primary text-primary-foreground font-inter font-semibold text-sm hover:bg-primary/90 transition-colors"
+                className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl bg-primary text-primary-foreground font-inter font-semibold text-xs hover:bg-primary/90 transition-colors"
               >
-                <Download className="h-4 w-4" />
-                Просмотреть и скачать договор
+                <Download className="h-3.5 w-3.5" />
+                Договор (ознакомительный)
               </Link>
             </div>
 
@@ -256,22 +257,35 @@ export default function VacancyDetail() {
               <p className="font-inter text-sm text-foreground/80 leading-relaxed">{vacancy.prospects}</p>
             </div>
 
+            {/* Routes button — only for voditel */}
+            {vacancy.id === "voditel" && (
+              <button
+                onClick={() => setRouteMapOpen(true)}
+                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-inter font-semibold text-sm transition-colors"
+              >
+                <Route className="h-4 w-4" />
+                Посмотреть маршруты
+              </button>
+            )}
+
             {/* CTA */}
             <div className="bg-card border border-border rounded-2xl p-5 text-center">
               <p className="font-inter text-sm text-muted-foreground mb-4">
                 Есть вопросы? Позвоните нам или напишите в Макс.
               </p>
               <a
-                href="tel:+79223120735"
+                href="tel:88000010101"
                 className="block w-full text-center bg-primary hover:bg-primary/90 text-primary-foreground font-inter font-semibold py-3 rounded-lg transition-colors mb-2"
               >
-                +7 922 312-07-35
+                8-800-001-01-01 (бесплатно)
               </a>
               <a
-                href="tel:+79191072244"
+                href="https://max.ru/u/f9LHodD0cOLnAxokVgBK1HcwEnGhlBy0W7dVL4IAtZFgqRBl5Imbli5RDlY"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="block w-full text-center bg-secondary hover:bg-secondary/80 text-secondary-foreground font-inter font-semibold py-3 rounded-lg transition-colors"
               >
-                +7 919 107-22-44
+                Написать в Макс
               </a>
             </div>
           </div>
@@ -283,6 +297,68 @@ export default function VacancyDetail() {
         onClose={() => setAppOpen(false)}
         preselectedVacancy={vacancy.title}
       />
+
+      {/* Route map modal */}
+      {routeMapOpen && (
+        <div className="fixed inset-0 z-50 bg-black/70 flex items-center justify-center p-4" onClick={() => setRouteMapOpen(false)}>
+          <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full p-6" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-5">
+              <h3 className="font-inter font-bold text-lg text-foreground">Маршруты доставки</h3>
+              <button onClick={() => setRouteMapOpen(false)} className="text-muted-foreground hover:text-foreground text-2xl leading-none">×</button>
+            </div>
+            <div className="relative bg-blue-50 border border-blue-200 rounded-xl overflow-hidden" style={{minHeight: 340}}>
+              {/* SVG схематичная карта */}
+              <svg viewBox="0 0 600 360" className="w-full h-auto" xmlns="http://www.w3.org/2000/svg">
+                {/* Фон */}
+                <rect width="600" height="360" fill="#e8f4fd"/>
+                {/* Азовское море */}
+                <ellipse cx="200" cy="300" rx="160" ry="55" fill="#b3d9f5" opacity="0.7"/>
+                <text x="140" y="305" fontFamily="Arial" fontSize="11" fill="#2b6cb0">Азовское море</text>
+                {/* Города */}
+                <circle cx="180" cy="240" r="8" fill="#e53e3e"/>
+                <text x="190" y="238" fontFamily="Arial" fontSize="13" fontWeight="bold" fill="#1a202c">Мариуполь</text>
+                <circle cx="340" cy="200" r="7" fill="#2b6cb0"/>
+                <text x="350" y="198" fontFamily="Arial" fontSize="13" fontWeight="bold" fill="#1a202c">Макеевка</text>
+                <circle cx="420" cy="130" r="7" fill="#c53030"/>
+                <text x="430" y="128" fontFamily="Arial" fontSize="13" fontWeight="bold" fill="#1a202c">Луганск</text>
+                <circle cx="470" cy="165" r="7" fill="#276749"/>
+                <text x="480" y="163" fontFamily="Arial" fontSize="13" fontWeight="bold" fill="#1a202c">Алчевск</text>
+                {/* Синий маршрут: Мариуполь → Макеевка */}
+                <line x1="188" y1="240" x2="333" y2="200" stroke="#2b6cb0" strokeWidth="3" strokeDasharray="8,4"/>
+                {/* Красный маршрут: Мариуполь → Луганск */}
+                <line x1="188" y1="236" x2="413" y2="133" stroke="#c53030" strokeWidth="3" strokeDasharray="8,4"/>
+                {/* Зелёный маршрут: Мариуполь → Алчевск */}
+                <line x1="188" y1="234" x2="463" y2="168" stroke="#276749" strokeWidth="3" strokeDasharray="8,4"/>
+                {/* Легенда */}
+                <rect x="20" y="20" width="200" height="100" rx="8" fill="white" opacity="0.9"/>
+                <line x1="35" y1="45" x2="65" y2="45" stroke="#2b6cb0" strokeWidth="3" strokeDasharray="6,3"/>
+                <text x="72" y="49" fontFamily="Arial" fontSize="12" fill="#1a202c">Мариуполь — Макеевка</text>
+                <line x1="35" y1="68" x2="65" y2="68" stroke="#c53030" strokeWidth="3" strokeDasharray="6,3"/>
+                <text x="72" y="72" fontFamily="Arial" fontSize="12" fill="#1a202c">Мариуполь — Луганск</text>
+                <line x1="35" y1="91" x2="65" y2="91" stroke="#276749" strokeWidth="3" strokeDasharray="6,3"/>
+                <text x="72" y="95" fontFamily="Arial" fontSize="12" fill="#1a202c">Мариуполь — Алчевск</text>
+              </svg>
+            </div>
+            <div className="mt-4 space-y-2">
+              <div className="flex items-center gap-3 text-sm font-inter">
+                <span className="w-4 h-0.5 bg-blue-600 inline-block" style={{borderTop:"3px dashed #2b6cb0"}}></span>
+                <span className="text-blue-700 font-semibold">Синий маршрут:</span>
+                <span className="text-foreground">Мариуполь → Макеевка</span>
+              </div>
+              <div className="flex items-center gap-3 text-sm font-inter">
+                <span className="w-4 h-0.5 inline-block" style={{borderTop:"3px dashed #c53030"}}></span>
+                <span className="text-red-700 font-semibold">Красный маршрут:</span>
+                <span className="text-foreground">Мариуполь → Луганск</span>
+              </div>
+              <div className="flex items-center gap-3 text-sm font-inter">
+                <span className="w-4 h-0.5 inline-block" style={{borderTop:"3px dashed #276749"}}></span>
+                <span className="text-green-800 font-semibold">Зелёный маршрут:</span>
+                <span className="text-foreground">Мариуполь → Алчевск</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

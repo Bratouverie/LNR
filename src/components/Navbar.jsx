@@ -36,9 +36,10 @@ const NAV_GROUPS = [
   {
     label: "Информация",
     items: [
-      { label: "Документы", href: "#documents" },
-      { label: "FAQ", href: "#faq" },
-      { label: "Контакты", href: "#contacts" },
+    { label: "Документы", href: "#documents" },
+    { label: "FAQ", href: "#faq" },
+    { label: "Юридическая информация", href: "#legal" },
+    { label: "Контакты", href: "#contacts" },
     ],
   },
 ];

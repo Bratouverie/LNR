@@ -265,7 +265,6 @@ export default function BenefitsSection() {
                 ))}
               </ul>
             </div>
-            <div className="grid sm:grid-cols-2 gap-5">
             <div className="bg-card border border-border rounded-2xl p-5">
               <div className="font-inter font-bold text-sm text-foreground mb-4">Пособия на детей</div>
               <ul className="space-y-2">
@@ -275,17 +274,6 @@ export default function BenefitsSection() {
                   </li>
                 ))}
               </ul>
-            </div>
-            <div className="bg-card border border-border rounded-2xl p-5">
-              <div className="font-inter font-bold text-sm text-foreground mb-4">Помощь при гибели сотрудника</div>
-              <ul className="space-y-2">
-                {FAMILY_DEATH.map((item, i) => (
-                  <li key={i} className="flex items-start gap-2 text-sm font-inter text-muted-foreground">
-                    <CheckCircle className="h-4 w-4 text-accent shrink-0 mt-0.5" />{item}
-                  </li>
-                ))}
-              </ul>
-            </div>
             </div>
           </div>
         )}

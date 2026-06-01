@@ -54,12 +54,12 @@ export default function AboutSection({ teamImg }) {
           <div className="relative">
             <div className="absolute -inset-4 bg-accent/5 rounded-2xl -rotate-2" />
             <img
-              src={teamImg}
+              src="https://media.base44.com/images/public/69f4a665db2c72a42818d397/08ba0707a_Professional_dynamic_lifestyle_photograph_of_const-1780315695211.png"
               alt="Команда специалистов"
               className="relative rounded-2xl w-full object-cover shadow-2xl" />
             
             <div className="absolute -bottom-6 -left-6 bg-primary text-primary-foreground rounded-xl p-4 shadow-xl">
-              <div className="font-mono font-bold text-2xl text-accent">700+</div>
+              <div className="font-mono font-bold text-2xl text-accent">1000+</div>
               <div className="font-inter text-xs text-primary-foreground/70">специалистов<br />уже в программе</div>
             </div>
           </div>

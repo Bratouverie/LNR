@@ -6,7 +6,8 @@ const TABS = [
 { id: "termination", label: "Уход из программы", icon: Home },
 { id: "contract", label: "Трудовой договор", icon: FileText },
 { id: "salary", label: "Гарантии зарплаты", icon: Banknote },
-{ id: "social", label: "Соц. пакет", icon: Heart }];
+{ id: "social", label: "Соц. пакет", icon: Heart },
+{ id: "legal_info", label: "Юридическая информация", icon: Scale }];
 
 
 const DISPUTES_STEPS = [
@@ -33,7 +34,8 @@ const DISPUTES_STEPS = [
   title: "Судебное разрешение",
   items: [
   "При невозможности досудебного урегулирования — обращение в суд",
-  "Суд по месту работы (Хабаровский край)",
+  "Суд города Москвы",
+  "Судебные разбирательства по разрешению конфликтов и спорных ситуаций осуществляются через суд города Москвы",
   "Судебные издержки возвращаются при победе работника"]
 
 }];
@@ -94,8 +96,8 @@ const CONTRACT_INFO = [
 { label: "Тип", value: "Трудовой договор на определённый срок (ст. 59 ТК РФ)" },
 { label: "Срок действия", value: "12 месяцев (365 дней)" },
 { label: "Метод работы", value: "Вахтовый метод (ст. 217–229 ТК РФ)" },
-{ label: "Дата начала", value: "25\u043C\u0430\u044F - 25 \u0438\u044E\u043D\u044F 2026 \u0433." },
-{ label: "Дата окончания", value: "25 мая 2027 г." },
+{ label: "Дата начала", value: "3–20 июля 2026 г." },
+{ label: "Дата окончания", value: "Июль 2027 г." },
 { label: "Испытательный срок", value: "Не применяется (вахтовая работа)" }];
 
 
@@ -274,6 +276,17 @@ export default function LegalSection() {
               </div>
           )}
           </div>
+        }
+
+        {/* Legal info anchor */}
+        {activeTab === "legal_info" &&
+        <div className="max-w-2xl mx-auto bg-accent/5 border border-accent/20 rounded-2xl p-6 text-center">
+          <p className="font-inter text-foreground text-base font-semibold mb-2">Юридическая информация</p>
+          <p className="font-inter text-muted-foreground text-sm mb-4">Полная правовая документация: политика конфиденциальности, реквизиты компании, нормативно-правовая база.</p>
+          <a href="/privacy" className="inline-block bg-primary hover:bg-primary/90 text-primary-foreground font-inter font-semibold px-6 py-3 rounded-xl transition-colors">
+            Открыть политику конфиденциальности
+          </a>
+        </div>
         }
 
         {/* Social package */}
