@@ -75,8 +75,8 @@ export default function VacancyDetail() {
             <span className="text-white/50"> · от {vacancy.salaryMin.toLocaleString("ru-RU")} ₽/мес</span>
           </div>
           <div className="flex items-center gap-3 ml-auto">
-            <a href="tel:88000010101" className="text-white/60 hover:text-white font-inter text-sm transition-colors">
-              8-800-001-01-01
+            <a href="tel:88002228463" className="text-white/60 hover:text-white font-inter text-sm transition-colors">
+              8-800-222-84-63
             </a>
             <Button
               onClick={() => setAppOpen(true)}
@@ -274,10 +274,10 @@ export default function VacancyDetail() {
                 Есть вопросы? Позвоните нам или напишите в Макс.
               </p>
               <a
-                href="tel:88000010101"
+                href="tel:88002228463"
                 className="block w-full text-center bg-primary hover:bg-primary/90 text-primary-foreground font-inter font-semibold py-3 rounded-lg transition-colors mb-2"
               >
-                8-800-001-01-01 (бесплатно)
+                8-800-222-84-63 (бесплатно)
               </a>
               <a
                 href="https://max.ru/u/f9LHodD0cOLnAxokVgBK1HcwEnGhlBy0W7dVL4IAtZFgqRBl5Imbli5RDlY"

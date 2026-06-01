@@ -65,7 +65,7 @@ export default function Footer() {
           <div>
             <div className="font-inter font-bold text-xs text-white/40 uppercase tracking-widest mb-3">Контакты</div>
             <div className="space-y-2 text-xs text-white/50 font-inter">
-              <div><a href="tel:88000010101" className="hover:text-white transition-colors font-semibold">8-800-001-01-01 (бесплатно)</a></div>
+              <div><a href="tel:88002228463" className="hover:text-white transition-colors font-semibold">8-800-222-84-63 (бесплатно)</a></div>
               <div className="text-white/30">Единый номер приёма заявок</div>
               <div className="pt-1"><a href="mailto:hh@vosstanovim-dnr.ru" className="hover:text-white transition-colors">hh@vosstanovim-dnr.ru</a></div>
               <div className="text-white/30">Трудоустройство граждан</div>

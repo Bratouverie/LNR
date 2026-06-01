@@ -18,8 +18,8 @@ export default function ContactsSection({ onCallback }) {
         {/* Единый телефон */}
         <div className="bg-primary text-primary-foreground rounded-2xl p-6 sm:p-8 text-center mb-8">
           <div className="text-white/60 font-inter text-sm mb-2">Единый телефон приёма заявок</div>
-          <a href="tel:88000010101" className="text-3xl sm:text-4xl font-mono font-black text-accent hover:text-accent/80 transition-colors">
-            8-800-001-01-01
+          <a href="tel:88002228463" className="text-3xl sm:text-4xl font-mono font-black text-accent hover:text-accent/80 transition-colors">
+            8-800-222-84-63
           </a>
           <div className="text-white/60 font-inter text-sm mt-2">По вопросам трудоустройства граждан и сотрудничества с кадровыми агентствами · Звонок бесплатный</div>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-6">
