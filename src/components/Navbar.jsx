@@ -10,7 +10,7 @@ const NAV_GROUPS = [
     items: [
       { label: "О программе", href: "#about" },
       { label: "Как устроена программа", href: "#mechanism" },
-      { label: "Статус проекта", href: "#project-status" },
+      { label: "Статус проекта", href: "#status" },
       { label: "Сроки и этапы", href: "#timeline" },
       { label: "География", href: "#geography" },
     ],

@@ -174,9 +174,9 @@ export default function ProjectStatusSection() {
               <div className="p-5 border-b md:border-b-0 md:border-r border-border">
                 <h4 className="font-inter font-bold text-sm text-foreground mb-4">Контакты</h4>
                 <div className="space-y-3">
-                  <a href="tel:88000010101" className="flex items-center gap-3 text-sm font-inter text-foreground hover:text-accent transition-colors font-semibold">
+                  <a href="tel:88002228463" className="flex items-center gap-3 text-sm font-inter text-foreground hover:text-accent transition-colors font-semibold">
                     <Phone className="h-4 w-4 text-accent" />
-                    8-800-001-01-01 (бесплатно)
+                    8-800-222-84-63 (бесплатно)
                   </a>
                   <a href="mailto:hh@vosstanovim-dnr.ru" className="flex items-center gap-3 text-sm font-inter text-foreground hover:text-accent transition-colors">
                     <Mail className="h-4 w-4 text-accent" />
