@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { Menu, X, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
 
 const GOV_LOGO = "https://media.base44.com/images/public/69f4a665db2c72a42818d397/b880d120f_mediapreview.jpeg";
 
@@ -40,6 +41,7 @@ const NAV_GROUPS = [
     { label: "FAQ", href: "#faq" },
     { label: "Юридическая информация", href: "#legal" },
     { label: "Контакты", href: "#contacts" },
+    { label: "Блог", href: "/blog", external: true },
     ],
   },
 ];
@@ -67,15 +69,26 @@ function DropdownMenu({ group, scrollTo }) {
       </button>
       {open && (
         <div className="absolute top-full left-0 mt-1 bg-primary border border-white/15 rounded-xl shadow-2xl py-1.5 min-w-[200px] z-50">
-          {group.items.map((item) => (
-            <button
-              key={item.href}
-              onClick={() => { scrollTo(item.href); setOpen(false); }}
-              className="block w-full text-left px-4 py-2 text-sm font-inter text-white/70 hover:text-white hover:bg-white/10 transition-colors"
-            >
-              {item.label}
-            </button>
-          ))}
+          {group.items.map((item) =>
+            item.external ? (
+              <Link
+                key={item.href}
+                to={item.href}
+                onClick={() => setOpen(false)}
+                className="block w-full text-left px-4 py-2 text-sm font-inter text-white/70 hover:text-white hover:bg-white/10 transition-colors"
+              >
+                {item.label}
+              </Link>
+            ) : (
+              <button
+                key={item.href}
+                onClick={() => { scrollTo(item.href); setOpen(false); }}
+                className="block w-full text-left px-4 py-2 text-sm font-inter text-white/70 hover:text-white hover:bg-white/10 transition-colors"
+              >
+                {item.label}
+              </button>
+            )
+          )}
         </div>
       )}
     </div>
@@ -155,15 +168,26 @@ export default function Navbar({ onOpenApplication }) {
               </button>
               {mobileExpanded === group.label && (
                 <div className="pb-2 pl-3 space-y-1">
-                  {group.items.map((item) => (
-                    <button
-                      key={item.href}
-                      onClick={() => scrollTo(item.href)}
-                      className="block w-full text-left py-2 text-white/60 hover:text-white text-sm font-inter transition-colors"
-                    >
-                      {item.label}
-                    </button>
-                  ))}
+                  {group.items.map((item) =>
+                    item.external ? (
+                      <Link
+                        key={item.href}
+                        to={item.href}
+                        onClick={() => setMobileOpen(false)}
+                        className="block w-full text-left py-2 text-white/60 hover:text-white text-sm font-inter transition-colors"
+                      >
+                        {item.label}
+                      </Link>
+                    ) : (
+                      <button
+                        key={item.href}
+                        onClick={() => scrollTo(item.href)}
+                        className="block w-full text-left py-2 text-white/60 hover:text-white text-sm font-inter transition-colors"
+                      >
+                        {item.label}
+                      </button>
+                    )
+                  )}
                 </div>
               )}
             </div>

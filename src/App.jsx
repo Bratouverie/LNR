@@ -9,6 +9,8 @@ import Home from './pages/Home';
 import VacancyDetail from './pages/VacancyDetail';
 import PrivacyPolicy from './pages/PrivacyPolicy';
 import ContractView from './pages/ContractView';
+import Blog from './pages/Blog';
+import BlogArticle from './pages/BlogArticle';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -41,6 +43,8 @@ const AuthenticatedApp = () => {
       <Route path="/vacancy/:id" element={<VacancyDetail />} />
       <Route path="/contract/:id" element={<ContractView />} />
       <Route path="/privacy" element={<PrivacyPolicy />} />
+      <Route path="/blog" element={<Blog />} />
+      <Route path="/blog/:slug" element={<BlogArticle />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
