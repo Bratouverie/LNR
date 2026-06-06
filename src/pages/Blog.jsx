@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft, Clock, Tag, ArrowRight, TrendingUp, Phone } from "lucide-react";
 import { BLOG_ARTICLES } from "@/lib/blogData";
+import LiveChat from "@/components/LiveChat";
+import VisitorCounter from "@/components/VisitorCounter";
 
 const CATEGORY_COLORS = {
   "Вакансии": "bg-blue-100 text-blue-700",

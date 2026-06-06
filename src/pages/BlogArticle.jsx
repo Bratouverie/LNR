@@ -1,4 +1,6 @@
 import { useParams, Link } from "react-router-dom";
+import LiveChat from "@/components/LiveChat";
+import VisitorCounter from "@/components/VisitorCounter";
 import { ArrowLeft, Clock, Tag, Phone, ChevronRight, Calendar, User, TrendingUp } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import { BLOG_ARTICLES } from "@/lib/blogData";
@@ -75,6 +77,10 @@ export default function BlogArticle() {
         </div>
       )}
 
+      <VisitorCounter />
+      <LiveChat />
+      <VisitorCounter />
+      <LiveChat />
       {/* Body */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid lg:grid-cols-3 gap-10">
@@ -118,9 +124,8 @@ export default function BlogArticle() {
                     <ol className="space-y-2 mb-5 ml-1 list-decimal list-inside">{children}</ol>
                   ),
                   li: ({ children }) => (
-                    <li className="flex items-start gap-2 font-inter text-sm text-muted-foreground">
-                      <span className="text-accent shrink-0 mt-1 font-bold">•</span>
-                      <span>{children}</span>
+                    <li className="font-inter text-sm text-muted-foreground pl-4 relative before:absolute before:left-0 before:top-2 before:w-1.5 before:h-1.5 before:rounded-full before:bg-accent before:shrink-0">
+                      {children}
                     </li>
                   ),
                   strong: ({ children }) => (

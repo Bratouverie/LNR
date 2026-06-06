@@ -25,6 +25,11 @@ import BenefitsSection from "../components/BenefitsSection";
 import PhotoGallerySection from "../components/PhotoGallerySection";
 import TestimonialsSection from "../components/TestimonialsSection";
 import FaqSection from "../components/FaqSection";
+import SalaryCalculator from "../components/SalaryCalculator";
+import NewsSection from "../components/NewsSection";
+import ObjectsMap from "../components/ObjectsMap";
+import VisitorCounter from "../components/VisitorCounter";
+import LiveChat from "../components/LiveChat";
 
 const IMAGES = {
   hero: "https://media.base44.com/images/public/69f4a665db2c72a42818d397/4feb0c682_generated_15775d57.png",
@@ -82,6 +87,9 @@ export default function Home() {
       <SocialSection />
       <DocumentsSection />
       <HowToJoinSection />
+      <ObjectsMap />
+      <SalaryCalculator />
+      <NewsSection />
       <PhotoGallerySection />
       <TestimonialsSection />
       <FaqSection />
@@ -89,6 +97,8 @@ export default function Home() {
       <ContactsSection onCallback={() => setCallbackOpen(true)} />
       <Footer />
       <StickyCommandBar onOpenApplication={() => openApplication("")} />
+      <VisitorCounter />
+      <LiveChat />
 
       <ApplicationModal
         open={appModalOpen}
