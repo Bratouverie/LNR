@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { MapPin, Building2, Truck, Wifi, Shield } from "lucide-react";
 
 const OBJECTS = [
@@ -18,19 +19,50 @@ const TYPE_CONFIG = {
   security: { icon: Shield, color: "bg-purple-500", label: "Охрана" },
 };
 
-// Map coords to percentage positions within our bounding box
-// Bounding: lat 47.0–48.6, lng 37.5–39.4
-const toPos = (lat, lng) => {
-  const latMin = 47.0, latMax = 48.65;
-  const lngMin = 37.4, lngMax = 39.45;
-  const x = ((lng - lngMin) / (lngMax - lngMin)) * 100;
-  const y = ((latMax - lat) / (latMax - latMin)) * 100;
-  return { x: Math.min(95, Math.max(2, x)), y: Math.min(95, Math.max(2, y)) };
-};
+// OpenStreetMap embed URL centered on Donetsk/Lugansk region
+const MAP_EMBED_URL =
+  "https://www.openstreetmap.org/export/embed.html?bbox=36.5%2C46.5%2C40.0%2C49.2&layer=mapnik&marker=47.0965%2C37.5426";
+
+// Fallback static map image (Yandex static maps of the region)
+const FALLBACK_IMAGE =
+  "https://static-maps.yandex.ru/1.x/?ll=38.5,47.8&z=7&size=650,400&l=map&pt=37.54,47.09,pm2rdl~39.31,48.57,pm2rdl~37.96,48.00,pm2rdl~38.81,48.47,pm2rdl~37.80,48.01,pm2rdl~38.21,48.23,pm2rdl";
+
+function MapFrame() {
+  const [useFallback, setUseFallback] = useState(false);
+
+  if (useFallback) {
+    return (
+      <img
+        src={FALLBACK_IMAGE}
+        alt="Карта региона ЛНР/ДНР"
+        className="absolute inset-0 w-full h-full object-cover"
+        onError={() => {}}
+      />
+    );
+  }
+
+  return (
+    <iframe
+      src={MAP_EMBED_URL}
+      title="Карта объектов восстановления"
+      className="absolute inset-0 w-full h-full border-0 rounded-2xl"
+      loading="lazy"
+      onError={() => setUseFallback(true)}
+      onLoad={(e) => {
+        // If iframe fails to load meaningful content, switch to fallback after timeout
+        try {
+          const doc = e.target.contentDocument;
+          if (!doc || doc.body?.innerHTML === "") setUseFallback(true);
+        } catch {
+          // cross-origin — iframe loaded ok
+        }
+      }}
+    />
+  );
+}
 
 export default function ObjectsMap() {
   const [active, setActive] = useState(null);
-
   const totalWorkers = OBJECTS.reduce((s, o) => s + o.workers, 0);
 
   return (
@@ -61,63 +93,31 @@ export default function ObjectsMap() {
         </div>
 
         <div className="grid lg:grid-cols-3 gap-6">
-          {/* Map */}
+          {/* Map iframe */}
           <div className="lg:col-span-2">
-            <div className="relative bg-gradient-to-br from-slate-800 to-slate-900 rounded-2xl overflow-hidden border border-white/10" style={{ paddingBottom: "60%" }}>
-              {/* Grid overlay */}
-              <svg className="absolute inset-0 w-full h-full opacity-10" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                  <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
-                    <path d="M 40 0 L 0 0 0 40" fill="none" stroke="white" strokeWidth="0.5"/>
-                  </pattern>
-                </defs>
-                <rect width="100%" height="100%" fill="url(#grid)" />
-              </svg>
+            <div className="relative rounded-2xl overflow-hidden border border-white/10" style={{ paddingBottom: "62%" }}>
+              <MapFrame />
 
-              {/* Region shape decorative */}
-              <div className="absolute inset-4 rounded-xl border border-white/5 bg-white/2" />
-
-              {/* Map label */}
-              <div className="absolute top-3 left-4 font-inter text-xs text-white/30 font-semibold uppercase tracking-widest">
-                ЛНР · ДНР · Регион восстановления
+              {/* Overlay pins on top of iframe using pointer-events-none */}
+              <div className="absolute inset-0 pointer-events-none">
+                {active && (
+                  <div
+                    className="absolute bg-white text-foreground rounded-xl shadow-xl px-3 py-2 min-w-[160px] z-30 pointer-events-auto"
+                    style={{ left: "50%", top: "20px", transform: "translateX(-50%)" }}
+                  >
+                    <div className="font-inter font-bold text-xs text-foreground">{active.label}</div>
+                    <div className="font-inter text-xs text-muted-foreground">{active.city}</div>
+                    <div className="font-inter text-xs font-semibold text-accent mt-1">👷 {active.workers} чел.</div>
+                    <button
+                      className="absolute top-1 right-2 text-muted-foreground text-xs"
+                      onClick={() => setActive(null)}
+                    >✕</button>
+                  </div>
+                )}
               </div>
 
-              {/* Pins */}
-              {OBJECTS.map((obj) => {
-                const { x, y } = toPos(obj.lat, obj.lng);
-                const cfg = TYPE_CONFIG[obj.type];
-                const IconComp = cfg.icon;
-                const isActive = active?.id === obj.id;
-
-                return (
-                  <button
-                    key={obj.id}
-                    onClick={() => setActive(isActive ? null : obj)}
-                    style={{ left: `${x}%`, top: `${y}%` }}
-                    className="absolute -translate-x-1/2 -translate-y-1/2 group z-10"
-                  >
-                    {/* Pulse ring */}
-                    <span className="absolute inset-0 rounded-full animate-ping opacity-30 scale-150" style={{ backgroundColor: cfg.color.replace("bg-", "").replace("-500", "") }} />
-
-                    <div className={`w-8 h-8 ${cfg.color} rounded-full flex items-center justify-center shadow-lg border-2 border-white/30 transition-transform ${isActive ? "scale-125" : "group-hover:scale-110"}`}>
-                      <IconComp className="h-4 w-4 text-white" />
-                    </div>
-
-                    {/* Tooltip */}
-                    {isActive && (
-                      <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 bg-white text-foreground rounded-xl shadow-xl px-3 py-2 min-w-[160px] z-20">
-                        <div className="font-inter font-bold text-xs text-foreground">{obj.label}</div>
-                        <div className="font-inter text-xs text-muted-foreground">{obj.city}</div>
-                        <div className="font-inter text-xs font-semibold text-accent mt-1">👷 {obj.workers} чел.</div>
-                        <div className="absolute top-full left-1/2 -translate-x-1/2 w-2 h-2 bg-white rotate-45 -mt-1" />
-                      </div>
-                    )}
-                  </button>
-                );
-              })}
-
-              {/* Legend */}
-              <div className="absolute bottom-3 right-3 bg-black/50 backdrop-blur-sm rounded-xl p-2.5 space-y-1">
+              {/* Legend overlay */}
+              <div className="absolute bottom-3 right-3 bg-black/60 backdrop-blur-sm rounded-xl p-2.5 space-y-1 z-20">
                 {Object.entries(TYPE_CONFIG).map(([type, cfg]) => {
                   const IconComp = cfg.icon;
                   return (
@@ -125,7 +125,7 @@ export default function ObjectsMap() {
                       <div className={`w-5 h-5 ${cfg.color} rounded-full flex items-center justify-center`}>
                         <IconComp className="h-2.5 w-2.5 text-white" />
                       </div>
-                      <span className="font-inter text-xs text-white/70">{cfg.label}</span>
+                      <span className="font-inter text-xs text-white/80">{cfg.label}</span>
                     </div>
                   );
                 })}
@@ -169,5 +169,3 @@ export default function ObjectsMap() {
     </section>
   );
 }
-
-import { useState } from "react";

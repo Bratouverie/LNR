@@ -3,6 +3,7 @@ import LiveChat from "@/components/LiveChat";
 import VisitorCounter from "@/components/VisitorCounter";
 import { ArrowLeft, Clock, Tag, Phone, ChevronRight, Calendar, User, TrendingUp } from "lucide-react";
 import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { BLOG_ARTICLES } from "@/lib/blogData";
 import ArticleChart from "@/components/blog/ArticleChart";
 import ArticleTimeline from "@/components/blog/ArticleTimeline";
@@ -79,8 +80,6 @@ export default function BlogArticle() {
 
       <VisitorCounter />
       <LiveChat />
-      <VisitorCounter />
-      <LiveChat />
       {/* Body */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid lg:grid-cols-3 gap-10">
@@ -101,6 +100,7 @@ export default function BlogArticle() {
             {/* Article text */}
             <div className="prose-custom">
               <ReactMarkdown
+                remarkPlugins={[remarkGfm]}
                 components={{
                   h2: ({ children }) => (
                     <h2 className="text-xl sm:text-2xl font-inter font-black text-foreground mt-10 mb-4 pb-2 border-b border-border">
