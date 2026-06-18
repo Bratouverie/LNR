@@ -12,6 +12,8 @@ import ContractView from './pages/ContractView';
 import Blog from './pages/Blog';
 import BlogArticle from './pages/BlogArticle';
 import ConsentPage from './pages/ConsentPage';
+import About from './pages/About';
+import Contact from './pages/Contact';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -47,6 +49,8 @@ const AuthenticatedApp = () => {
       <Route path="/blog" element={<Blog />} />
       <Route path="/blog/:slug" element={<BlogArticle />} />
       <Route path="/consent" element={<ConsentPage />} />
+      <Route path="/about" element={<About />} />
+      <Route path="/contact" element={<Contact />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );

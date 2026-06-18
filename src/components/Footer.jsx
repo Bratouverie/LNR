@@ -1,3 +1,5 @@
+import { Link } from "react-router-dom";
+
 export default function Footer() {
   const scrollTo = (href) => {
     const el = document.querySelector(href);
@@ -112,9 +114,17 @@ export default function Footer() {
           <p className="text-xs text-white/30 font-inter">
             <a href="https://vosstanovim-dnr.ru" className="hover:text-white transition-colors">https://vosstanovim-dnr.ru</a>
           </p>
-          <a href="/privacy" className="text-xs text-white/40 hover:text-white font-inter transition-colors underline">
-            Политика конфиденциальности
-          </a>
+          <div className="flex items-center justify-center gap-4 flex-wrap">
+            <a href="/privacy" className="text-xs text-white/40 hover:text-white font-inter transition-colors underline">
+              Политика конфиденциальности
+            </a>
+            <Link to="/about" className="text-xs text-white/40 hover:text-white font-inter transition-colors underline">
+              О программе
+            </Link>
+            <Link to="/contact" className="text-xs text-white/40 hover:text-white font-inter transition-colors underline">
+              Контакты
+            </Link>
+          </div>
         </div>
 
       </div>
