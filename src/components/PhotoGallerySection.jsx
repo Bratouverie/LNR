@@ -63,6 +63,11 @@ export default function PhotoGallerySection() {
   const prev = () => setLightbox((l) => (l === 0 ? photos.length - 1 : l - 1));
   const next = () => setLightbox((l) => (l === photos.length - 1 ? 0 : l + 1));
 
+  const handleTabChange = (id) => {
+    setActiveTab(id);
+    setLightbox(null);
+  };
+
   return (
     <section id="gallery" className="py-24 sm:py-32 bg-background">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -82,7 +87,7 @@ export default function PhotoGallerySection() {
           {TABS.map((t) => (
             <button
               key={t.id}
-              onClick={() => setActiveTab(t.id)}
+              onClick={() => handleTabChange(t.id)}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-lg font-inter text-sm font-medium transition-all duration-200 ${
                 activeTab === t.id
                   ? "bg-primary text-primary-foreground shadow-lg"
@@ -106,6 +111,10 @@ export default function PhotoGallerySection() {
               <img
                 src={photo.src}
                 alt={photo.caption}
+                loading="lazy"
+                decoding="async"
+                width="400"
+                height="225"
                 className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 onError={(e) => { e.target.style.display = 'none'; }}
               />
