@@ -91,16 +91,22 @@ export default function ContractView() {
 
             {/* 1. Стороны */}
             <ContractSection num="1" title="СТОРОНЫ ДОГОВОРА">
-              <p>
-                <strong>Работодатель:</strong> Организация, осуществляющая восстановительные работы в городах Луганской Народной Республики (ЛНР) и Донецкой Народной Республики (ДНР). <strong>Полные реквизиты работодателя, включая юридический адрес, наименование и контактную информацию, являются засекреченными и будут предоставлены работнику при прибытии на место несения вахты</strong> в целях безопасности проекта и защиты персональных данных организации.
-              </p>
+              <div className="border border-gray-300 rounded p-3 bg-gray-50 text-sm space-y-0.5">
+                <p><strong>Работодатель:</strong> ООО «Братоуверие-СНБ»</p>
+                <p>ОГРН: 1262500006966 &nbsp;|&nbsp; ИНН: 2511135442 &nbsp;|&nbsp; КПП: 251101001</p>
+                <p>Юридический адрес: 692510, Приморский край, г.о. Уссурийский, г. Уссурийск, пер. Мирный, д. 1</p>
+                <p>Расчётный счёт: 40702810820110001074</p>
+                <p>Банк: ФИЛИАЛ «ХАБАРОВСКИЙ» АО «АЛЬФА-БАНК»</p>
+                <p>БИК: 040813770 &nbsp;|&nbsp; Корр. счёт: 30101810800000000770</p>
+                <p>Тел.: +7(4212) 51-59-30 &nbsp;|&nbsp; E-mail: hh@bratouverie-snb.ru &nbsp;|&nbsp; Сайт: bratouverie-snb.ru</p>
+              </div>
               <p className="mt-3">
                 <strong>Работник:</strong> _______________________________ (ФИО), паспорт РФ серия __________, номер __________, выданный _________________________, дата выдачи ______________. Дата рождения: ______________. Постоянное место проживания: _________________________________________________.
               </p>
 
-              <SubSection title="1.1 Организация безопасности и доставки Министерством обороны РФ">
+              <SubSection title="1.1 Организация безопасности и доставки Федеральной службой безопасности РФ">
                 <p>{CONTRACT_COMMON.contractSections.moSection}</p>
-                <p className="mt-2">Нарушение требований МО РФ влечёт немедленное расторжение договора без выплаты компенсаций и возможное привлечение к ответственности.</p>
+                <p className="mt-2">Нарушение требований ФСБ России влечёт немедленное расторжение договора без выплаты компенсаций и возможное привлечение к ответственности.</p>
               </SubSection>
             </ContractSection>
 
@@ -233,7 +239,7 @@ export default function ContractView() {
             {/* 8. Безопасность */}
             <ContractSection num="8" title="БЕЗОПАСНОСТЬ И ОХРАНА ТРУДА">
               <SubSection title="8.1 Обеспечение безопасности">
-                <p className="mb-2">Работа осуществляется на освобождённых территориях ЛНР и ДНР под защитой и обеспечением безопасности специальных подразделений Вооружённых Сил Российской Федерации.</p>
+                <p className="mb-2">Работа осуществляется на восстанавливаемых территориях ЛНР и ДНР под охраной и обеспечением безопасности силовых структур Российской Федерации.</p>
                 <BulletList items={CONTRACT_COMMON.security} />
               </SubSection>
               <SubSection title="8.2 Обязанности работника в области охраны труда">
@@ -318,28 +324,22 @@ export default function ContractView() {
 
                 <div>
                   <p className="font-bold text-gray-900 mb-4">РАБОТОДАТЕЛЬ:</p>
-                  <div className="space-y-4 text-sm">
-                    <div>
-                      <p className="text-gray-500 text-xs mb-1">Наименование организации:</p>
-                      <p className="text-xs text-gray-400 italic">(Полные реквизиты предоставляются при подписании официального договора)</p>
-                      <div className="border-b border-gray-400 h-6 mt-1" />
-                    </div>
-                    <div>
-                      <p className="text-gray-500 text-xs mb-1">Уполномоченный представитель:</p>
-                      <div className="border-b border-gray-400 h-6" />
-                    </div>
-                    <div>
-                      <p className="text-gray-500 text-xs mb-1">Реквизиты организации:</p>
-                      <div className="border-b border-gray-400 h-6" />
-                    </div>
-                    <div className="flex gap-8 mt-2">
-                      <div className="flex-1">
-                        <p className="text-gray-500 text-xs mb-1">Дата:</p>
-                        <div className="border-b border-gray-400 h-6" />
+                  <div className="text-sm space-y-1">
+                    <p className="font-semibold">ООО «Братоуверие-СНБ»</p>
+                    <p className="text-xs text-gray-600">ОГРН: 1262500006966 | ИНН: 2511135442 | КПП: 251101001</p>
+                    <p className="text-xs text-gray-600">692510, Приморский край, г.о. Уссурийский, г. Уссурийск, пер. Мирный, д. 1</p>
+                    <p className="text-xs text-gray-600">Р/сч: 40702810820110001074</p>
+                    <p className="text-xs text-gray-600">Банк: ФИЛИАЛ «ХАБАРОВСКИЙ» АО «АЛЬФА-БАНК»</p>
+                    <p className="text-xs text-gray-600">БИК: 040813770 | Корр. счёт: 30101810800000000770</p>
+                    <p className="text-xs text-gray-600">Тел.: +7(4212) 51-59-30 | hh@bratouverie-snb.ru | bratouverie-snb.ru</p>
+                    <div className="mt-4 space-y-3">
+                      <div>
+                        <p className="text-gray-500 text-xs mb-1">Генеральный директор:</p>
+                        <p className="text-sm">______________ Я.Е. Ануфриев &nbsp;&nbsp;&nbsp;&nbsp; М.П.</p>
                       </div>
-                      <div className="flex-1">
-                        <p className="text-gray-500 text-xs mb-1">Подпись:</p>
-                        <div className="border-b border-gray-400 h-6" />
+                      <div>
+                        <p className="text-gray-500 text-xs mb-1">Дата:</p>
+                        <div className="border-b border-gray-400 h-6 w-40" />
                       </div>
                     </div>
                   </div>
