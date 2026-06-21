@@ -33,7 +33,7 @@ export default function ArticleTimeline({ data }) {
           <span className="font-bold">Итого от заявки до выезда:</span> 14–21 рабочий день
         </div>
         <div className="font-inter text-sm font-bold text-accent">
-          Подъёмные 625000 ₽ через 5 дней после подписания
+          Подъёмные 2 500 000 ₽ через 5 дней после подписания
         </div>
       </div>
     </div>

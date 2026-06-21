@@ -206,7 +206,7 @@ export default function BlogArticle() {
                 </div>
                 <div className="flex justify-between text-xs font-inter">
                   <span className="text-white/60">Подъёмные</span>
-                  <span className="font-bold text-accent">625000 ₽</span>
+                  <span className="font-bold text-accent">2 500 000 ₽</span>
                 </div>
                 <div className="flex justify-between text-xs font-inter">
                   <span className="text-white/60">Страховка</span>
@@ -237,7 +237,7 @@ export default function BlogArticle() {
               <h3 className="font-inter font-bold text-foreground mb-4 text-sm">📌 Ключевые факты</h3>
               <div className="space-y-3">
                 {[
-                  { label: "Срок вахты", value: "3 мес." },
+                  { label: "Срок вахты", value: "1 год" },
                   { label: "Место работы", value: "Мариуполь, Луганск, Макеевка, Алчевск" },
                   { label: "Формат занятости", value: "Официальный трудовой договор" },
                   { label: "Выплата зарплаты", value: "2 раза в месяц" },
