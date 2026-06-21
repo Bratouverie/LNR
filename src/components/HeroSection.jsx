@@ -93,7 +93,7 @@ export default function HeroSection({ onOpenApplication, heroImg, mapImg }) {
         {/* Stats row */}
         <div className="grid grid-cols-3 gap-4 sm:gap-8 max-w-lg mx-auto">
           <div className="text-center">
-            <div className="text-2xl sm:text-3xl font-mono font-bold text-accent">625 000</div>
+            <div className="text-2xl sm:text-3xl font-mono font-bold text-accent">625000</div>
             <div className="text-xs sm:text-sm text-white/50 font-inter mt-1">подъёмные, ₽</div>
           </div>
           <div className="text-center">
