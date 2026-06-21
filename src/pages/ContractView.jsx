@@ -146,17 +146,15 @@ export default function ContractView() {
             </ContractSection>
 
             {/* 4. Режим работы */}
-            <ContractSection num="4" title="РЕЖИМ РАБОТЫ И ВРЕМЯ ОТДЫХА">
+            <ContractSection num="4" title="РЕЖИМ РАБОТЫ">
               <SubSection title="4.1 Формат работы">
-                <p>Работник принимается на работу на условиях вахтового метода организации труда в соответствии с Трудовым кодексом Российской Федерации. Вахта продолжается {CONTRACT_COMMON.vacancyDays} календарных дней без прерывания с предоставлением оплачиваемого отпуска.</p>
+                <p>Работник принимается на работу на условиях вахтового метода организации труда в соответствии с Трудовым кодексом Российской Федерации (ст. 217–229). Вахта продолжается {CONTRACT_COMMON.vacancyDays} дней (3 месяца).</p>
               </SubSection>
               <SubSection title="4.2 График работы">
-                <p><strong>Рабочая неделя и рабочий день:</strong> {extra.schedule}.</p>
-                <p className="mt-2"><strong>Время отдыха:</strong> Работнику предоставляется достаточный период отдыха между сменами для восстановления. Возможны экстренные вызовы при критических ситуациях.</p>
+                <p><strong>Рабочая неделя и рабочий день:</strong> {extra.schedule}. Время отдыха между сменами предоставляется согласно внутреннему распорядку объекта. Возможны экстренные вызовы при критических ситуациях.</p>
               </SubSection>
-              <SubSection title="4.3 Длительность вахты и отпуск">
-                <p><strong>Общая длительность вахты:</strong> {CONTRACT_COMMON.vacancyDays} календарных дней непрерывной работы.</p>
-                <p className="mt-2"><strong>Оплачиваемый отпуск:</strong> Работнику предоставляется оплачиваемый отпуск в размере не менее {CONTRACT_COMMON.vacationDays} календарных дней за вахтовый период. Сроки согласовываются с учётом производственной необходимости. По согласованию возможны краткосрочные отпуска в экстренных случаях.</p>
+              <SubSection title="4.3 Длительность вахты">
+                <p><strong>Общая длительность вахты:</strong> {CONTRACT_COMMON.vacancyDays} дней (3 месяца). Во время вахты отпуск не предоставляется. Время отдыха между сменами предоставляется согласно внутреннему распорядку объекта.</p>
               </SubSection>
             </ContractSection>
 
@@ -191,8 +189,8 @@ export default function ContractView() {
                       <td className="px-4 py-2 font-bold text-gray-900">{extra.salaryTotal}</td>
                     </tr>
                     <tr>
-                      <td className="px-4 py-2 font-semibold bg-gray-50">Единовременная выплата при подписании</td>
-                      <td className="px-4 py-2 font-bold">{(CONTRACT_COMMON.bonus / 1000000).toFixed(1)} 000 000 ₽</td>
+                      <td className="px-4 py-2 font-semibold bg-gray-50">Единовременная выплата за вахту</td>
+                      <td className="px-4 py-2 font-bold">625 000 ₽</td>
                     </tr>
                   </tbody>
                 </table>
