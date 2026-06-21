@@ -53,9 +53,9 @@ export default function PaymentSection() {
           {/* Left - Big Number */}
           <div className="bg-white/5 border border-white/10 rounded-2xl p-8 sm:p-12 flex flex-col items-center justify-center text-center">
             <div className="text-sm text-white/50 font-inter mb-2">Единовременная выплата</div>
-            <div className="text-5xl sm:text-6xl lg:text-7xl text-accent">
-              <AnimatedCounter target={2500000} prefix="" suffix=" ₽" />
-            </div>
+             <div className="text-5xl sm:text-6xl lg:text-7xl text-accent">
+               <AnimatedCounter target={625000} prefix="" suffix=" ₽" />
+             </div>
             <div className="text-white/50 font-inter text-sm mt-3">
               при подписании контракта
             </div>
@@ -74,14 +74,14 @@ export default function PaymentSection() {
             </div>
 
             <div className="bg-accent/10 border border-accent/20 rounded-2xl p-6 sm:p-8">
-              <div className="text-sm text-accent font-inter font-semibold mb-2">Итого за год вахты</div>
+              <div className="text-sm text-accent font-inter font-semibold mb-2">Итого за 3 мес вахты</div>
               <div className="text-3xl sm:text-4xl text-accent">
-                <AnimatedCounter target={6100000} suffix="" prefix="" />
+                <AnimatedCounter target={1580000} suffix="" prefix="" />
                 <span className="text-2xl sm:text-3xl"> – </span>
-                <AnimatedCounter target={8140000} suffix=" ₽" prefix="" />
+                <AnimatedCounter target={1895000} suffix=" ₽" prefix="" />
               </div>
               <div className="text-white/40 font-inter text-sm mt-2">
-                включая единовременную выплату + 12 ежемесячных
+                включая единовременную выплату за 3 мес
               </div>
             </div>
           </div>
@@ -92,20 +92,20 @@ export default function PaymentSection() {
           <h3 className="font-inter font-bold text-lg mb-6 text-white">Пример расчёта (средний уровень)</h3>
           <div className="grid sm:grid-cols-3 gap-4">
             <div className="bg-white/5 rounded-xl p-4 text-center">
-              <div className="text-xs text-white/40 font-inter mb-1">1-й месяц</div>
-              <div className="font-mono font-bold text-xl text-white">2 885 000 ₽</div>
-              <div className="text-xs text-white/40 font-inter mt-1">2 500К + 385К зарплата</div>
-            </div>
-            <div className="bg-white/5 rounded-xl p-4 text-center">
-              <div className="text-xs text-white/40 font-inter mb-1">2–12 месяцы</div>
-              <div className="font-mono font-bold text-xl text-white">4 235 000 ₽</div>
-              <div className="text-xs text-white/40 font-inter mt-1">385К × 11 месяцев</div>
-            </div>
-            <div className="bg-accent/20 rounded-xl p-4 text-center border border-accent/30">
-              <div className="text-xs text-accent font-inter font-semibold mb-1">Итого за год</div>
-              <div className="font-mono font-bold text-xl text-accent">7 120 000 ₽</div>
-              <div className="text-xs text-white/40 font-inter mt-1">при средних показателях</div>
-            </div>
+                <div className="text-xs text-white/40 font-inter mb-1">1-й месяц</div>
+                <div className="font-mono font-bold text-xl text-white">925 000 ₽</div>
+                <div className="text-xs text-white/40 font-inter mt-1">625К подъём + 300К зарплата</div>
+              </div>
+              <div className="bg-white/5 rounded-xl p-4 text-center">
+                <div className="text-xs text-white/40 font-inter mb-1">2–3 месяцы</div>
+                <div className="font-mono font-bold text-xl text-white">700 000 ₽</div>
+                <div className="text-xs text-white/40 font-inter mt-1">350К × 2 месяца</div>
+              </div>
+              <div className="bg-accent/20 rounded-xl p-4 text-center border border-accent/30">
+                <div className="text-xs text-accent font-inter font-semibold mb-1">Итого за 3 мес</div>
+                <div className="font-mono font-bold text-xl text-accent">1 625 000 ₽</div>
+                <div className="text-xs text-white/40 font-inter mt-1">при средних показателях</div>
+              </div>
           </div>
         </div>
 
