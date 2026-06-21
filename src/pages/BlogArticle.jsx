@@ -206,7 +206,7 @@ export default function BlogArticle() {
                 </div>
                 <div className="flex justify-between text-xs font-inter">
                   <span className="text-white/60">Подъёмные</span>
-                  <span className="font-bold text-accent">2 500 000 ₽</span>
+                  <span className="font-bold text-accent">625000 ₽</span>
                 </div>
                 <div className="flex justify-between text-xs font-inter">
                   <span className="text-white/60">Страховка</span>
