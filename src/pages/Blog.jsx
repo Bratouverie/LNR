@@ -41,7 +41,7 @@ export default function Blog() {
           <div className="flex flex-wrap gap-6 mt-8">
             {[
               { label: "Зарплата от", value: "300 000 ₽/мес" },
-              { label: "Подъёмные", value: "2 500 000 ₽" },
+              { label: "Подъёмные", value: "625000 ₽" },
               { label: "Страховка", value: "до 14,7 млн ₽" },
             ].map((s) => (
               <div key={s.label} className="bg-white/10 rounded-xl px-4 py-2.5 text-center">
