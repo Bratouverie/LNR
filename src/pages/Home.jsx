@@ -6,6 +6,7 @@ import VacanciesSection from "../components/VacanciesSection";
 import DayOfSpecialist from "../components/DayOfSpecialist";
 import TestimonialsSection from "../components/TestimonialsSection";
 import RecoveryObjects from "../components/RecoveryObjects";
+import InteractiveMap from "../components/InteractiveMap";
 import NotMilitaryContract from "../components/NotMilitaryContract";
 import ProcessSection from "../components/ProcessSection";
 import CollectionPoints from "../components/CollectionPoints";
@@ -34,10 +35,18 @@ export default function Home() {
   const [appModalOpen, setAppModalOpen] = useState(false);
   const [callbackOpen, setCallbackOpen] = useState(false);
   const [selectedVacancy, setSelectedVacancy] = useState("");
+  const [selectedObject, setSelectedObject] = useState("");
   const [calcPosition, setCalcPosition] = useState(null);
 
   const openApplication = (vacancy) => {
     setSelectedVacancy(typeof vacancy === "string" ? vacancy : "");
+    setSelectedObject("");
+    setAppModalOpen(true);
+  };
+
+  const openApplicationForObject = (objectName) => {
+    setSelectedVacancy("");
+    setSelectedObject(objectName);
     setAppModalOpen(true);
   };
 
@@ -70,6 +79,9 @@ export default function Home() {
 
       {/* SECTION 6 – RECOVERY OBJECTS */}
       <RecoveryObjects />
+
+      {/* SECTION 6.5 – INTERACTIVE MAP */}
+      <InteractiveMap onApply={openApplicationForObject} />
 
       {/* SECTION 7 – NOT MILITARY CONTRACT */}
       <NotMilitaryContract />
@@ -129,6 +141,7 @@ export default function Home() {
         open={appModalOpen}
         onClose={() => setAppModalOpen(false)}
         preselectedVacancy={selectedVacancy}
+        preselectedObject={selectedObject}
       />
       <CallbackModal
         open={callbackOpen}
