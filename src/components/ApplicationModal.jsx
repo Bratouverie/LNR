@@ -8,6 +8,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2, CheckCircle } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import { toast } from "@/components/ui/use-toast";
 
 const VACANCIES = [
   "Разнорабочий",
@@ -43,14 +44,23 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy }) 
     e.preventDefault();
     if (!form.consent || !form.full_name || !form.phone) return;
     setLoading(true);
-    await base44.entities.Application.create({ ...form, type: "application" });
-    setLoading(false);
-    setSuccess(true);
-    setTimeout(() => {
-      setSuccess(false);
-      setForm({ full_name: "", phone: "", email: "", vacancy: "", experience: "", comment: "", consent: false });
-      onClose();
-    }, 2500);
+    try {
+      await base44.entities.Application.create({ ...form, type: "application" });
+      setSuccess(true);
+      setTimeout(() => {
+        setSuccess(false);
+        setForm({ full_name: "", phone: "", email: "", vacancy: "", experience: "", comment: "", consent: false });
+        onClose();
+      }, 2500);
+    } catch (err) {
+      toast({
+        title: "Не удалось отправить заявку",
+        description: "Проверьте интернет-соединение и попробуйте снова",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

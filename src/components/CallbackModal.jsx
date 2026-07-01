@@ -6,6 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2, CheckCircle } from "lucide-react";
 import { base44 } from "@/api/base44Client";
+import { toast } from "@/components/ui/use-toast";
 
 export default function CallbackModal({ open, onClose }) {
   const [form, setForm] = useState({ full_name: "", phone: "", consent: false });
@@ -16,19 +17,28 @@ export default function CallbackModal({ open, onClose }) {
     e.preventDefault();
     if (!form.consent || !form.phone) return;
     setLoading(true);
-    await base44.entities.Application.create({
-      full_name: form.full_name,
-      phone: form.phone,
-      consent: form.consent,
-      type: "callback",
-    });
-    setLoading(false);
-    setSuccess(true);
-    setTimeout(() => {
-      setSuccess(false);
-      setForm({ full_name: "", phone: "", consent: false });
-      onClose();
-    }, 2500);
+    try {
+      await base44.entities.Application.create({
+        full_name: form.full_name,
+        phone: form.phone,
+        consent: form.consent,
+        type: "callback",
+      });
+      setSuccess(true);
+      setTimeout(() => {
+        setSuccess(false);
+        setForm({ full_name: "", phone: "", consent: false });
+        onClose();
+      }, 2500);
+    } catch (err) {
+      toast({
+        title: "Не удалось отправить заявку",
+        description: "Проверьте интернет-соединение и попробуйте снова",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
