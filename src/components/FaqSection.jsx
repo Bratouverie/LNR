@@ -105,17 +105,26 @@ export default function FaqSection() {
         </div>
 
         <div className="mt-10 bg-primary/5 border border-primary/20 rounded-2xl p-6 text-center">
-          <p className="font-inter text-sm text-foreground mb-3">
+          <p className="font-inter font-semibold text-base text-foreground mb-4">
             Не нашли ответ? Задайте вопрос напрямую:
           </p>
-          <div className="flex flex-wrap justify-center gap-4">
+          <div className="flex flex-wrap justify-center gap-4 mb-3">
             <a href="tel:88002228463" className="text-accent hover:underline font-semibold text-sm font-inter">
-              8-800-222-84-63
+              ☎ 8-800-222-84-63 (бесплатно)
             </a>
-            <a href="mailto:partner@bratouverie-snb.ru" className="text-accent hover:underline font-semibold text-sm font-inter">
-              partner@bratouverie-snb.ru
+            <a href="mailto:hh@bratouverie-snb.ru" className="text-accent hover:underline font-semibold text-sm font-inter">
+              📧 hh@bratouverie-snb.ru
+            </a>
+            <a
+              href="https://max.ru/u/f9LHodD0cOLnAxokVgBK1HcwEnGhlBy0W7dVL4IAtZFgqRBl5Imbli5RDlY"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-accent hover:underline font-semibold text-sm font-inter"
+            >
+              💬 Написать Максу (Максим) в Telegram
             </a>
           </div>
+          <p className="font-inter text-xs text-muted-foreground italic">Вахта запускается в июле</p>
         </div>
       </div>
     </section>

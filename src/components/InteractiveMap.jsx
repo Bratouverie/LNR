@@ -83,6 +83,12 @@ function MarkerPopup({ point, onApply }) {
           </div>
         )}
 
+        {point.phone && (
+          <div className="flex items-start gap-1.5 mt-2 text-xs text-muted-foreground">
+            <span className="shrink-0">📞</span>
+            {point.phone}
+          </div>
+        )}
         {point.workHours && (
           <div className="flex items-start gap-1.5 mt-2 text-xs text-muted-foreground">
             <Clock className="h-3 w-3 mt-0.5 shrink-0" />
@@ -275,12 +281,14 @@ export default function InteractiveMap({ onApply }) {
             Как выбрать объект на карте?
           </h3>
           <ol className="space-y-1.5 font-inter text-sm text-muted-foreground list-decimal list-inside">
-            <li>Используйте фильтры вверху карты (Все, Базы, Объекты, Точки сбора)</li>
-            <li>Нажмите на маркер на карте или выберите из списка справа</li>
-            <li>Прочитайте информацию во всплывающем окне</li>
-            <li>Нажмите кнопку «Подать заявку» в окне маркера</li>
-            <li>Заполните форму заявки — объект будет выбран автоматически</li>
+            <li>Выберите фильтр: «Все» или «Только объекты»</li>
+            <li>Кликните на маркер на карте или выберите из списка справа</li>
+            <li>В окне маркера увидите информацию и кнопку «Подать заявку»</li>
+            <li>Кликните «Подать заявку» — откроется форма с выбранным объектом</li>
           </ol>
+          <p className="mt-3 font-inter text-xs text-muted-foreground">
+            <strong>ℹ️ Примечание:</strong> На карте — информационные материалы. Вы можете выбрать любую специальность и объект в форме заявки.
+          </p>
         </div>
       </div>
     </section>

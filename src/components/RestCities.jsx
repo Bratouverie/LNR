@@ -4,34 +4,38 @@ import { MapPin, Clock } from "lucide-react";
 const CITIES = [
   {
     name: "Макеевка",
-    role: "Главная база",
-    distance: "0–30 км от объектов",
-    amenities: ["Ресторан", "Кинотеатр", "Парк", "Интернет-кафе", "Прачечная"],
-    weekends: "Суббота – воскресенье",
+    role: "Главная база — выходные на базе",
+    distance: "Ежедневный радиус работы: 10–40 км",
+    amenities: ["Спортзал", "Интернет 24/7", "Телевизор", "Психолог", "Прачечная"],
+    weekends: "Суббота – воскресенье (4–5 дней/мес на базе)",
+    note: "База в 70–100 км от линии боевых действий — безопасная зона",
     visualId: 75,
   },
   {
     name: "Мариуполь",
-    role: "Город у моря",
-    distance: "60–80 км (групповой проезд)",
-    amenities: ["Море", "Рестораны", "Музеи", "Парк аттракционов"],
-    weekends: "Суббота – воскресенье",
+    role: "Редкие выезды (1–2 раза/мес)",
+    distance: "60–80 км от базы",
+    amenities: ["Набережная", "Рестораны", "Музеи", "Парки"],
+    weekends: "По согласованию, в выходные",
+    note: "Проезд и питание — бесплатно",
     visualId: 76,
   },
   {
     name: "Луганск",
-    role: "Редкие выезды",
-    distance: "100+ км",
-    amenities: ["Музеи", "Театр", "Рестораны"],
-    weekends: "По согласованию",
+    role: "Редкие выезды (1–2 раза/мес)",
+    distance: "100–120 км от базы",
+    amenities: ["Театры", "Центр города", "Рестораны"],
+    weekends: "По согласованию, в выходные",
+    note: "Проезд и питание — бесплатно",
     visualId: 77,
   },
   {
     name: "Алчевск",
-    role: "Редкие выезды",
-    distance: "150+ км",
-    amenities: ["Парки", "Культурные центры"],
-    weekends: "По согласованию",
+    role: "Редкие выезды (1–2 раза/мес)",
+    distance: "45–60 км от базы",
+    amenities: ["Парки", "Кафе", "Культурные центры"],
+    weekends: "По согласованию, в выходные",
+    note: "Проезд и питание — бесплатно",
     visualId: 78,
   },
 ];
@@ -70,6 +74,12 @@ export default function RestCities() {
                   <Clock className="h-4 w-4 text-accent shrink-0 mt-0.5" />
                   <span className="font-inter text-xs text-muted-foreground">{city.weekends}</span>
                 </div>
+
+                {city.note && (
+                  <div className="bg-accent/5 border border-accent/20 rounded-lg px-3 py-2">
+                    <span className="font-inter text-xs text-accent font-medium">{city.note}</span>
+                  </div>
+                )}
 
                 <div className="border-t border-border pt-3">
                   <div className="font-inter text-xs font-bold text-foreground mb-2">Инфраструктура:</div>

@@ -9,7 +9,7 @@ const LEVELS = [
     icon: MapPin,
     title: "Уровень 1 — Географический",
     items: [
-      "Базы в 5–15 км от линии боевых действий (не в «красной зоне»)",
+      "Базы в 70–100 км от линии боевых действий (безопасная зона)",
       "Объекты на освобождённых территориях",
       "Ежедневный мониторинг обстановки",
       "При эскалации работа приостанавливается или эвакуация",
@@ -102,7 +102,7 @@ export default function SafetySection() {
         <div className="bg-primary text-primary-foreground rounded-2xl p-8 mb-8">
           <div className="flex items-center gap-3 mb-6">
             <BarChart3 className="h-6 w-6 text-accent" />
-            <h3 className="font-inter font-bold text-lg">Статистика безопасности (2024–2025)</h3>
+            <h3 className="font-inter font-bold text-lg">Статистика безопасности (2024–2026)</h3>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
             <Stat value={SAFETY_STATS.totalSpecialists.toLocaleString("ru-RU")} label="специалистов всего" />

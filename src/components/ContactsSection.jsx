@@ -55,8 +55,8 @@ export default function ContactsSection({ onCallback }) {
                 <div className="text-xs text-muted-foreground">Приём заявок от агентств, партнёрские программы</div>
               </div>
             </div>
-            <a href="mailto:partner@bratouverie-snb.ru" className="block text-accent font-mono text-sm font-semibold hover:underline">
-              partner@bratouverie-snb.ru
+            <a href="mailto:hh@bratouverie-snb.ru" className="block text-accent font-mono text-sm font-semibold hover:underline">
+              hh@bratouverie-snb.ru
             </a>
             <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
               По вопросам партнёрства, агентских договоров и передачи кандидатов от кадровых агентств направляйте письма на указанный адрес.
