@@ -1,45 +1,87 @@
 import { Quote, Star } from "lucide-react";
 
+const IMG = (n) => `https://media.base44.com/images/public/69f4a665db2c72a42818d397/${n}`;
+
 const TESTIMONIALS = [
   {
-    name: "Алексей М.",
-    role: "Строитель, Омск",
-    text: "Поехал с опаской, но всё оказалось именно так, как описывали. Получил 625 000 ₽ подъёмных при подписании, жильё нормальное, кормят хорошо. За год заработал больше, чем за три года дома. Уже оформил земельный участок в ЛНР.",
+    name: "Сергей Волков",
+    role: "Строитель, Воронеж",
+    text: "Приехал по контракту на год. Подъёмные получил сразу, жильё нормальное. За время работы восстановили два дома — видно результат своими руками. Зарплата приходит без задержек.",
     stars: 5,
     duration: "1 год в программе",
-    photo: "https://media.base44.com/images/public/69f4a665db2c72a42818d397/df7c0fdaf_.png",
+    photo: IMG("8b95f93b2_44.png"),
   },
   {
-    name: "Дмитрий К.",
-    role: "Водитель кат. C, Тюмень",
-    text: "Работаю на технике, возим стройматериалы. Платят вовремя, дважды в месяц — около 350 000 плюс надбавки за безаварийную работу. Охрана хорошая, ни разу не чувствовал угрозы. Рекомендую тем, кто не боится работать.",
+    name: "Андрей Лебедев",
+    role: "Бригадир, Ростов-на-Дону",
+    text: "Уже третья вахта. Команда подобралась крепкая, снабжение стабильное. Созваниваюсь с семьёй каждый вечер — интернет работает без перебоев. Доволен условиями.",
+    stars: 5,
+    duration: "9 месяцев в программе",
+    photo: IMG("a4316753b_45.png"),
+  },
+  {
+    name: "Дмитрий Соколов",
+    role: "Разнорабочий, Тамбов",
+    text: "Оформление документов заняло пару дней, всё чётко. На объекте порядок, техника безопасности соблюдается. Первые недели было непросто, но втянулся. Платят как договаривались.",
+    stars: 4,
+    duration: "5 месяцев в программе",
+    photo: IMG("ff40ec17c_46.png"),
+  },
+  {
+    name: "Артём Кузнецов",
+    role: "Разнорабочий, Липецк",
+    text: "Жильё скромное, но всё есть — кровать, чайник, шкаф. Парни в комнате нормальные. Зарплата выше, чем дома в три раза. Уже подал заявку на земельный участок.",
+    stars: 4,
+    duration: "6 месяцев в программе",
+    photo: IMG("872d8fcd8_47.png"),
+  },
+  {
+    name: "Павел Морозов",
+    role: "Водитель кат. С, Краснодар",
+    text: "Дорога до базы долгая, но организовали нормально. На месте выдали форму, поселили быстро. Работаю на грузовике, маршруты понятные. За безаварийность премируют каждый месяц.",
+    stars: 4,
+    duration: "7 месяцев в программе",
+    photo: IMG("2df680490_48.png"),
+  },
+  {
+    name: "Иван Громов",
+    role: "Медик, Волгоград",
+    text: "Работаю в медпункте на объекте. Оснащение хорошее, лекарства в наличии. Профосмотры проводим регулярно. Ребята приходят не только за помощью, но и просто поговорить — атмосфера человеческая.",
     stars: 5,
     duration: "8 месяцев в программе",
-    photo: "https://media.base44.com/images/public/69f4a665db2c72a42818d397/924a2e8fd_.png",
+    photo: IMG("5dc9f4c1a_49.png"),
   },
   {
-    name: "Игорь В.",
-    role: "Разнорабочий, Бийск",
-    text: "Без специальности взяли разнорабочим. Обучили на месте. Получаю 320 000 в месяц — больше, чем зарабатывал дома. Ребята в бригаде хорошие. Минус — скучаю по семье, но интернет помогает. Буду продлевать контракт.",
+    name: "Максим Дроздов",
+    role: "Строитель, Ставрополь",
+    text: "Работа тяжёлая, но честная. Каждый день видишь, как восстанавливается здание — это мотивирует. Бригадир объясняет всё толково. Зарплату платят точно в срок.",
+    stars: 5,
+    duration: "10 месяцев в программе",
+    photo: IMG("1a1a48e10_50.png"),
+  },
+  {
+    name: "Роман Зайцев",
+    role: "Разнорабочий, Пенза",
+    text: "После смены можно отдохнуть в комнате, связь с домом не прерывается. Питание трёхразовое, готовят нормально. За полтора года накопил на машину. Буду продлевать контракт.",
     stars: 4,
-    duration: "4 месяца в программе",
-    photo: "https://media.base44.com/images/public/69f4a665db2c72a42818d397/5c14a0714_.png",
+    duration: "1.5 года в программе",
+    photo: IMG("1295e9837_51.png"),
   },
   {
-    name: "Михаил Т.",
+    name: "Олег Степанов",
+    role: "Водитель кат. СЕ, Воронеж",
+    text: "Логистика налажена — возим материалы между объектами. Техника обслуживается вовремя. Охрана на трассах серьёзная, чувствую себя спокойно. Рекомендую мужикам, кто готов работать.",
+    stars: 5,
+    duration: "11 месяцев в программе",
+    photo: IMG("37c637a36_52.png"),
+  },
+  {
+    name: "Николай Орлов",
     role: "Охранник, Саратов",
-    text: "Прошёл службу, опыт есть. Условия нормальные: посты оборудованы, видеонаблюдение работает. Получаю около 330 000 плюс ночные. Начальство адекватное. Первые недели было тревожно из-за обстановки, потом привык.",
+    text: "Посты оборудованы, видеонаблюдение круглосуточное. График 12/12, можно привыкнуть. Начальство адекватное, вопросы решают быстро. За вычетом первых недель — всё стабильно и предсказуемо.",
     stars: 4,
     duration: "9 месяцев в программе",
-    photo: "https://media.base44.com/images/public/69f4a665db2c72a42818d397/ec3c66fdb_.png",
-  },
-  {
-    name: "Андрей П.",
-    role: "Разнорабочий, Красноярск",
-    text: "Работа тяжёлая, не буду скрывать. Физически непросто, особенно первые недели. Но платят честно — все суммы как обещали. Жильё и питание включены, это плюс. Был один тревожный момент, но охрана сработала чётко. В целом доволен, но это не для всех.",
-    stars: 3,
-    duration: "3 месяца в программе",
-    photo: "https://media.base44.com/images/public/69f4a665db2c72a42818d397/440293e06_.png",
+    photo: IMG("73b491507_53.png"),
   },
 ];
 
@@ -77,17 +119,17 @@ export default function TestimonialsSection() {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {TESTIMONIALS.map((t, i) => (
-            <div key={i} className="bg-card border border-border rounded-2xl p-6 flex flex-col gap-4 hover:border-accent/30 hover:shadow-lg transition-all duration-300">
-              <div className="flex items-start gap-3">
-                <img
-                  src={t.photo}
-                  alt={t.name}
-                  className="w-10 h-10 rounded-full object-cover shrink-0"
-                />
-                <div>
-                  <div className="font-inter font-bold text-sm text-foreground">{t.name}</div>
-                  <div className="font-inter text-xs text-muted-foreground">{t.role}</div>
-                  <div className="flex gap-0.5 mt-1">
+            <div key={i} className="bg-card border border-border rounded-2xl overflow-hidden flex flex-col hover:border-accent/30 hover:shadow-lg transition-all duration-300">
+              <div className="relative h-48 overflow-hidden bg-secondary">
+                <img src={t.photo} alt={t.name} loading="lazy" className="w-full h-full object-cover" />
+              </div>
+              <div className="p-5 flex flex-col gap-3 flex-1">
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <div className="font-inter font-bold text-sm text-foreground">{t.name}</div>
+                    <div className="font-inter text-xs text-muted-foreground">{t.role}</div>
+                  </div>
+                  <div className="flex gap-0.5">
                     {[...Array(t.stars)].map((_, s) => (
                       <Star key={s} className="h-3 w-3 fill-accent text-accent" />
                     ))}
@@ -96,19 +138,17 @@ export default function TestimonialsSection() {
                     ))}
                   </div>
                 </div>
-              </div>
-
-              <div className="relative">
-                <Quote className="h-6 w-6 text-accent/20 absolute -top-1 -left-1" />
-                <p className="font-inter text-sm text-muted-foreground leading-relaxed pl-4">
-                  {t.text}
-                </p>
-              </div>
-
-              <div className="mt-auto pt-3 border-t border-border">
-                <span className="font-mono text-xs text-accent font-semibold bg-accent/10 px-2 py-0.5 rounded-full">
-                  {t.duration}
-                </span>
+                <div className="relative">
+                  <Quote className="h-5 w-5 text-accent/20 absolute -top-1 -left-1" />
+                  <p className="font-inter text-sm text-muted-foreground leading-relaxed pl-5">
+                    {t.text}
+                  </p>
+                </div>
+                <div className="mt-auto pt-3 border-t border-border">
+                  <span className="font-mono text-xs text-accent font-semibold bg-accent/10 px-2 py-0.5 rounded-full">
+                    {t.duration}
+                  </span>
+                </div>
               </div>
             </div>
           ))}
