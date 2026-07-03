@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Calculator as CalcIcon } from "lucide-react";
-import { VACANCIES_DATA } from "@/lib/vacanciesData";
+import { VACANCIES_DATA } from "@/data/vacanciesConfig";
 
 const CATEGORY_MAP = {
   "Строительство": "raznorabochy",

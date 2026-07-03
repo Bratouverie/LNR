@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Calculator, TrendingUp, Info, CheckCircle, ArrowRight } from "lucide-react";
-import { SALARY_LIST, CONTRACT_DURATIONS, UPLIFTS, TAX_RATE, fmt } from "@/lib/calculatorData";
+import { SALARY_LIST, CONTRACT_DURATIONS, UPLIFTS, TAX_RATE, fmt } from "@/data/vacanciesConfig";
 
 export default function SalaryCalculator({ preselectedPosition, onApply }) {
   const [positionKey, setPositionKey] = useState("stroitel");
@@ -169,7 +169,7 @@ export default function SalaryCalculator({ preselectedPosition, onApply }) {
                     <div className="font-inter text-xs text-white/60 mb-2">Примеры дохода (чистыми):</div>
                     <Scenario label="Базовый" desc="Разнорабочий, без премий" amount={1495000} />
                     <Scenario label="С бонусами" desc="Строитель, безаварийная работа" amount={1570000} />
-                    <Scenario label="Максимальный" desc="Взрывотехник, 2-й контракт (+15%)" amount={2185000} />
+                    <Scenario label="Максимальный" desc="Медработник, 2-й контракт (+15%)" amount={1835000} />
                   </div>
 
                   {/* CTA */}

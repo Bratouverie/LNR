@@ -9,18 +9,9 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2, CheckCircle } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { toast } from "@/components/ui/use-toast";
+import { ALL_POSITION_OPTIONS } from "@/data/vacanciesConfig";
 
-const VACANCIES = [
-  "Разнорабочий",
-  "Строитель",
-  "Автослесарь",
-  "Водитель (кат. B)",
-  "Водитель (кат. C)",
-  "Водитель (кат. CE)",
-  "Водитель (кат. CD)",
-  "Медицинский работник",
-  "Охранник",
-];
+const VACANCIES = ALL_POSITION_OPTIONS;
 
 const EXPERIENCE = ["до 1 года", "1–3 года", "3+ года"];
 
