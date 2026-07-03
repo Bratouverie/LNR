@@ -3,10 +3,10 @@ import { Building2, MapPin, Phone, Mail, Globe, CheckCircle, ExternalLink } from
 import { COMPANY_INFO } from "@/lib/calculatorData";
 
 const DIRECTIONS = [
-  "Восстановление ДНР/ЛНР",
-  "Арктический вызов",
-  "Программа КАДРЫ",
-];
+"Восстановление ДНР/ЛНР",
+"Арктический вызов",
+"Программа КАДРЫ"];
+
 
 export default function AboutCompany() {
   return (
@@ -60,12 +60,12 @@ export default function AboutCompany() {
             <div className="bg-card border border-border rounded-2xl p-6">
               <h3 className="font-inter font-bold text-sm text-foreground mb-4">Проекты компании</h3>
               <div className="space-y-2">
-                {DIRECTIONS.map((dir) => (
-                  <div key={dir} className="flex items-center gap-2">
+                {DIRECTIONS.map((dir) =>
+                <div key={dir} className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4 text-accent shrink-0" />
                     <span className="font-inter text-sm text-muted-foreground">{dir}</span>
                   </div>
-                ))}
+                )}
               </div>
             </div>
 
@@ -131,29 +131,29 @@ export default function AboutCompany() {
               <VisualPlaceholder id={88} ratio="3:4" label="Награда" />
             </div>
             <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 text-center">
-              <p className="font-inter text-xs text-muted-foreground">
-                Всего 10–12 грамот и благодарностей от Министерств и Правительства РФ
+              <p className="font-inter text-xs text-muted-foreground">Всего 12 грамот и благодарностей от Министерств и Правительства РФ
+
               </p>
             </div>
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
 
 function ReqRow({ label, value, link }) {
   return (
     <div className="flex items-center justify-between">
       <span className="font-inter text-xs text-muted-foreground">{label}</span>
-      {link ? (
-        <a href={link} target="_blank" rel="noopener noreferrer" className="font-mono text-sm text-accent hover:underline flex items-center gap-1">
+      {link ?
+      <a href={link} target="_blank" rel="noopener noreferrer" className="font-mono text-sm text-accent hover:underline flex items-center gap-1">
           {value}
           <ExternalLink className="h-3 w-3" />
-        </a>
-      ) : (
-        <span className="font-mono text-sm text-foreground">{value}</span>
-      )}
-    </div>
-  );
+        </a> :
+
+      <span className="font-mono text-sm text-foreground">{value}</span>
+      }
+    </div>);
+
 }
