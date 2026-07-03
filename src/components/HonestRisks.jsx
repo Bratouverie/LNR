@@ -1,5 +1,11 @@
-import VisualPlaceholder from "./VisualPlaceholder";
 import { Shield, HeartPulse, Brain, Phone } from "lucide-react";
+
+const IMG_BASE = "https://media.base44.com/images/public/69f4a665db2c72a42818d397";
+const RISK_PHOTOS = {
+  72: `${IMG_BASE}/3fe5e0f7d_72.png`,
+  73: `${IMG_BASE}/6c49fa8a5_73.png`,
+  74: `${IMG_BASE}/539f985d0_74.png`,
+};
 
 const RISKS = [
   {
@@ -44,7 +50,7 @@ export default function HonestRisks() {
             <div key={i} className="grid md:grid-cols-3 gap-6 items-center bg-card border border-border rounded-2xl p-6 hover:border-accent/30 transition-colors">
               {/* Visual */}
               <div className="md:col-span-1">
-                <VisualPlaceholder id={risk.visualId} ratio="4:3" label={risk.title} />
+                <img src={RISK_PHOTOS[risk.visualId]} alt={risk.title} loading="lazy" className="w-full aspect-[4/3] object-cover rounded-xl" />
               </div>
 
               {/* Content */}
