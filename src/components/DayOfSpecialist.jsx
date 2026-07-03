@@ -1,5 +1,16 @@
-import VisualPlaceholder from "./VisualPlaceholder";
 import { Clock } from "lucide-react";
+
+const IMAGES = {
+  14: "https://media.base44.com/images/public/69f4a665db2c72a42818d397/2be25b74f_14.png",
+  15: "https://media.base44.com/images/public/69f4a665db2c72a42818d397/f6c6a28fa_15.png",
+  16: "https://media.base44.com/images/public/69f4a665db2c72a42818d397/ad9daa3f2_16.png",
+  17: "https://media.base44.com/images/public/69f4a665db2c72a42818d397/03e293c96_17.png",
+  18: "https://media.base44.com/images/public/69f4a665db2c72a42818d397/7e2876f68_18.png",
+  19: "https://media.base44.com/images/public/69f4a665db2c72a42818d397/8df922efb_19.png",
+  20: "https://media.base44.com/images/public/69f4a665db2c72a42818d397/dcf246d8a_20.png",
+  21: "https://media.base44.com/images/public/69f4a665db2c72a42818d397/006d1e67d_21.png",
+  22: "https://media.base44.com/images/public/69f4a665db2c72a42818d397/861210dfd_22.png",
+};
 
 const TIMELINE = [
   { time: "06:30", title: "Подъём, завтрак", desc: "Столовая на базе, 3-разовое питание", visualId: 14, ratio: "3:2" },
@@ -40,7 +51,14 @@ export default function DayOfSpecialist() {
                 </div>
                 <h3 className="font-inter font-bold text-sm text-foreground mb-1">{item.title}</h3>
                 <p className="font-inter text-xs text-muted-foreground mb-3">{item.desc}</p>
-                <VisualPlaceholder id={item.visualId} ratio={item.ratio} />
+                <div className="relative w-full overflow-hidden rounded-lg bg-secondary">
+                  <img
+                    src={IMAGES[item.visualId]}
+                    alt={item.title}
+                    loading="lazy"
+                    className="w-full h-auto object-cover"
+                  />
+                </div>
               </div>
             ))}
           </div>
