@@ -1,7 +1,13 @@
 import { useState } from "react";
-import VisualPlaceholder from "./VisualPlaceholder";
 import { Shield, MapPin, Users, Stethoscope, BarChart3, AlertCircle } from "lucide-react";
 import { SAFETY_STATS, INSURANCE_LEVELS } from "@/lib/calculatorData";
+
+const IMG_BASE = "https://media.base44.com/images/public/69f4a665db2c72a42818d397";
+const SAFETY_PHOTOS = {
+  66: `${IMG_BASE}/093bdf9a8_66.png`,
+  67: `${IMG_BASE}/d494d21a0_67.png`,
+  68: `${IMG_BASE}/85fd23527_68.png`,
+};
 
 const LEVELS = [
   {
@@ -38,7 +44,7 @@ const LEVELS = [
       "Медпункт на базе (2 врача, скорая 15 мин до больницы)",
       "Психолог 24/7 (поддержка, стресс-менеджмент)",
     ],
-    visualId: 69,
+    visualId: 68,
   },
 ];
 
@@ -95,7 +101,7 @@ export default function SafetySection() {
               ))}
             </ul>
           </div>
-          <VisualPlaceholder id={active.visualId} ratio="3:2" label={active.title} />
+          <img src={SAFETY_PHOTOS[active.visualId]} alt={active.title} loading="lazy" className="w-full aspect-[3/2] object-cover rounded-xl border border-border shadow-sm" />
         </div>
 
         {/* Statistics */}
