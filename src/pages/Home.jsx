@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Navbar from "../components/Navbar";
 import HeroSection from "../components/HeroSection";
-import SalaryCalculator from "../components/SalaryCalculator";
+import SalaryCalculator from "@/components/SalaryCalculator/SalaryCalculator";
 import VacanciesSection from "../components/VacanciesSection";
 import DayOfSpecialist from "../components/DayOfSpecialist";
 import TestimonialsSection from "../components/TestimonialsSection";

@@ -3,14 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Calculator as CalcIcon } from "lucide-react";
 import { VACANCIES_DATA } from "@/data/vacanciesConfig";
 
-const CATEGORY_MAP = {
-  "Строительство": "raznorabochy",
-  "Транспорт": "voditel_c",
-  "Медицина": "medrabotnik",
-  "Охрана": "ohrannik",
-  "Инженерия": "inzhener",
-};
-
 export default function VacanciesSection({ onApply, onCalculate }) {
   const [filter, setFilter] = useState("Все");
 
@@ -59,7 +51,9 @@ export default function VacanciesSection({ onApply, onCalculate }) {
 
 function VacancyCard({ vacancy, onApply, onCalculate }) {
   const [expanded, setExpanded] = useState(false);
-  const calcKey = CATEGORY_MAP[vacancy.category] || "raznorabochy";
+  const calcKey = vacancy.salary?.type === "by-category"
+    ? Object.values(vacancy.salary.categories)[0]?.calcKey || vacancy.id
+    : vacancy.id;
 
   return (
     <div className="group bg-card border-2 border-border rounded-xl p-6 hover:border-accent/40 hover:shadow-xl hover:shadow-accent/5 transition-all duration-300 flex flex-col h-full">

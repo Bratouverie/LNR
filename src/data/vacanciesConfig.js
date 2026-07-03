@@ -473,6 +473,37 @@ export function calculateSalary(positionKey, durationMonths = 3, multiplier = 1.
   return { position: salaryItem.label, monthlySalary, totalSalary, taxes, netSalary, grossIncome, netIncome, uplifts: UPLIFTS };
 }
 
+export function calculateVacancySalary(vacancyId, level = "min", driverCategory = null) {
+  const vacancy = VACANCIES.find((v) => v.id === vacancyId);
+  if (!vacancy) return null;
+
+  let monthlyBase;
+  if (vacancy.salary.type === "by-category" && driverCategory) {
+    const cat = vacancy.salary.categories[driverCategory];
+    if (!cat) return null;
+    monthlyBase = level === "max" ? cat.max : cat.min;
+  } else {
+    monthlyBase = level === "max" ? vacancy.salary.max : vacancy.salary.min;
+  }
+
+  const stintDuration = GLOBAL_CONFIG.compensation.stintDuration;
+  const totalForMonths = monthlyBase * stintDuration;
+  const oneTimePayment = UPLIFTS;
+  const totalForStint = totalForMonths + oneTimePayment;
+
+  return {
+    stintDuration,
+    monthlySalary: monthlyBase,
+    monthlySalaryFormatted: formatCurrency(monthlyBase),
+    totalMonths: totalForMonths,
+    totalMonthsFormatted: formatCurrency(totalForMonths),
+    oneTimePayment,
+    oneTimePaymentFormatted: formatCurrency(oneTimePayment),
+    totalForStint,
+    totalForStintFormatted: formatCurrency(totalForStint),
+  };
+}
+
 // ============================================
 // ТОЧКИ СБОРА
 // ============================================
