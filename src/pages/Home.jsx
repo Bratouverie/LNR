@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "../components/Navbar";
 import HeroSection from "../components/HeroSection";
 import SalaryCalculator from "@/components/SalaryCalculator/SalaryCalculator";
@@ -37,6 +37,15 @@ export default function Home() {
   const [selectedVacancy, setSelectedVacancy] = useState("");
   const [selectedObject, setSelectedObject] = useState("");
   const [calcPosition, setCalcPosition] = useState(null);
+
+  useEffect(() => {
+    if (window.location.hash) {
+      const el = document.querySelector(window.location.hash);
+      if (el) {
+        setTimeout(() => el.scrollIntoView({ behavior: "smooth" }), 150);
+      }
+    }
+  }, []);
 
   const openApplication = (vacancy) => {
     setSelectedVacancy(typeof vacancy === "string" ? vacancy : "");

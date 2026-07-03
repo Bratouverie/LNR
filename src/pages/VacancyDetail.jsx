@@ -41,10 +41,10 @@ export default function VacancyDetail() {
 
       <div className="pt-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <button
-          onClick={() => navigate(-1)}
+          onClick={() => navigate("/#vacancies")}
           className="inline-flex items-center gap-2 text-muted-foreground hover:text-accent transition-colors mb-6 font-inter text-sm"
         >
-          <ArrowLeft size={18} /> Вернуться
+          <ArrowLeft size={18} /> Назад к вакансиям
         </button>
       </div>
 
