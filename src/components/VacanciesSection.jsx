@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Calculator as CalcIcon } from "lucide-react";
+import { Calculator as CalcIcon, ArrowRight } from "lucide-react";
 import { VACANCIES_DATA } from "@/data/vacanciesConfig";
 
 export default function VacanciesSection({ onApply, onCalculate }) {
@@ -50,13 +51,18 @@ export default function VacanciesSection({ onApply, onCalculate }) {
 }
 
 function VacancyCard({ vacancy, onApply, onCalculate }) {
-  const [expanded, setExpanded] = useState(false);
+  const navigate = useNavigate();
   const calcKey = vacancy.salary?.type === "by-category"
     ? Object.values(vacancy.salary.categories)[0]?.calcKey || vacancy.id
     : vacancy.id;
 
+  const goToVacancy = () => navigate(`/vacancy/${vacancy.id}`);
+
   return (
-    <div className="group bg-card border-2 border-border rounded-xl p-6 hover:border-accent/40 hover:shadow-xl hover:shadow-accent/5 transition-all duration-300 flex flex-col h-full">
+    <div
+      onClick={goToVacancy}
+      className="group bg-card border-2 border-border rounded-xl p-6 hover:border-accent/40 hover:shadow-xl hover:shadow-accent/5 transition-all duration-300 flex flex-col h-full cursor-pointer hover:-translate-y-1"
+    >
       <div className="flex items-start justify-between mb-4">
         <span className="text-xs font-mono font-semibold text-accent bg-accent/10 px-3 py-1 rounded-full">
           {vacancy.category}
@@ -79,43 +85,22 @@ function VacancyCard({ vacancy, onApply, onCalculate }) {
         {vacancy.role}
       </p>
 
-      {expanded && (
-        <div className="mb-4 space-y-3 border-t border-border pt-4">
-          <div>
-            <div className="font-inter text-xs font-bold text-foreground mb-1">Обязанности:</div>
-            <ul className="space-y-1">
-              {vacancy.duties.slice(0, 4).map((d, i) => (
-                <li key={i} className="flex gap-2 text-xs text-muted-foreground font-inter">
-                  <span className="text-accent shrink-0">•</span>
-                  <span>{d}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <div className="font-inter text-xs font-bold text-foreground mb-1">Требования:</div>
-            <div className="font-inter text-xs text-muted-foreground">{vacancy.requirements?.experience}</div>
-            <div className="font-inter text-xs text-muted-foreground mt-0.5">{vacancy.requirements?.age}</div>
-          </div>
-        </div>
-      )}
-
       <div className="flex flex-col gap-2 mt-auto">
         <button
-          onClick={() => setExpanded(!expanded)}
-          className="text-xs font-inter text-muted-foreground hover:text-accent transition-colors text-center"
+          onClick={(e) => { e.stopPropagation(); goToVacancy(); }}
+          className="flex items-center justify-center gap-1 text-xs font-inter font-semibold text-muted-foreground hover:text-accent transition-colors text-center"
         >
-          {expanded ? "Свернуть ↑" : "Подробнее ↓"}
+          Подробнее <ArrowRight className="h-3 w-3" />
         </button>
         <div className="flex gap-2">
           <Button
-            onClick={() => onApply(vacancy.title)}
+            onClick={(e) => { e.stopPropagation(); onApply(vacancy.title); }}
             className="flex-1 bg-primary hover:bg-accent text-primary-foreground font-inter font-semibold transition-all duration-300 group-hover:bg-accent group-hover:text-accent-foreground text-sm"
           >
             Откликнуться
           </Button>
           <button
-            onClick={() => onCalculate && onCalculate(calcKey)}
+            onClick={(e) => { e.stopPropagation(); onCalculate && onCalculate(calcKey); }}
             className="shrink-0 flex items-center gap-1.5 border border-border hover:border-accent hover:text-accent rounded-lg px-3 text-xs font-inter font-medium transition-colors"
             title="Рассчитать доход"
           >
