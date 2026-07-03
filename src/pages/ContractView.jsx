@@ -7,11 +7,49 @@ import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Download, Printer, Loader2 } from "lucide-react";
 
+function buildContractHtml(data) {
+  let html = "";
+  html += `<h1 style="text-align:center;font-size:20pt;font-weight:bold;margin-bottom:8px;">${data.title}</h1>`;
+  if (data.subtitle) {
+    html += `<h2 style="text-align:center;font-size:14pt;font-weight:bold;margin-bottom:20px;">${data.subtitle}</h2>`;
+  }
+  for (const block of data.blocks) {
+    switch (block.type) {
+      case "heading":
+        html += `<h3 style="font-size:12pt;font-weight:bold;margin-top:18px;margin-bottom:8px;border-bottom:1px solid #999;padding-bottom:3px;">${block.text}</h3>`;
+        break;
+      case "subheading":
+        html += `<h4 style="font-size:11pt;font-weight:bold;margin-top:12px;margin-bottom:6px;">${block.text}</h4>`;
+        break;
+      case "paragraph":
+        html += `<p style="font-size:10pt;text-align:justify;margin-bottom:6px;line-height:1.5;">${block.text}</p>`;
+        break;
+      case "bullets":
+        html += `<ul style="font-size:10pt;margin-bottom:8px;padding-left:20px;line-height:1.5;">${block.items.map(i => `<li style="margin-bottom:3px;">${i}</li>`).join("")}</ul>`;
+        break;
+      case "table":
+        html += `<table style="width:100%;border-collapse:collapse;font-size:9pt;margin-bottom:12px;">`;
+        if (block.headers) {
+          html += `<thead><tr>${block.headers.map(h => `<th style="border:1px solid #999;padding:5px;background:#e8e8e8;font-weight:bold;">${h}</th>`).join("")}</tr></thead>`;
+        }
+        html += `<tbody>`;
+        for (const row of (block.rows || [])) {
+          const cells = Array.isArray(row) ? row : [row];
+          html += `<tr>${cells.map(c => `<td style="border:1px solid #999;padding:5px;">${c}</td>`).join("")}</tr>`;
+        }
+        html += `</tbody></table>`;
+        break;
+    }
+  }
+  return html;
+}
+
 export default function ContractView() {
   const { id } = useParams();
   const printRef = useRef();
 
   const [downloadingDocx, setDownloadingDocx] = useState(false);
+  const [downloadingPdf, setDownloadingPdf] = useState(false);
 
   const vacancy = VACANCIES_DATA.find((v) => v.id === id);
   const extra = CONTRACT_VACANCY_EXTRA[id];
@@ -29,6 +67,56 @@ export default function ContractView() {
 
   const handlePrint = () => {
     window.print();
+  };
+
+  const handleDownloadPdf = async () => {
+    setDownloadingPdf(true);
+    try {
+      const contractData = buildContractBlocks(id);
+      if (!contractData) throw new Error("Данные договора не найдены");
+
+      const { default: html2canvas } = await import("html2canvas");
+      const { jsPDF } = await import("jspdf");
+
+      const div = document.createElement("div");
+      div.style.position = "absolute";
+      div.style.left = "-9999px";
+      div.style.top = "0";
+      div.style.width = "794px";
+      div.style.padding = "40px";
+      div.style.background = "white";
+      div.style.fontFamily = "'Times New Roman', Times, serif";
+      div.style.color = "#222";
+      div.innerHTML = buildContractHtml(contractData);
+      document.body.appendChild(div);
+
+      const canvas = await html2canvas(div, { scale: 2, useCORS: true });
+      document.body.removeChild(div);
+
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF("p", "mm", "a4");
+      const imgWidth = 210;
+      const pageHeight = 297;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      let heightLeft = imgHeight;
+      let position = 0;
+
+      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeight;
+
+      while (heightLeft > 0) {
+        position -= pageHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeight;
+      }
+
+      pdf.save(`Договор_${vacancy?.title || id}.pdf`);
+    } catch (e) {
+      alert("Не удалось создать PDF: " + (e?.message || "ошибка"));
+    } finally {
+      setDownloadingPdf(false);
+    }
   };
 
   const handleDownloadDocx = async () => {
@@ -70,7 +158,7 @@ export default function ContractView() {
           <div className="flex items-center gap-2">
             <Button onClick={handlePrint} variant="outline" size="sm" className="gap-2">
               <Printer className="h-4 w-4" />
-              Печать / PDF
+              Печать
             </Button>
             <Button
               onClick={handleDownloadDocx}
@@ -82,8 +170,13 @@ export default function ContractView() {
               {downloadingDocx ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
               Скачать DOCX
             </Button>
-            <Button onClick={handlePrint} size="sm" className="gap-2 bg-accent hover:bg-accent/90 text-white">
-              <Download className="h-4 w-4" />
+            <Button
+              onClick={handleDownloadPdf}
+              disabled={downloadingPdf}
+              size="sm"
+              className="gap-2 bg-accent hover:bg-accent/90 text-white"
+            >
+              {downloadingPdf ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
               Скачать PDF
             </Button>
           </div>
