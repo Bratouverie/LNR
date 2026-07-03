@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ShieldCheck, Banknote, Award } from "lucide-react";
 
-const PROMO_VIDEO = "https://media.base44.com/videos/public/69f4a665db2c72a42818d397/862599edf_promo_vosstanovim_dnr_9x16_final_v3.mp4";
+const PROMO_VIDEO = "https://media.base44.com/videos/public/69f4a665db2c72a42818d397/6d5cbf847_Promo_new_GL.mp4";
 
 export default function HeroSection({ onOpenApplication }) {
   const scrollToVacancies = () => {
