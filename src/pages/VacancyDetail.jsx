@@ -17,14 +17,14 @@ export default function VacancyDetail() {
 
   if (!vacancy) {
     return (
-      <div className="min-h-screen bg-[#05070A] flex flex-col">
+      <div className="min-h-screen bg-background flex flex-col">
         <Navbar />
         <div className="flex-1 flex items-center justify-center">
           <div className="text-center">
-            <h1 className="text-3xl font-black text-[#F8FAFC] mb-4">Вакансия не найдена</h1>
+            <h1 className="text-3xl font-inter font-black text-foreground mb-4">Вакансия не найдена</h1>
             <button
               onClick={() => navigate("/")}
-              className="px-6 py-3 bg-[#7B3FBF] text-white rounded-lg font-bold hover:bg-[#8B4FCF] transition-colors"
+              className="px-6 py-3 bg-accent text-accent-foreground rounded-lg font-inter font-bold hover:bg-accent/90 transition-colors"
             >
               Вернуться на главную
             </button>
@@ -36,13 +36,13 @@ export default function VacancyDetail() {
   }
 
   return (
-    <div className="min-h-screen bg-[#05070A]">
+    <div className="min-h-screen bg-background">
       <Navbar onOpenApplication={() => setAppOpen(true)} />
 
-      <div className="pt-20 px-6 lg:px-10 max-w-7xl mx-auto">
+      <div className="pt-20 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <button
           onClick={() => navigate(-1)}
-          className="inline-flex items-center gap-2 text-[#F8FAFC]/50 hover:text-[#7B3FBF] transition-colors mb-6"
+          className="inline-flex items-center gap-2 text-muted-foreground hover:text-accent transition-colors mb-6 font-inter text-sm"
         >
           <ArrowLeft size={18} /> Вернуться
         </button>
@@ -50,18 +50,18 @@ export default function VacancyDetail() {
 
       <VacancyHero vacancy={vacancy} />
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 py-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <VacancyTabs vacancy={vacancy} />
       </div>
 
       {/* CTA */}
-      <div className="max-w-7xl mx-auto px-6 lg:px-10 pb-16">
-        <div className="glass-card-gold rounded-2xl p-8 text-center">
-          <h2 className="text-2xl font-black text-[#F8FAFC] mb-4">Готовы подать заявку?</h2>
-          <p className="text-[#F8FAFC]/60 mb-6">Заполните форму — мы свяжемся с вами в ближайшее время</p>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+        <div className="bg-secondary border border-border rounded-2xl p-8 text-center">
+          <h2 className="text-2xl font-inter font-black text-foreground mb-4">Готовы подать заявку?</h2>
+          <p className="text-muted-foreground font-inter mb-6">Заполните форму — мы свяжемся с вами в ближайшее время</p>
           <button
             onClick={() => setAppOpen(true)}
-            className="px-8 py-4 rounded-lg bg-gradient-to-r from-[#7B3FBF] to-[#8B4FCF] hover:from-[#8B4FCF] hover:to-[#9B5FDF] text-white font-bold text-lg transition-all shadow-[0_0_30px_rgba(123,63,191,0.4)]"
+            className="px-8 py-4 rounded-lg bg-accent hover:bg-accent/90 text-accent-foreground font-inter font-bold text-lg transition-all shadow-lg shadow-accent/25"
           >
             📝 Оставить заявку
           </button>

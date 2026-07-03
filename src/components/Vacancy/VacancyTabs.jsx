@@ -21,15 +21,15 @@ export default function VacancyTabs({ vacancy }) {
 
   return (
     <div>
-      <div className="flex gap-2 mb-12 overflow-x-auto pb-4 border-b border-[#7B3FBF]/20">
+      <div className="flex gap-2 mb-12 overflow-x-auto pb-4 border-b border-border">
         {TABS.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`px-4 py-3 rounded-lg font-bold text-sm whitespace-nowrap transition-all ${
+            className={`px-4 py-3 rounded-lg font-inter font-bold text-sm whitespace-nowrap transition-all ${
               activeTab === tab.id
-                ? "bg-[#7B3FBF] text-white shadow-lg shadow-[#7B3FBF]/30"
-                : "text-[#F8FAFC]/60 hover:text-[#F8FAFC] hover:bg-[#7B3FBF]/10"
+                ? "bg-primary text-primary-foreground shadow-lg"
+                : "text-muted-foreground hover:text-foreground hover:bg-secondary"
             }`}
           >
             {tab.label}

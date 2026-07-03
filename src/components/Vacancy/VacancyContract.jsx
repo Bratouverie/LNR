@@ -33,7 +33,7 @@ export default function VacancyContract({ vacancy }) {
 
   if (!contract) {
     return (
-      <div className="glass-card rounded-2xl p-8 text-center text-[#F8FAFC]/60">
+      <div className="bg-card border border-border rounded-2xl p-8 text-center text-muted-foreground">
         <p>Договор недоступен</p>
       </div>
     );
@@ -41,14 +41,14 @@ export default function VacancyContract({ vacancy }) {
 
   return (
     <div className="space-y-6">
-      <div className="glass-card rounded-2xl p-8">
+      <div className="bg-card border border-border rounded-2xl p-6 sm:p-8">
         <div className="flex items-start gap-5 mb-6">
-          <div className="w-14 h-14 rounded-xl bg-[#C9A84C]/10 flex items-center justify-center shrink-0 border border-[#C9A84C]/20">
-            <FileText className="h-7 w-7 text-[#C9A84C]" />
+          <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center shrink-0 border border-accent/20">
+            <FileText className="h-7 w-7 text-accent" />
           </div>
           <div className="flex-1">
-            <h3 className="text-xl font-black text-[#F8FAFC] mb-1">Трудовой договор</h3>
-            <p className="text-[#F8FAFC]/60 font-inter text-sm leading-relaxed">
+            <h3 className="text-xl font-inter font-black text-foreground mb-1">Трудовой договор</h3>
+            <p className="text-muted-foreground font-inter text-sm leading-relaxed">
               Ознакомьтесь с полным текстом трудового договора. Вы можете просмотреть его на сайте или скачать в удобном формате. Официальная версия подписывается на месте несения вахты.
             </p>
           </div>
@@ -56,7 +56,7 @@ export default function VacancyContract({ vacancy }) {
 
         {/* Главная кнопка — просмотр на сайте */}
         <Link to={`/contract/${vacancy.id}`} target="_blank" rel="noopener noreferrer">
-          <button className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-[#7B3FBF] hover:bg-[#8B4FCF] text-white font-bold transition-all shadow-lg shadow-[#7B3FBF]/30 hover:shadow-[#7B3FBF]/50 mb-4">
+          <button className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-inter font-bold transition-all shadow-lg mb-4">
             <Eye className="h-5 w-5" />
             Просмотреть договор на сайте
             <ExternalLink className="h-4 w-4 ml-1 opacity-60" />
@@ -69,7 +69,7 @@ export default function VacancyContract({ vacancy }) {
             href={contract.pdfUrl || vacancy.contractUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[#C9A84C]/10 border border-[#C9A84C]/30 text-[#C9A84C] font-bold text-sm hover:bg-[#C9A84C]/20 transition-all"
+            className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-accent/10 border border-accent/30 text-accent font-inter font-bold text-sm hover:bg-accent/20 transition-all"
           >
             <Download className="h-4 w-4" />
             Скачать PDF
@@ -78,7 +78,7 @@ export default function VacancyContract({ vacancy }) {
           <button
             onClick={handleDownloadDocx}
             disabled={downloadingDocx}
-            className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-[#7B3FBF]/10 border border-[#7B3FBF]/30 text-[#7B3FBF] font-bold text-sm hover:bg-[#7B3FBF]/20 transition-all disabled:opacity-50"
+            className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-primary/10 border border-primary/30 text-primary font-inter font-bold text-sm hover:bg-primary/20 transition-all disabled:opacity-50"
           >
             {downloadingDocx
               ? <Loader2 className="h-4 w-4 animate-spin" />
@@ -87,9 +87,9 @@ export default function VacancyContract({ vacancy }) {
           </button>
         </div>
 
-        <div className="mt-5 p-4 bg-[#C9A84C]/10 border border-[#C9A84C]/20 rounded-xl">
-          <p className="text-sm text-[#F8FAFC]/70 font-inter leading-snug">
-            <span className="font-bold text-[#C9A84C]">⚠️ Внимание:</span> Договор соответствует условиям, указанным на этой странице. Официальная версия подписывается на месте несения вахты.
+        <div className="mt-5 p-4 bg-accent/10 border border-accent/20 rounded-xl">
+          <p className="text-sm text-muted-foreground font-inter leading-snug">
+            <span className="font-bold text-accent">⚠️ Внимание:</span> Договор соответствует условиям, указанным на этой странице. Официальная версия подписывается на месте несения вахты.
           </p>
         </div>
       </div>
