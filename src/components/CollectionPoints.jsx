@@ -1,6 +1,16 @@
-import VisualPlaceholder from "./VisualPlaceholder";
 import { MapPin, Phone, Clock } from "lucide-react";
 import { COLLECTION_POINTS } from "@/lib/calculatorData";
+
+const IMG_BASE = "https://media.base44.com/images/public/69f4a665db2c72a42818d397";
+const POINT_PHOTOS = {
+  54: `${IMG_BASE}/ef553851f_54.png`,
+  55: `${IMG_BASE}/4f3b34074_55.png`,
+  56: `${IMG_BASE}/486e22552_56.png`,
+  57: `${IMG_BASE}/c7f88019a_57.png`,
+  58: `${IMG_BASE}/433d9b048_58.png`,
+  59: `${IMG_BASE}/61af4492a_59.png`,
+  60: `${IMG_BASE}/b6b2244be_60.png`,
+};
 
 export default function CollectionPoints() {
   return (
@@ -18,14 +28,14 @@ export default function CollectionPoints() {
 
         {/* Map */}
         <div className="mb-10">
-          <VisualPlaceholder id={54} ratio="16:9" label="Карта России с точками сбора" />
+          <img src={POINT_PHOTOS[54]} alt="Карта России с точками сбора" loading="lazy" className="w-full aspect-video object-cover rounded-2xl border border-border" />
         </div>
 
         {/* Cards grid */}
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {COLLECTION_POINTS.map((point) => (
             <div key={point.city} className="bg-card border border-border rounded-2xl p-5 hover:border-accent/30 transition-colors">
-              <VisualPlaceholder id={point.visualId} ratio="4:3" label={point.city} className="mb-4" />
+              <img src={POINT_PHOTOS[point.visualId]} alt={point.city} loading="lazy" className="w-full aspect-[4/3] object-cover rounded-xl mb-4" />
 
               <h3 className="font-inter font-bold text-lg text-foreground mb-3">{point.city}</h3>
 
