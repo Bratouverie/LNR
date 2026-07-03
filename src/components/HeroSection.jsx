@@ -15,25 +15,25 @@ export default function HeroSection({ onOpenApplication }) {
   };
 
   const columns = [
-    {
-      icon: Banknote,
-      title: "Доход",
-      value: "1 625 000 ₽",
-      desc: "средний доход за 3 месяца (подъёмные + зарплата)",
-    },
-    {
-      icon: ShieldCheck,
-      title: "Гарантии",
-      value: "625 000 ₽",
-      desc: "подъёмные при подписании договора, без налогов",
-    },
-    {
-      icon: Award,
-      title: "Значимость",
-      value: "1 197",
-      desc: "специалистов уже восстановили ЛНР и ДНР",
-    },
-  ];
+  {
+    icon: Banknote,
+    title: "Доход",
+    value: "1 645 000 \u20BD",
+    desc: "средний доход за 3 месяца (подъёмные + зарплата)"
+  },
+  {
+    icon: ShieldCheck,
+    title: "Гарантии",
+    value: "625 000 ₽",
+    desc: "подъёмные при подписании договора, без налогов"
+  },
+  {
+    icon: Award,
+    title: "Значимость",
+    value: "1 197",
+    desc: "специалистов уже восстановили ЛНР и ДНР"
+  }];
+
 
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
@@ -43,8 +43,8 @@ export default function HeroSection({ onOpenApplication }) {
         loop
         muted
         playsInline
-        className="absolute inset-0 w-full h-full object-cover"
-      >
+        className="absolute inset-0 w-full h-full object-cover">
+        
         <source src={PROMO_VIDEO} type="video/mp4" />
       </video>
       <div className="absolute inset-0 bg-gradient-to-b from-primary/70 via-primary/50 to-primary" />
@@ -66,48 +66,48 @@ export default function HeroSection({ onOpenApplication }) {
         </p>
 
         <div className="inline-flex flex-wrap items-center justify-center gap-2 mb-10">
-          {["Мариуполь", "Макеевка", "Луганск", "Алчевск"].map((city) => (
-            <span key={city} className="flex items-center gap-1.5 bg-white/10 border border-white/20 rounded-full px-3 py-1 text-white/80 text-sm font-inter">
+          {["Мариуполь", "Макеевка", "Луганск", "Алчевск"].map((city) =>
+          <span key={city} className="flex items-center gap-1.5 bg-white/10 border border-white/20 rounded-full px-3 py-1 text-white/80 text-sm font-inter">
               <span className="w-1.5 h-1.5 rounded-full bg-accent inline-block" />
               {city}
             </span>
-          ))}
+          )}
         </div>
 
         {/* Three columns */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 max-w-3xl mx-auto mb-12">
-          {columns.map((col) => (
-            <div key={col.title} className="bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-5">
+          {columns.map((col) =>
+          <div key={col.title} className="bg-white/10 backdrop-blur-md border border-white/10 rounded-2xl p-5">
               <col.icon className="h-6 w-6 text-accent mx-auto mb-3" />
               <div className="text-xs sm:text-sm text-white/60 font-inter font-medium uppercase tracking-wider mb-2">{col.title}</div>
               <div className="text-2xl sm:text-3xl font-mono font-black text-white mb-2">{col.value}</div>
               <div className="text-xs text-white/50 font-inter leading-snug">{col.desc}</div>
             </div>
-          ))}
+          )}
         </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
           <Button
             onClick={onOpenApplication}
             size="lg"
-            className="bg-accent hover:bg-accent/90 text-accent-foreground font-inter font-bold text-base px-8 py-6 rounded-lg shadow-lg shadow-accent/25 transition-all hover:shadow-xl hover:shadow-accent/30 hover:scale-105 animate-pulse"
-          >
+            className="bg-accent hover:bg-accent/90 text-accent-foreground font-inter font-bold text-base px-8 py-6 rounded-lg shadow-lg shadow-accent/25 transition-all hover:shadow-xl hover:shadow-accent/30 hover:scale-105 animate-pulse">
+            
             Оставить заявку за 2 минуты
           </Button>
           <Button
             onClick={scrollToCalculator}
             variant="outline"
             size="lg"
-            className="border-white/20 text-white hover:bg-white/10 font-inter font-medium text-base px-8 py-6 rounded-lg"
-          >
+            className="border-white/20 text-white hover:bg-white/10 font-inter font-medium text-base px-8 py-6 rounded-lg">
+            
             Рассчитать доход
           </Button>
         </div>
 
         <button
           onClick={scrollToVacancies}
-          className="text-white/50 hover:text-white/80 font-inter text-sm transition-colors"
-        >
+          className="text-white/50 hover:text-white/80 font-inter text-sm transition-colors">
+          
           Посмотреть вакансии →
         </button>
       </div>
@@ -116,6 +116,6 @@ export default function HeroSection({ onOpenApplication }) {
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
         <ChevronDown className="h-6 w-6 text-white/40" />
       </div>
-    </section>
-  );
+    </section>);
+
 }
