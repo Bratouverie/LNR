@@ -44,7 +44,13 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
     if (!form.consent || !form.full_name || !form.phone) return;
     setLoading(true);
     try {
-      await base44.entities.Application.create({ ...form, type: "application" });
+      const payload = { type: "application" };
+      for (const [key, value] of Object.entries(form)) {
+        if (value !== "" && value !== null && value !== undefined) {
+          payload[key] = value;
+        }
+      }
+      await base44.entities.Application.create(payload);
       setSuccess(true);
       setTimeout(() => {
         setSuccess(false);
