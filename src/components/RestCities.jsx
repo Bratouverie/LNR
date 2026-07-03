@@ -1,5 +1,12 @@
-import VisualPlaceholder from "./VisualPlaceholder";
 import { MapPin, Clock } from "lucide-react";
+
+const IMG_BASE = "https://media.base44.com/images/public/69f4a665db2c72a42818d397";
+const REST_PHOTOS = {
+  75: `${IMG_BASE}/7b100b8ee_75.png`,
+  76: `${IMG_BASE}/c24319689_76.png`,
+  77: `${IMG_BASE}/0307b6fd4_77.png`,
+  78: `${IMG_BASE}/2f814f7bf_78.png`,
+};
 
 const CITIES = [
   {
@@ -57,7 +64,7 @@ export default function RestCities() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {CITIES.map((city) => (
             <div key={city.name} className="bg-card border border-border rounded-2xl overflow-hidden hover:border-accent/30 transition-colors">
-              <VisualPlaceholder id={city.visualId} ratio="3:2" label={city.name} />
+              <img src={REST_PHOTOS[city.visualId]} alt={city.name} loading="lazy" className="w-full aspect-[3/2] object-cover" />
 
               <div className="p-5 space-y-3">
                 <div>
