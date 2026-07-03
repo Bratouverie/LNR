@@ -203,9 +203,9 @@ export const VACANCIES = [
     salary: {
       type: "by-category",
       min: 300000, max: 380000, calcBase: 335000, currency: "₽", period: "месяц",
-      base: "65 000–80 000 ₽/мес",
-      bonus_monthly: "+10 000–15 000 ₽ надбавка за сложность, бонусы за безаварийную работу",
-      total: "75 000–95 000 ₽/мес (в зависимости от категории)",
+      base: "260 000–320 000 ₽/мес",
+      bonus_monthly: "+40 000–60 000 ₽ надбавка за сложность, бонусы за безаварийную работу",
+      total: "300 000–380 000 ₽/мес (в зависимости от категории)",
       categories: {
         B: { name: "Категория B", description: "Легковые автомобили", calcKey: "voditel_b", base: 320000, min: 300000, max: 340000 },
         C: { name: "Категория C", description: "Грузовики до 12 т", calcKey: "voditel_c", base: 335000, min: 310000, max: 360000 },
