@@ -4,36 +4,36 @@ const IMG_BASE = "https://media.base44.com/images/public/69f4a665db2c72a42818d39
 const LEADER_PHOTOS = {
   96: `${IMG_BASE}/8cbc0245c_96.png`,
   97: `${IMG_BASE}/de0af4154_97.png`,
-  98: `${IMG_BASE}/cd5ca3013_98.png`,
+  98: `${IMG_BASE}/cd5ca3013_98.png`
 };
 
 const LEADERS = [
-  {
-    name: "Игорь Андреевич Михляев",
-    role: "Генеральный директор, руководитель проекта отбора",
-    experience: "18 лет в кадровом менеджменте, 5 лет гос. контрактов",
-    education: "МГУ им. Ломоносова (экономика)",
-    phone: "+7 (4212) 51-59-30 доб. 702",
-    email: "igor.mikhlayev@bratouverie-snb.ru",
-    visualId: 96,
-  },
-  {
-    name: "Руководитель отдела безопасности",
-    role: "Начальник отдела безопасности",
-    experience: "Бывший спецслужб, 10 лет охрана объектов",
-    phone: "+7 (4212) 51-59-30 доб. 703",
-    email: "security@bratouverie-snb.ru",
-    visualId: 97,
-  },
-  {
-    name: "Главный юрист",
-    role: "Руководитель юридического отдела",
-    experience: "Адвокат, 12 лет трудовое право",
-    phone: "+7 (4212) 51-59-30 доб. 704",
-    email: "legal@bratouverie-snb.ru",
-    visualId: 98,
-  },
-];
+{
+  name: "Игорь Андреевич Михляев",
+  role: "Генеральный директор, руководитель проекта отбора",
+  experience: "18 лет в кадровом менеджменте, 5 лет гос. контрактов",
+  education: "МГУ им. Ломоносова (экономика)",
+  phone: "+7 (4212) 51-59-30 доб. 702",
+  email: "igor.mikhlayev@bratouverie-snb.ru",
+  visualId: 96
+},
+{
+  name: "\u0411\u0430\u0442\u0440\u0430\u043A\u043E\u0432 \u0412\u0438\u043A\u0442\u043E\u0440 \u0421\u0435\u0440\u0433\u0435\u0435\u0432\u0438\u0447",
+  role: "Начальник отдела безопасности",
+  experience: "Бывший спецслужб, 10 лет охрана объектов",
+  phone: "+7 (4212) 51-59-30 доб. 703",
+  email: "security@bratouverie-snb.ru",
+  visualId: 97
+},
+{
+  name: "Главный юрист",
+  role: "Руководитель юридического отдела",
+  experience: "Адвокат, 12 лет трудовое право",
+  phone: "+7 (4212) 51-59-30 доб. 704",
+  email: "legal@bratouverie-snb.ru",
+  visualId: 98
+}];
+
 
 export default function CompanyLeadership() {
   return (
@@ -50,8 +50,8 @@ export default function CompanyLeadership() {
         </div>
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {LEADERS.map((leader, i) => (
-            <div key={i} className="bg-card border border-border rounded-2xl overflow-hidden hover:border-accent/30 transition-colors">
+          {LEADERS.map((leader, i) =>
+          <div key={i} className="bg-card border border-border rounded-2xl overflow-hidden hover:border-accent/30 transition-colors">
               <img src={LEADER_PHOTOS[leader.visualId]} alt={leader.name} loading="lazy" className="w-full aspect-[3/4] object-cover" />
 
               <div className="p-5 space-y-3">
@@ -60,19 +60,19 @@ export default function CompanyLeadership() {
                   <div className="font-inter text-xs text-accent font-medium mt-1">{leader.role}</div>
                 </div>
 
-                {leader.experience && (
-                  <div>
+                {leader.experience &&
+              <div>
                     <div className="font-inter text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1">Опыт:</div>
                     <p className="font-inter text-xs text-muted-foreground">{leader.experience}</p>
                   </div>
-                )}
+              }
 
-                {leader.education && (
-                  <div>
+                {leader.education &&
+              <div>
                     <div className="font-inter text-xs font-bold text-muted-foreground uppercase tracking-wider mb-1">Образование:</div>
                     <p className="font-inter text-xs text-muted-foreground">{leader.education}</p>
                   </div>
-                )}
+              }
 
                 <div className="border-t border-border pt-3 space-y-2">
                   <a href={`tel:${leader.phone.replace(/[^+\d]/g, "")}`} className="flex items-center gap-2 text-xs font-inter text-foreground hover:text-accent transition-colors">
@@ -86,9 +86,9 @@ export default function CompanyLeadership() {
                 </div>
               </div>
             </div>
-          ))}
+          )}
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
