@@ -1,5 +1,11 @@
-import VisualPlaceholder from "./VisualPlaceholder";
 import { Phone, Mail } from "lucide-react";
+
+const IMG_BASE = "https://media.base44.com/images/public/69f4a665db2c72a42818d397";
+const LEADER_PHOTOS = {
+  96: `${IMG_BASE}/8cbc0245c_96.png`,
+  97: `${IMG_BASE}/de0af4154_97.png`,
+  98: `${IMG_BASE}/cd5ca3013_98.png`,
+};
 
 const LEADERS = [
   {
@@ -46,7 +52,7 @@ export default function CompanyLeadership() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {LEADERS.map((leader, i) => (
             <div key={i} className="bg-card border border-border rounded-2xl overflow-hidden hover:border-accent/30 transition-colors">
-              <VisualPlaceholder id={leader.visualId} ratio="3:4" label={leader.name} />
+              <img src={LEADER_PHOTOS[leader.visualId]} alt={leader.name} loading="lazy" className="w-full aspect-[3/4] object-cover" />
 
               <div className="p-5 space-y-3">
                 <div>
