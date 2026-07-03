@@ -14,7 +14,7 @@ export default function Calculator() {
   };
 
   return (
-    <div className="min-h-screen bg-[#05070A]">
+    <div className="min-h-screen bg-background">
       <Navbar onOpenApplication={() => openApplication("")} />
       <SalaryCalculator onApply={openApplication} />
       <Footer />

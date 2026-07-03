@@ -1,6 +1,7 @@
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { ChevronDown, ShieldCheck, Banknote, Award, Volume2, VolumeX, Loader2 } from "lucide-react";
+import { GLOBAL_CONFIG, getAverageTotalIncome, formatCurrency } from "@/data/vacanciesConfig";
 
 const PROMO_VIDEO = "https://media.base44.com/videos/public/69f4a665db2c72a42818d397/6d5cbf847_Promo_new_GL.mp4";
 
@@ -30,19 +31,19 @@ export default function HeroSection({ onOpenApplication }) {
   {
     icon: Banknote,
     title: "Доход",
-    value: "1 645 000 \u20BD",
-    desc: "средний доход за 3 месяца (подъёмные + зарплата)"
+    value: formatCurrency(getAverageTotalIncome()),
+    desc: `средний доход за ${GLOBAL_CONFIG.compensation.stintDuration} месяца (подъёмные + зарплата)`
   },
   {
     icon: ShieldCheck,
     title: "Гарантии",
-    value: "625 000 ₽",
+    value: formatCurrency(GLOBAL_CONFIG.compensation.oneTimePayment),
     desc: "подъёмные при подписании договора, без налогов"
   },
   {
     icon: Award,
     title: "Значимость",
-    value: "1 197",
+    value: GLOBAL_CONFIG.program.totalSpecialists.toLocaleString("ru-RU"),
     desc: "специалистов уже восстановили ЛНР и ДНР"
   }];
 
@@ -103,7 +104,7 @@ export default function HeroSection({ onOpenApplication }) {
         </p>
 
         <div className="inline-flex flex-wrap items-center justify-center gap-2 mb-10">
-          {["Мариуполь", "Макеевка", "Луганск", "Алчевск"].map((city) =>
+          {GLOBAL_CONFIG.program.locations.map((city) =>
           <span key={city} className="flex items-center gap-1.5 bg-white/10 border border-white/20 rounded-full px-3 py-1 text-white/80 text-sm font-inter">
               <span className="w-1.5 h-1.5 rounded-full bg-accent inline-block" />
               {city}

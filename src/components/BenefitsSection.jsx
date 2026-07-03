@@ -1,8 +1,9 @@
 import { CheckCircle, Home, Banknote, Shield, GraduationCap, Award, Users } from "lucide-react";
+import { GLOBAL_CONFIG, getMinSalaryAcrossVacancies, getMaxSalaryAcrossVacancies, getAverageTotalIncome, formatCurrency } from "@/data/vacanciesConfig";
 
 const DURING_CONTRACT = [
-  { param: "Зарплата", desc: "Ежемесячно, 2 раза в месяц", amount: "300–470 К" },
-  { param: "Подъёмные", desc: "При подписании договора", amount: "625 К" },
+  { param: "Зарплата", desc: "Ежемесячно, 2 раза в месяц", amount: `${Math.round(getMinSalaryAcrossVacancies()/1000)}–${Math.round(getMaxSalaryAcrossVacancies()/1000)} К` },
+  { param: "Подъёмные", desc: "При подписании договора", amount: `${Math.round(GLOBAL_CONFIG.compensation.oneTimePayment/1000)} К` },
   { param: "Жильё", desc: "2–3 чел. на комнату", amount: "0 ₽ (включено)" },
   { param: "Питание", desc: "3-разовое (завтрак, обед, ужин)", amount: "0 ₽ (включено)" },
   { param: "Интернет", desc: "Wi-Fi на базе", amount: "0 ₽" },
@@ -79,8 +80,8 @@ export default function BenefitsSection() {
                   </tr>
                 ))}
                 <tr className="bg-accent/10 border-t-2 border-accent/30">
-                  <td className="px-4 py-3 font-bold text-foreground text-xs" colSpan={2}>ИТОГО за 3 месяца</td>
-                  <td className="px-4 py-3 text-right font-mono font-black text-accent text-sm">~1 625 000 ₽</td>
+                  <td className="px-4 py-3 font-bold text-foreground text-xs" colSpan={2}>ИТОГО за {GLOBAL_CONFIG.compensation.stintDuration} месяца</td>
+                  <td className="px-4 py-3 text-right font-mono font-black text-accent text-sm">~{formatCurrency(getAverageTotalIncome())}</td>
                 </tr>
               </tbody>
             </table>

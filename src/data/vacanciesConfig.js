@@ -629,6 +629,39 @@ export function getCommonBenefits() {
   return GLOBAL_CONFIG.commonBenefits;
 }
 
+export function getAverageMonthlySalary() {
+  const sum = VACANCIES.reduce((acc, v) => {
+    if (v.salary.type === "by-category") {
+      const cats = Object.values(v.salary.categories);
+      const avg = cats.reduce((s, c) => s + (c.min + c.max) / 2, 0) / cats.length;
+      return acc + avg;
+    }
+    return acc + (v.salary.min + v.salary.max) / 2;
+  }, 0);
+  return Math.round(sum / VACANCIES.length);
+}
+
+export function getAverageTotalIncome() {
+  const monthly = getAverageMonthlySalary();
+  return Math.round(monthly * GLOBAL_CONFIG.compensation.stintDuration + GLOBAL_CONFIG.compensation.oneTimePayment);
+}
+
+export function getMinSalaryAcrossVacancies() {
+  return Math.min(...VACANCIES.map((v) =>
+    v.salary.type === "by-category"
+      ? Math.min(...Object.values(v.salary.categories).map((c) => c.min))
+      : v.salary.min
+  ));
+}
+
+export function getMaxSalaryAcrossVacancies() {
+  return Math.max(...VACANCIES.map((v) =>
+    v.salary.type === "by-category"
+      ? Math.max(...Object.values(v.salary.categories).map((c) => c.max))
+      : v.salary.max
+  ));
+}
+
 export function getGlobalConfig() {
   return GLOBAL_CONFIG;
 }
