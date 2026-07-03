@@ -1,17 +1,18 @@
-import VisualPlaceholder from "./VisualPlaceholder";
 import { FileText, Phone, ShieldCheck, MapPin, Stethoscope, PenTool, Banknote, Plane, ClipboardCheck } from "lucide-react";
 
+const IMG_BASE = "https://media.base44.com/images/public/69f4a665db2c72a42818d397";
+
 const STEPS = [
-  { day: "День 1", icon: FileText, title: "Заявка", desc: "Заполните форму на сайте или позвоните", docs: "Паспорт, резюме", visualId: 44, ratio: "4:3" },
-  { day: "День 2–3", icon: Phone, title: "Собеседование", desc: "По телефону или через мессенджер", docs: "Опыт работы, контакты", visualId: 45, ratio: "4:3" },
-  { day: "День 4", icon: ShieldCheck, title: "Проверка безопасности", desc: "Проверка в органах безопасности (2–3 дня)", docs: "Справка о несудимости", visualId: 46, ratio: "4:3" },
-  { day: "День 5", icon: MapPin, title: "Приглашение в точку сбора", desc: "При положительном решении — приглашение", docs: "Билет до точки сбора", visualId: 47, ratio: "4:3" },
-  { day: "День 5–7", icon: ClipboardCheck, title: "Прибытие в точку сбора", desc: "Собрать чемодан + документы ПН", docs: "Все оригиналы документов", visualId: 48, ratio: "4:3" },
-  { day: "День 8–9", icon: Stethoscope, title: "Медкомиссия + допуски", desc: "ВТ–ПТ, 08:00–16:00, оформление секретности", docs: "Медкарта, анализы", visualId: 49, ratio: "4:3" },
-  { day: "День 10", icon: PenTool, title: "Подписание договора", desc: "Трудовой договор по ТК РФ", docs: "Трудовой договор (2 экз.)", visualId: 50, ratio: "4:3" },
-  { day: "День 11", icon: Banknote, title: "Выплата подъёмных", desc: "625 000 ₽ на карту в течение 5 дней", docs: "Банковская карта", visualId: 51, ratio: "4:3" },
-  { day: "День 12", icon: Plane, title: "Отправка самолётом", desc: "В Ростов-на-Дону → автобус в Макеевку", docs: "Билет (за счёт программы)", visualId: 52, ratio: "4:3" },
-  { day: "День 13–15", icon: MapPin, title: "Первый день работы", desc: "Распределение по объектам, начало работы", docs: "Пропуск на объект", visualId: 53, ratio: "4:3" },
+  { day: "День 1", icon: FileText, title: "Заявка", desc: "Заполните форму на сайте или позвоните", docs: "Паспорт, резюме", photo: `${IMG_BASE}/8b95f93b2_44.png` },
+  { day: "День 2–3", icon: Phone, title: "Собеседование", desc: "По телефону или через мессенджер", docs: "Опыт работы, контакты", photo: `${IMG_BASE}/a4316753b_45.png` },
+  { day: "День 4", icon: ShieldCheck, title: "Проверка безопасности", desc: "Проверка в органах безопасности (2–3 дня)", docs: "Справка о несудимости", photo: `${IMG_BASE}/ff40ec17c_46.png` },
+  { day: "День 5", icon: MapPin, title: "Приглашение в точку сбора", desc: "При положительном решении — приглашение", docs: "Билет до точки сбора", photo: `${IMG_BASE}/872d8fcd8_47.png` },
+  { day: "День 5–7", icon: ClipboardCheck, title: "Прибытие в точку сбора", desc: "Собрать чемодан + документы ПН", docs: "Все оригиналы документов", photo: `${IMG_BASE}/2df680490_48.png` },
+  { day: "День 8–9", icon: Stethoscope, title: "Медкомиссия + допуски", desc: "ВТ–ПТ, 08:00–16:00, оформление секретности", docs: "Медкарта, анализы", photo: `${IMG_BASE}/5dc9f4c1a_49.png` },
+  { day: "День 10", icon: PenTool, title: "Подписание договора", desc: "Трудовой договор по ТК РФ", docs: "Трудовой договор (2 экз.)", photo: `${IMG_BASE}/1a1a48e10_50.png` },
+  { day: "День 11", icon: Banknote, title: "Выплата подъёмных", desc: "625 000 ₽ на карту в течение 5 дней", docs: "Банковская карта", photo: `${IMG_BASE}/1295e9837_51.png` },
+  { day: "День 12", icon: Plane, title: "Отправка самолётом", desc: "В Ростов-на-Дону → автобус в Макеевку", docs: "Билет (за счёт программы)", photo: `${IMG_BASE}/37c637a36_52.png` },
+  { day: "День 13–15", icon: MapPin, title: "Первый день работы", desc: "Распределение по объектам, начало работы", docs: "Пропуск на объект", photo: `${IMG_BASE}/73b491507_53.png` },
 ];
 
 export default function ProcessSection() {
@@ -56,7 +57,7 @@ export default function ProcessSection() {
 
                 {/* Visual on other side */}
                 <div className="hidden sm:block flex-1">
-                  <VisualPlaceholder id={step.visualId} ratio={step.ratio} className="max-w-[200px]" />
+                  <img src={step.photo} alt={step.title} loading="lazy" className="w-full max-w-[200px] aspect-[4/3] object-cover rounded-xl border border-border shadow-sm" />
                 </div>
               </div>
             ))}
