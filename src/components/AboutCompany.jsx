@@ -1,6 +1,13 @@
-import VisualPlaceholder from "./VisualPlaceholder";
 import { Building2, MapPin, Phone, Mail, Globe, CheckCircle, ExternalLink } from "lucide-react";
 import { COMPANY_INFO } from "@/lib/calculatorData";
+
+const IMG_BASE = "https://media.base44.com/images/public/69f4a665db2c72a42818d397";
+const AWARDS = [
+  { src: `${IMG_BASE}/b3e2a9181_9cb9620f5_Official_Russian_Certificate_of_Honor_Pochetnaya_-1779972088305.jpg`, alt: "Почётная грамота Минпросвещения РФ", landscape: true },
+  { src: `${IMG_BASE}/0a6f2d63f_11d8178ed_.jpg`, alt: "Благодарность Минздрава РФ" },
+  { src: `${IMG_BASE}/f411dc883_994da1168_--.jpg`, alt: "Благодарность Правительства РФ" },
+  { src: `${IMG_BASE}/9937d325f_1148d61b5_Official_Russian_Certificate_of_Honor_Pochetnaya_-1779974154437.jpg`, alt: "Почётная грамота Минцифры РФ" },
+];
 
 const DIRECTIONS = [
 "Восстановление ДНР/ЛНР",
@@ -121,14 +128,13 @@ export default function AboutCompany() {
             </div>
           </div>
 
-          {/* Right: visuals */}
+          {/* Right: awards */}
           <div className="space-y-4">
-            <VisualPlaceholder id={84} ratio="4:3" label="Грамота Правительства РФ" />
-            <div className="grid grid-cols-2 gap-4">
-              <VisualPlaceholder id={85} ratio="3:4" label="Благодарность Минздрава" />
-              <VisualPlaceholder id={86} ratio="3:4" label="Грамота Минцифры" />
-              <VisualPlaceholder id={87} ratio="3:4" label="Грамота Минпросвещения" />
-              <VisualPlaceholder id={88} ratio="3:4" label="Награда" />
+            <img src={AWARDS[0].src} alt={AWARDS[0].alt} loading="lazy" className="w-full aspect-[4/3] object-cover rounded-xl border border-border shadow-sm" />
+            <div className="grid grid-cols-3 gap-3">
+              {AWARDS.slice(1).map((award) => (
+                <img key={award.src} src={award.src} alt={award.alt} loading="lazy" className="w-full aspect-[3/4] object-cover rounded-xl border border-border shadow-sm" />
+              ))}
             </div>
             <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 text-center">
               <p className="font-inter text-xs text-muted-foreground">Всего 12 грамот и благодарностей от Министерств и Правительства РФ
