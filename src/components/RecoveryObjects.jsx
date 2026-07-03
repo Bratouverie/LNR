@@ -7,8 +7,8 @@ const IMAGES = {
   30: "https://media.base44.com/images/public/69f4a665db2c72a42818d397/b862a3b75_30.png",
   31: "https://media.base44.com/images/public/69f4a665db2c72a42818d397/a596d7132_31.png",
   32: "https://media.base44.com/images/public/69f4a665db2c72a42818d397/10ee55882_32.png",
-  35: "https://media.base44.com/images/public/69f4a665db2c72a42818d397/4c64438f8_35.png",
-  "36base": "https://media.base44.com/images/public/69f4a665db2c72a42818d397/e2dfda354_36base.png",
+  35: "https://media.base44.com/images/public/69f4a665db2c72a42818d397/1e67526bd_35.png",
+  "36base": "https://media.base44.com/images/public/69f4a665db2c72a42818d397/1916e57eb_36-1base.png",
   36: "https://media.base44.com/images/public/69f4a665db2c72a42818d397/3f57d16c7_36.png",
   "37base": "https://media.base44.com/images/public/69f4a665db2c72a42818d397/d135135e6_37base.png",
   37: "https://media.base44.com/images/public/69f4a665db2c72a42818d397/458cd53c9_37.png",
@@ -62,7 +62,7 @@ export default function RecoveryObjects() {
             <div className="grid grid-cols-2 gap-4">
               <div>
                 <div className="relative w-full overflow-hidden rounded-xl bg-secondary aspect-[4/3]">
-                  <img src={IMAGES[obj.baseVisualId + "base"]} alt="База размещения" loading="lazy" className="w-full h-full object-cover" />
+                  <img src={IMAGES[obj.baseVisualId + "base"] || IMAGES[obj.baseVisualId]} alt="База размещения" loading="lazy" className="w-full h-full object-cover" />
                 </div>
                 <p className="font-inter text-xs text-muted-foreground mt-1.5 text-center">База размещения</p>
               </div>
