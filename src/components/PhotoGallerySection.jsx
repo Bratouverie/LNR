@@ -1,5 +1,9 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight, Camera } from "lucide-react";
+
+const INITIAL_BATCH = 15;
+const BATCH_SIZE = 8;
 
 const B = "https://media.base44.com/images/public/69f4a665db2c72a42818d397/";
 
@@ -122,11 +126,29 @@ function LazyImage({ src, alt, onClick, index }) {
 }
 
 export default function PhotoGallerySection() {
+  const [visibleCount, setVisibleCount] = useState(INITIAL_BATCH);
   const [lightbox, setLightbox] = useState(null);
+  const sentinelRef = useRef(null);
 
   const prev = useCallback(() => setLightbox((l) => (l === 0 ? PHOTOS.length - 1 : l - 1)), []);
   const next = useCallback(() => setLightbox((l) => (l === PHOTOS.length - 1 ? 0 : l + 1)), []);
   const close = useCallback(() => setLightbox(null), []);
+
+  // Infinite scroll: load next batch when sentinel enters viewport
+  useEffect(() => {
+    const el = sentinelRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisibleCount((c) => Math.min(c + BATCH_SIZE, PHOTOS.length));
+        }
+      },
+      { rootMargin: "300px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   useEffect(() => {
     if (lightbox === null) return;
@@ -138,6 +160,9 @@ export default function PhotoGallerySection() {
     window.addEventListener("keydown", handler);
     return () => window.removeEventListener("keydown", handler);
   }, [lightbox, prev, next, close]);
+
+  const visiblePhotos = PHOTOS.slice(0, visibleCount);
+  const hasMore = visibleCount < PHOTOS.length;
 
   return (
     <section id="gallery" className="py-24 sm:py-32 bg-background">
@@ -158,7 +183,7 @@ export default function PhotoGallerySection() {
 
         {/* Masonry-style grid */}
         <div className="columns-2 sm:columns-3 lg:columns-4 gap-3 space-y-3">
-          {PHOTOS.map((photo, i) => (
+          {visiblePhotos.map((photo, i) => (
             <div key={i} className="break-inside-avoid mb-3">
               <LazyImage
                 src={photo.src}
@@ -170,59 +195,80 @@ export default function PhotoGallerySection() {
           ))}
         </div>
 
-        {/* Lightbox */}
-        {lightbox !== null && (
-          <div
-            className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4"
-            onClick={close}
-            role="dialog"
-            aria-modal="true"
-            aria-label="Просмотр фото"
-          >
-            {/* Close */}
-            <button
-              className="absolute top-4 right-4 text-white/60 hover:text-white p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10"
-              onClick={close}
-              aria-label="Закрыть"
-            >
-              <X className="h-5 w-5" />
-            </button>
-
-            {/* Prev */}
-            <button
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white p-3 bg-black/50 hover:bg-black/70 rounded-full transition-colors z-10"
-              onClick={(e) => { e.stopPropagation(); prev(); }}
-              aria-label="Предыдущее фото"
-            >
-              <ChevronLeft className="h-6 w-6" />
-            </button>
-
-            {/* Next */}
-            <button
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white p-3 bg-black/50 hover:bg-black/70 rounded-full transition-colors z-10"
-              onClick={(e) => { e.stopPropagation(); next(); }}
-              aria-label="Следующее фото"
-            >
-              <ChevronRight className="h-6 w-6" />
-            </button>
-
-            {/* Image */}
-            <div className="max-w-5xl w-full" onClick={(e) => e.stopPropagation()}>
-              <img
-                key={lightbox}
-                src={PHOTOS[lightbox].src}
-                alt={PHOTOS[lightbox].caption}
-                className="w-full rounded-xl max-h-[80vh] object-contain"
-              />
-              <p className="text-white/80 font-inter text-center mt-3 text-sm">
-                {PHOTOS[lightbox].caption}
-              </p>
-              <p className="text-white/40 font-mono text-center text-xs mt-1">
-                {lightbox + 1} / {PHOTOS.length}
-              </p>
+        {/* Infinite scroll sentinel + loader */}
+        {hasMore && (
+          <div ref={sentinelRef} className="flex justify-center py-8">
+            <div className="flex gap-1.5">
+              <span className="w-2.5 h-2.5 bg-accent/60 rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+              <span className="w-2.5 h-2.5 bg-accent/60 rounded-full animate-bounce" style={{ animationDelay: "150ms" }} />
+              <span className="w-2.5 h-2.5 bg-accent/60 rounded-full animate-bounce" style={{ animationDelay: "300ms" }} />
             </div>
           </div>
         )}
+
+        {/* Lightbox with Framer Motion */}
+        <AnimatePresence>
+          {lightbox !== null && (
+            <motion.div
+              className="fixed inset-0 z-50 bg-black/95 flex items-center justify-center p-4"
+              onClick={close}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Просмотр фото"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+            >
+              {/* Close */}
+              <button
+                className="absolute top-4 right-4 text-white/60 hover:text-white p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors z-10"
+                onClick={close}
+                aria-label="Закрыть"
+              >
+                <X className="h-5 w-5" />
+              </button>
+
+              {/* Prev */}
+              <button
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white p-3 bg-black/50 hover:bg-black/70 rounded-full transition-colors z-10"
+                onClick={(e) => { e.stopPropagation(); prev(); }}
+                aria-label="Предыдущее фото"
+              >
+                <ChevronLeft className="h-6 w-6" />
+              </button>
+
+              {/* Next */}
+              <button
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-white/70 hover:text-white p-3 bg-black/50 hover:bg-black/70 rounded-full transition-colors z-10"
+                onClick={(e) => { e.stopPropagation(); next(); }}
+                aria-label="Следующее фото"
+              >
+                <ChevronRight className="h-6 w-6" />
+              </button>
+
+              {/* Image */}
+              <div className="max-w-5xl w-full" onClick={(e) => e.stopPropagation()}>
+                <motion.img
+                  key={lightbox}
+                  src={PHOTOS[lightbox].src}
+                  alt={PHOTOS[lightbox].caption}
+                  className="w-full rounded-xl max-h-[80vh] object-contain"
+                  initial={{ opacity: 0, scale: 0.95 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  transition={{ duration: 0.25, ease: "easeOut" }}
+                />
+                <p className="text-white/80 font-inter text-center mt-3 text-sm">
+                  {PHOTOS[lightbox].caption}
+                </p>
+                <p className="text-white/40 font-mono text-center text-xs mt-1">
+                  {lightbox + 1} / {PHOTOS.length}
+                </p>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </section>
   );
