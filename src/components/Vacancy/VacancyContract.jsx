@@ -1,83 +1,100 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Download, FileText, Eye } from "lucide-react";
-import ContractViewer from "./ContractViewer";
+import { Download, FileText, Eye, ExternalLink, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { buildContractBlocks } from "@/lib/contractBuilder";
+import { base44 } from "@/api/base44Client";
+import { Link } from "react-router-dom";
 
 export default function VacancyContract({ vacancy }) {
   const contract = vacancy.contract;
-  const [showViewer, setShowViewer] = useState(false);
+  const [downloadingDocx, setDownloadingDocx] = useState(false);
+
+  const handleDownloadDocx = async () => {
+    setDownloadingDocx(true);
+    try {
+      const contractData = buildContractBlocks(vacancy.id);
+      const res = await base44.functions.invoke("generateContractDocx", contractData);
+      const { base64, filename } = res.data;
+      const binary = atob(base64);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+      const blob = new Blob([bytes], { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename || `Договор_${vacancy.title || vacancy.id}.docx`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      alert("Ошибка при создании DOCX: " + e.message);
+    } finally {
+      setDownloadingDocx(false);
+    }
+  };
 
   if (!contract) {
     return (
-      <div className="glass-card rounded-2xl p-8 text-center text-[#F8FAFC]/60">
+      <div className="bg-card border border-border rounded-2xl p-8 text-center text-muted-foreground">
         <p>Договор недоступен</p>
       </div>
     );
   }
 
   return (
-    <div className="space-y-8">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="glass-card rounded-2xl p-8"
-      >
-        <div className="flex items-start gap-6 mb-6">
-          <FileText size={48} className="text-[#C9A84C] flex-shrink-0" />
+    <div className="space-y-6">
+      <div className="bg-card border border-border rounded-2xl p-8">
+        <div className="flex items-start gap-5 mb-6">
+          <div className="w-14 h-14 rounded-xl bg-accent/10 flex items-center justify-center shrink-0">
+            <FileText className="h-7 w-7 text-accent" />
+          </div>
           <div className="flex-1">
-            <h3 className="text-2xl font-black text-[#F8FAFC] mb-2">📄 Трудовой договор</h3>
-            <p className="text-[#F8FAFC]/70">
-              Ознакомьтесь с полным текстом трудового договора. Вы можете просмотреть договор на сайте или скачать его в удобном формате.
+            <h3 className="text-xl font-black text-foreground mb-1">Трудовой договор</h3>
+            <p className="text-muted-foreground font-inter text-sm leading-relaxed">
+              Ознакомьтесь с полным текстом трудового договора. Официальная версия подписывается на месте несения вахты.
             </p>
           </div>
         </div>
 
-        <div className="space-y-3 mb-8">
-          <button
-            onClick={() => setShowViewer(true)}
-            className="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-lg bg-[#7B3FBF] hover:bg-[#8B4FCF] text-white font-bold transition-all shadow-lg shadow-[#7B3FBF]/30 hover:shadow-[#7B3FBF]/50"
-          >
-            <Eye size={20} /> Просмотреть договор на сайте
-          </button>
+        {/* Главная кнопка — просмотр на сайте */}
+        <Link to={`/contract/${vacancy.id}`} target="_blank" rel="noopener noreferrer">
+          <Button className="w-full gap-2 bg-primary hover:bg-accent text-primary-foreground font-inter font-bold py-6 text-base mb-4 transition-all">
+            <Eye className="h-5 w-5" />
+            Просмотреть договор на сайте
+            <ExternalLink className="h-4 w-4 ml-1 opacity-60" />
+          </Button>
+        </Link>
 
-          <div className="grid md:grid-cols-3 gap-3">
-            <a
-              href={contract.pdfUrl || vacancy.contractUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-[#C9A84C]/10 border border-[#C9A84C]/30 text-[#C9A84C] font-bold hover:bg-[#C9A84C]/20 transition-all"
-            >
-              <Download size={18} /> PDF
-            </a>
-            <a
-              href={`/contract/${vacancy.id}`}
-              className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-[#7B3FBF]/10 border border-[#7B3FBF]/30 text-[#7B3FBF] font-bold hover:bg-[#7B3FBF]/20 transition-all"
-            >
-              <FileText size={18} /> Страница договора
-            </a>
-            <button
-              onClick={() => window.open(`/contract/${vacancy.id}`, "_blank")}
-              className="flex items-center justify-center gap-2 px-4 py-3 rounded-lg bg-[#7B3FBF]/10 border border-[#7B3FBF]/30 text-[#7B3FBF] font-bold hover:bg-[#7B3FBF]/20 transition-all"
-            >
-              <Download size={18} /> DOCX
-            </button>
-          </div>
+        {/* Скачать */}
+        <div className="grid grid-cols-2 gap-3">
+          <a
+            href={contract.pdfUrl || vacancy.contractUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl bg-secondary border border-border text-foreground font-inter font-semibold text-sm hover:border-accent/40 hover:text-accent transition-all"
+          >
+            <Download className="h-4 w-4" />
+            Скачать PDF
+          </a>
+
+          <Button
+            onClick={handleDownloadDocx}
+            disabled={downloadingDocx}
+            variant="outline"
+            className="flex items-center justify-center gap-2 rounded-xl font-inter font-semibold text-sm hover:border-accent/40 hover:text-accent transition-all"
+          >
+            {downloadingDocx
+              ? <Loader2 className="h-4 w-4 animate-spin" />
+              : <Download className="h-4 w-4" />}
+            Скачать DOCX
+          </Button>
         </div>
 
-        <div className="p-4 bg-[#C9A84C]/10 border border-[#C9A84C]/20 rounded-lg">
-          <p className="text-sm text-[#F8FAFC]/70">
-            <span className="font-bold text-[#C9A84C]">⚠️ Внимание:</span> Договор соответствует трудовому законодательству РФ и условиям, указанным на этой странице. Официальная версия подписывается на месте несения вахты.
+        <div className="mt-5 p-4 bg-accent/5 border border-accent/20 rounded-xl">
+          <p className="text-sm text-muted-foreground font-inter leading-snug">
+            <span className="font-bold text-accent">⚠️ Внимание:</span> Договор соответствует условиям, указанным на этой странице. Официальная версия подписывается на месте несения вахты.
           </p>
         </div>
-      </motion.div>
-
-      {showViewer && (
-        <ContractViewer
-          contract={contract}
-          vacancyId={vacancy.id}
-          onClose={() => setShowViewer(false)}
-        />
-      )}
+      </div>
     </div>
   );
 }

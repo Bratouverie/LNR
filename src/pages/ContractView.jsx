@@ -1,13 +1,17 @@
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { VACANCIES_DATA } from "@/lib/vacanciesData";
 import { CONTRACT_COMMON, CONTRACT_VACANCY_EXTRA } from "@/lib/contractData";
+import { buildContractBlocks } from "@/lib/contractBuilder";
+import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Download, Printer } from "lucide-react";
+import { ArrowLeft, Download, Printer, Loader2 } from "lucide-react";
 
 export default function ContractView() {
   const { id } = useParams();
   const printRef = useRef();
+
+  const [downloadingDocx, setDownloadingDocx] = useState(false);
 
   const vacancy = VACANCIES_DATA.find((v) => v.id === id);
   const extra = CONTRACT_VACANCY_EXTRA[id];
@@ -27,6 +31,29 @@ export default function ContractView() {
     window.print();
   };
 
+  const handleDownloadDocx = async () => {
+    setDownloadingDocx(true);
+    try {
+      const contract = buildContractBlocks(id);
+      const res = await base44.functions.invoke("generateContractDocx", contract);
+      const { base64, filename } = res.data;
+      const binary = atob(base64);
+      const bytes = new Uint8Array(binary.length);
+      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+      const blob = new Blob([bytes], { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename || `${extra.fullTitle}.docx`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      alert("Ошибка при создании DOCX: " + e.message);
+    } finally {
+      setDownloadingDocx(false);
+    }
+  };
+
   const location = vacancy.conditions?.location || "Мариуполь, Макеевка, Луганск, Алчевск";
 
   return (
@@ -44,6 +71,16 @@ export default function ContractView() {
             <Button onClick={handlePrint} variant="outline" size="sm" className="gap-2">
               <Printer className="h-4 w-4" />
               Печать / PDF
+            </Button>
+            <Button
+              onClick={handleDownloadDocx}
+              disabled={downloadingDocx}
+              variant="outline"
+              size="sm"
+              className="gap-2"
+            >
+              {downloadingDocx ? <Loader2 className="h-4 w-4 animate-spin" /> : <Download className="h-4 w-4" />}
+              Скачать DOCX
             </Button>
             <Button onClick={handlePrint} size="sm" className="gap-2 bg-accent hover:bg-accent/90 text-white">
               <Download className="h-4 w-4" />
