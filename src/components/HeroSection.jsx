@@ -1,9 +1,21 @@
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { ChevronDown, ShieldCheck, Banknote, Award } from "lucide-react";
+import { ChevronDown, ShieldCheck, Banknote, Award, Volume2, VolumeX, Loader2 } from "lucide-react";
 
 const PROMO_VIDEO = "https://media.base44.com/videos/public/69f4a665db2c72a42818d397/6d5cbf847_Promo_new_GL.mp4";
 
 export default function HeroSection({ onOpenApplication }) {
+  const videoRef = useRef(null);
+  const [videoLoaded, setVideoLoaded] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+
+  const toggleSound = () => {
+    const video = videoRef.current;
+    if (!video) return;
+    video.muted = !video.muted;
+    setIsMuted(video.muted);
+  };
+
   const scrollToVacancies = () => {
     const el = document.querySelector("#vacancies");
     if (el) el.scrollIntoView({ behavior: "smooth" });
@@ -39,15 +51,40 @@ export default function HeroSection({ onOpenApplication }) {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background video */}
       <video
+        ref={videoRef}
         autoPlay
         loop
         muted
         playsInline
+        preload="auto"
+        onLoadedData={() => setVideoLoaded(true)}
+        onWaiting={() => setVideoLoaded(false)}
+        onPlaying={() => setVideoLoaded(true)}
         className="absolute inset-0 w-full h-full object-cover">
         
-        <source src={PROMO_VIDEO} type="video/mp4" />
+        <source src={`${PROMO_VIDEO}#t=0.1`} type="video/mp4" />
       </video>
       <div className="absolute inset-0 bg-gradient-to-b from-primary/70 via-primary/50 to-primary" />
+
+      {/* Loading indicator */}
+      {!videoLoaded && (
+        <div className="absolute inset-0 flex items-center justify-center bg-primary z-[5]">
+          <Loader2 className="h-10 w-10 text-white/60 animate-spin" />
+        </div>
+      )}
+
+      {/* Sound toggle */}
+      <button
+        onClick={toggleSound}
+        className="absolute top-20 right-4 sm:right-6 z-20 flex items-center justify-center w-11 h-11 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 hover:bg-white/20 transition-colors"
+        title={isMuted ? "Включить звук" : "Выключить звук"}
+      >
+        {isMuted ? (
+          <VolumeX className="h-5 w-5 text-white/80" />
+        ) : (
+          <Volume2 className="h-5 w-5 text-white/80" />
+        )}
+      </button>
 
       {/* Content */}
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 text-center pt-20 pb-16">
