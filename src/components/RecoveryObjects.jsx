@@ -1,7 +1,22 @@
 import { useState } from "react";
-import VisualPlaceholder from "./VisualPlaceholder";
 import { MapPin, Users, Calendar, Banknote } from "lucide-react";
 import { RECOVERY_OBJECTS } from "@/lib/calculatorData";
+
+const IMAGES = {
+  29: "https://media.base44.com/images/public/69f4a665db2c72a42818d397/1ccee32a9_29.png",
+  30: "https://media.base44.com/images/public/69f4a665db2c72a42818d397/b862a3b75_30.png",
+  31: "https://media.base44.com/images/public/69f4a665db2c72a42818d397/a596d7132_31.png",
+  32: "https://media.base44.com/images/public/69f4a665db2c72a42818d397/10ee55882_32.png",
+  35: "https://media.base44.com/images/public/69f4a665db2c72a42818d397/4c64438f8_35.png",
+  "36base": "https://media.base44.com/images/public/69f4a665db2c72a42818d397/e2dfda354_36base.png",
+  36: "https://media.base44.com/images/public/69f4a665db2c72a42818d397/3f57d16c7_36.png",
+  "37base": "https://media.base44.com/images/public/69f4a665db2c72a42818d397/d135135e6_37base.png",
+  37: "https://media.base44.com/images/public/69f4a665db2c72a42818d397/458cd53c9_37.png",
+  "38base": "https://media.base44.com/images/public/69f4a665db2c72a42818d397/745980975_38base.png",
+  38: "https://media.base44.com/images/public/69f4a665db2c72a42818d397/a1dfe3530_38.png",
+  39: "https://media.base44.com/images/public/69f4a665db2c72a42818d397/a438493ab_39.png",
+  41: "https://media.base44.com/images/public/69f4a665db2c72a42818d397/d36c07858_41.png",
+};
 
 export default function RecoveryObjects() {
   const [activeIdx, setActiveIdx] = useState(0);
@@ -41,10 +56,22 @@ export default function RecoveryObjects() {
         <div className="grid lg:grid-cols-2 gap-8 items-start">
           {/* Left: images */}
           <div className="space-y-4">
-            <VisualPlaceholder id={obj.visualId} ratio="3:2" label={obj.name} />
+            <div className="relative w-full overflow-hidden rounded-xl bg-secondary">
+              <img src={IMAGES[obj.visualId]} alt={obj.name} loading="lazy" className="w-full h-auto object-cover" />
+            </div>
             <div className="grid grid-cols-2 gap-4">
-              <VisualPlaceholder id={obj.baseVisualId} ratio="4:3" label="База размещения" />
-              <VisualPlaceholder id={obj.baseVisualId + 1} ratio="4:3" label="Условия проживания" />
+              <div>
+                <div className="relative w-full overflow-hidden rounded-xl bg-secondary aspect-[4/3]">
+                  <img src={IMAGES[obj.baseVisualId + "base"]} alt="База размещения" loading="lazy" className="w-full h-full object-cover" />
+                </div>
+                <p className="font-inter text-xs text-muted-foreground mt-1.5 text-center">База размещения</p>
+              </div>
+              <div>
+                <div className="relative w-full overflow-hidden rounded-xl bg-secondary aspect-[4/3]">
+                  <img src={IMAGES[obj.baseVisualId + 1]} alt="Условия проживания" loading="lazy" className="w-full h-full object-cover" />
+                </div>
+                <p className="font-inter text-xs text-muted-foreground mt-1.5 text-center">Условия проживания</p>
+              </div>
             </div>
           </div>
 
@@ -96,7 +123,9 @@ export default function RecoveryObjects() {
             </div>
 
             {/* Map placeholder */}
-            <VisualPlaceholder id={41} ratio="16:9" label="Карта объектов ЛНР/ДНР" />
+            <div className="relative w-full overflow-hidden rounded-xl bg-secondary">
+              <img src={IMAGES[41]} alt="Карта объектов ЛНР/ДНР" loading="lazy" className="w-full h-auto object-cover" />
+            </div>
           </div>
         </div>
       </div>
