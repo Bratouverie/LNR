@@ -4,7 +4,7 @@ export default function FinalCTA({ onOpenApplication, onCallback }) {
   const totalSlots = 200;
   const taken = 153;
   const remaining = totalSlots - taken;
-  const percent = taken / totalSlots * 100;
+  const percent = (taken / totalSlots) * 100;
 
   return (
     <section id="final-cta" className="py-24 sm:py-32 bg-primary text-primary-foreground">
@@ -46,14 +46,14 @@ export default function FinalCTA({ onOpenApplication, onCallback }) {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
           <button
             onClick={onOpenApplication}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-accent hover:bg-accent/90 text-accent-foreground font-inter font-bold text-base px-8 py-4 rounded-xl shadow-lg shadow-accent/25 transition-all hover:shadow-xl hover:scale-105">
-            
+            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-accent hover:bg-accent/90 text-accent-foreground font-inter font-bold text-base px-8 py-4 rounded-xl shadow-lg shadow-accent/25 transition-all hover:shadow-xl hover:scale-105"
+          >
             Оставить заявку за 2 минуты
           </button>
           <button
             onClick={onCallback}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 border border-white/20 text-white hover:bg-white/10 font-inter font-medium text-base px-8 py-4 rounded-xl transition-colors">
-            
+            className="w-full sm:w-auto flex items-center justify-center gap-2 border border-white/20 text-white hover:bg-white/10 font-inter font-medium text-base px-8 py-4 rounded-xl transition-colors"
+          >
             Задать вопрос менеджеру
           </button>
         </div>
@@ -77,6 +77,6 @@ export default function FinalCTA({ onOpenApplication, onCallback }) {
           </a>
         </div>
       </div>
-    </section>);
-
+    </section>
+  );
 }
