@@ -114,14 +114,7 @@ function MarkerPopup({ point, onApply }) {
           </div>
         )}
 
-        {(point.type === "object" || point.type === "base") && (
-          <Button
-            onClick={() => onApply(point.name)}
-            className="w-full mt-3 bg-accent hover:bg-accent/90 text-accent-foreground font-inter font-semibold text-xs h-8"
-          >
-            Подать заявку
-          </Button>
-        )}
+
       </div>
     </Popup>
   );
@@ -278,16 +271,16 @@ export default function InteractiveMap({ onApply }) {
         <div className="mt-8 bg-accent/5 border-l-4 border-accent rounded-r-xl p-5">
           <h3 className="font-inter font-bold text-sm text-foreground mb-3 flex items-center gap-2">
             <Navigation className="h-4 w-4 text-accent" />
-            Как выбрать объект на карте?
+            Изучите объекты восстановления
           </h3>
           <ol className="space-y-1.5 font-inter text-sm text-muted-foreground list-decimal list-inside">
-            <li>Выберите фильтр: «Все» или «Только объекты»</li>
-            <li>Кликните на маркер на карте или выберите из списка справа</li>
-            <li>В окне маркера увидите информацию и кнопку «Подать заявку»</li>
-            <li>Кликните «Подать заявку» — откроется форма с выбранным объектом</li>
+            <li>На карте отмечены все активные объекты восстановления ДНР/ЛНР</li>
+            <li>Кликните на маркер, чтобы увидеть детали: адрес, сроки, виды работ, команду</li>
+            <li>Используйте карту для ознакомления с местоположением и условиями работы</li>
+            <li>Подайте заявку через основную форму — укажите интересующий вас объект</li>
           </ol>
           <p className="mt-3 font-inter text-xs text-muted-foreground">
-            <strong>ℹ️ Примечание:</strong> На карте — информационные материалы. Вы можете выбрать любую специальность и объект в форме заявки.
+            <strong>ℹ️ Примечание:</strong> Выберите объект и специальность в форме заявки. Мы распределим вас на оптимальный объект в зависимости от опыта и потребностей проекта.
           </p>
         </div>
       </div>

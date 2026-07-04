@@ -60,20 +60,20 @@ export default function FinalCTA({ onOpenApplication, onCallback }) {
 
         {/* Three contacts */}
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-2xl mx-auto">
-          <a href="tel:+74212515930" className="flex flex-col items-center gap-2 bg-white/5 border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-colors">
+          <a href="tel:+74996864630" className="flex flex-col items-center gap-2 bg-white/5 border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-colors">
             <Phone className="h-5 w-5 text-accent" />
             <span className="font-inter text-xs text-white/50">Телефон</span>
-            <span className="font-inter text-sm font-semibold text-white">+7 (4212) 51-59-30 доб. 702</span>
+            <span className="font-inter text-sm font-semibold text-white">+7 (499) 686-46-30</span>
           </a>
-          <a href="mailto:partner@bratouverie-snb.ru" className="flex flex-col items-center gap-2 bg-white/5 border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-colors">
+          <a href="mailto:hh@vosstanovim-dnr.ru" className="flex flex-col items-center gap-2 bg-white/5 border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-colors">
             <Mail className="h-5 w-5 text-accent" />
             <span className="font-inter text-xs text-white/50">Email</span>
-            <span className="font-inter text-sm font-semibold text-white">partner@bratouverie-snb.ru</span>
+            <span className="font-inter text-sm font-semibold text-white">hh@vosstanovim-dnr.ru</span>
           </a>
-          <a href="https://t.me/bratouverie_support" target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-2 bg-white/5 border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-colors">
+          <a href="https://max.ru/u/f9LHodD0cOLnAxokVgBK1HcwEnGhlBy0W7dVL4IAtZFgqRBl5Imbli5RDlY" target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-2 bg-white/5 border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-colors">
             <Send className="h-5 w-5 text-accent" />
             <span className="font-inter text-xs text-white/50">Telegram</span>
-            <span className="font-inter text-sm font-semibold text-white">@bratouverie_support</span>
+            <span className="font-inter text-sm font-semibold text-white">Макс</span>
           </a>
         </div>
       </div>

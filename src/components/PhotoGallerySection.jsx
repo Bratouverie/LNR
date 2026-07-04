@@ -9,7 +9,7 @@ const B = "https://media.base44.com/images/public/69f4a665db2c72a42818d397/";
 
 const PHOTOS = [
   // Объекты — строительство
-  { src: `${B}fb3c043db_Russian_male_bricklayer_age_40-45_weathered_work-1782925911496.png`, caption: "Каменщик за работой" },
+
   { src: `${B}a280218b3_Realistic_documentary_photo_of_a_Russian_construct-1782925903762.png`, caption: "Строительная бригада на объекте" },
   { src: `${B}bb3c2b8be_Real_photo_of_Russian_male_workers_only_no_women-1782926059352.png`, caption: "Рабочие на строительной площадке" },
   { src: `${B}fbcebed74_Real_photo_of_Russian_male_workers_only_no_women-1782926102307.png`, caption: "Бригада строителей" },
@@ -47,7 +47,7 @@ const PHOTOS = [
   { src: `${B}12a0f64ca_Russian_male_truck_driver_age_50_weathered_exper-1782925923874.png`, caption: "Опытный водитель" },
   // Механики и авторемонт
   { src: `${B}77660fe76_Russian_male_auto_mechanic_age_45_real_greasy_wo-1782925938079.png`, caption: "Автослесарь в цехе" },
-  { src: `${B}77f5b38be_Real_testimonial_portrait_of_a_Russian_auto_mechan-1782926043991.png`, caption: "Механик за работой" },
+
   // Охранники
   { src: `${B}e9a8fee3b_Real_testimonial_photo_of_a_Russian_security_guard-1782926040561.png`, caption: "Охранник на посту" },
   { src: `${B}6c41d01a5_Russian_male_security_guard_age_40_plain_honest_-1782925953105.png`, caption: "Охранник режимного объекта" },
@@ -60,7 +60,7 @@ const PHOTOS = [
   { src: `${B}84828d63e_622c43fca_Portrait_of_young_Russian_construction_specialist-1777979799754.png`, caption: "Молодой специалист программы" },
   { src: `${B}724bc9435_0069169d4_Portrait_of_successful_Russian_female_medical_work-1777979812293.png`, caption: "Медицинский работник" },
   // Связь / инженер-связист
-  { src: `${B}890c1b078_Real_testimonial_photo_of_a_Russian_telecom_engineer-1782926032999.png`, caption: "Инженер-связист" },
+
   { src: `${B}3bbeb9829_Russian_male_telecom_engineer_age_38_plain_Russi-1782925943055.png`, caption: "Техник связи на объекте" },
   // Быт и жизнь
   { src: `${B}51cd94f09_9821.png`, caption: "Бытовка — жильё на объекте" },

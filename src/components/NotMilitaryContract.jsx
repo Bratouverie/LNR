@@ -1,4 +1,4 @@
-import { ShieldX, CheckCircle, FileText, MessageSquare, Download } from "lucide-react";
+import { ShieldX, CheckCircle, MessageSquare } from "lucide-react";
 
 const QA_ITEMS = [
   {
@@ -67,17 +67,12 @@ export default function NotMilitaryContract() {
           ))}
         </div>
 
-        {/* CTAs */}
-        <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-          <a
-            href="https://media.base44.com/files/public/69f4a665db2c72a42818d397/a60e58511_Postanovlenie_11zon.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-inter font-semibold px-6 py-3 rounded-xl transition-colors text-sm"
-          >
-            <Download className="h-4 w-4" />
-            Скачать трудовой договор (PDF)
-          </a>
+        {/* Contract note + CTA */}
+        <div className="mt-10 flex flex-col items-center justify-center gap-4">
+          <p className="font-inter text-sm text-muted-foreground text-center max-w-lg">
+            Типовой трудовой договор по Трудовому кодексу РФ. Ознакомьтесь с условиями контракта в разделе{" "}
+            <a href="#vacancies" className="text-accent font-semibold hover:underline">Вакансии</a>.
+          </p>
           <a
             href="tel:88002228463"
             className="flex items-center gap-2 border border-border hover:border-accent hover:text-accent font-inter font-semibold px-6 py-3 rounded-xl transition-colors text-sm"
