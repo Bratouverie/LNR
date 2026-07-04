@@ -25,11 +25,7 @@ export default function ReviewsBlock() {
     }
 
     try {
-      const data = await base44.entities.Review.filter(
-        { status: "approved" },
-        "-created_date",
-        100
-      );
+      const data = await base44.entities.Review.list("-created_date", 100);
       setReviews(data);
       setCachedReviews(data);
       setError(null);
