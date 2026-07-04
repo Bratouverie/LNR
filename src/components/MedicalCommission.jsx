@@ -2,11 +2,11 @@ import { useState, useEffect, useRef } from "react";
 import { Stethoscope, Clock, Banknote, CheckCircle, AlertTriangle, ChevronLeft, ChevronRight } from "lucide-react";
 
 const MEDICAL_PHOTOS = [
-  "https://media.base44.com/images/public/69f4a665db2c72a42818d397/f050daaea_A_casual_photograph_taken_on_an_old_budget_Android-1783148584734.png",
-  "https://media.base44.com/images/public/69f4a665db2c72a42818d397/3dd65328b_A_casual_photograph_taken_on_an_old_budget_Android-1783148586746.png",
-  "https://media.base44.com/images/public/69f4a665db2c72a42818d397/968a20a06_A_casual_photograph_taken_on_an_old_budget_Android-1783148589294.png",
-  "https://media.base44.com/images/public/69f4a665db2c72a42818d397/461520973_A_casual_photograph_taken_on_an_old_budget_Android-1783148591995.png",
-  "https://media.base44.com/images/public/69f4a665db2c72a42818d397/85383ec36_A_casual_snapshot_taken_on_an_old_cheap_point-and--1783148528814.png",
+  "https://media.base44.com/images/public/69f4a665db2c72a42818d397/a9150d98f_A_casual_photograph_taken_on_an_old_budget_Android-1783149215925.png",
+  "https://media.base44.com/images/public/69f4a665db2c72a42818d397/53af609a8_A_casual_photograph_taken_on_an_old_budget_Android-1783148586746.png",
+  "https://media.base44.com/images/public/69f4a665db2c72a42818d397/8cad3badb_A_casual_photograph_taken_on_an_old_budget_Android-1783148589294.png",
+  "https://media.base44.com/images/public/69f4a665db2c72a42818d397/0f2eaace7_A_casual_photograph_taken_on_an_old_budget_Android-1783148591995.png",
+  "https://media.base44.com/images/public/69f4a665db2c72a42818d397/fcc199f3c_A_casual_snapshot_taken_on_an_old_cheap_point-and--1783149161904.png",
 ];
 
 function MedicalCarousel() {
