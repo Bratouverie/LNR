@@ -4,7 +4,7 @@ import HeroSection from "../components/HeroSection";
 import SalaryCalculator from "@/components/SalaryCalculator/SalaryCalculator";
 import VacanciesSection from "../components/VacanciesSection";
 import DayOfSpecialist from "../components/DayOfSpecialist";
-import TestimonialsSection from "../components/TestimonialsSection";
+import ReviewsBlock from "@/components/reviews/ReviewsBlock";
 import RecoveryObjects from "../components/RecoveryObjects";
 import InteractiveMap from "../components/InteractiveMap";
 import NotMilitaryContract from "../components/NotMilitaryContract";
@@ -83,8 +83,8 @@ export default function Home() {
       {/* SECTION 4 – DAY OF SPECIALIST */}
       <DayOfSpecialist />
 
-      {/* SECTION 5 – TESTIMONIALS */}
-      <TestimonialsSection />
+      {/* SECTION 5 – REVIEWS */}
+      <ReviewsBlock />
 
       {/* SECTION 6 – RECOVERY OBJECTS */}
       <RecoveryObjects />

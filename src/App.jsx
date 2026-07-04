@@ -15,6 +15,7 @@ import ConsentPage from './pages/ConsentPage';
 import About from './pages/About';
 import Contact from './pages/Contact';
 import Calculator from './pages/Calculator';
+import AdminReviews from './pages/AdminReviews';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -53,6 +54,7 @@ const AuthenticatedApp = () => {
       <Route path="/about" element={<About />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/calculator" element={<Calculator />} />
+      <Route path="/admin/reviews" element={<AdminReviews />} />
       <Route path="*" element={<PageNotFound />} />
     </Routes>
   );
