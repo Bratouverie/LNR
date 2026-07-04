@@ -1,5 +1,69 @@
-import VisualPlaceholder from "./VisualPlaceholder";
-import { Stethoscope, Clock, Banknote, CheckCircle, AlertTriangle } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { Stethoscope, Clock, Banknote, CheckCircle, AlertTriangle, ChevronLeft, ChevronRight } from "lucide-react";
+
+const MEDICAL_PHOTOS = [
+  "https://media.base44.com/images/public/69f4a665db2c72a42818d397/f050daaea_A_casual_photograph_taken_on_an_old_budget_Android-1783148584734.png",
+  "https://media.base44.com/images/public/69f4a665db2c72a42818d397/3dd65328b_A_casual_photograph_taken_on_an_old_budget_Android-1783148586746.png",
+  "https://media.base44.com/images/public/69f4a665db2c72a42818d397/968a20a06_A_casual_photograph_taken_on_an_old_budget_Android-1783148589294.png",
+  "https://media.base44.com/images/public/69f4a665db2c72a42818d397/461520973_A_casual_photograph_taken_on_an_old_budget_Android-1783148591995.png",
+  "https://media.base44.com/images/public/69f4a665db2c72a42818d397/85383ec36_A_casual_snapshot_taken_on_an_old_cheap_point-and--1783148528814.png",
+];
+
+function MedicalCarousel() {
+  const [current, setCurrent] = useState(0);
+  const timerRef = useRef(null);
+
+  const next = () => setCurrent((c) => (c === MEDICAL_PHOTOS.length - 1 ? 0 : c + 1));
+  const prev = () => setCurrent((c) => (c === 0 ? MEDICAL_PHOTOS.length - 1 : c - 1));
+
+  useEffect(() => {
+    timerRef.current = setInterval(next, 4000);
+    return () => clearInterval(timerRef.current);
+  }, []);
+
+  return (
+    <div
+      className="relative aspect-[4/3] rounded-2xl overflow-hidden border border-border bg-secondary/60 group"
+      onMouseEnter={() => clearInterval(timerRef.current)}
+      onMouseLeave={() => { timerRef.current = setInterval(next, 4000); }}
+    >
+      {MEDICAL_PHOTOS.map((src, i) => (
+        <img
+          key={i}
+          src={src}
+          alt={`Медкомиссия — фото ${i + 1}`}
+          loading={i === 0 ? "eager" : "lazy"}
+          decoding="async"
+          className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${i === current ? "opacity-100" : "opacity-0"}`}
+        />
+      ))}
+      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5">
+        {MEDICAL_PHOTOS.map((_, i) => (
+          <button
+            key={i}
+            onClick={() => setCurrent(i)}
+            className={`h-2 rounded-full transition-all ${i === current ? "w-6 bg-accent" : "w-2 bg-white/60"}`}
+            aria-label={`Слайд ${i + 1}`}
+          />
+        ))}
+      </div>
+      <button
+        onClick={prev}
+        className="absolute left-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/40 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+        aria-label="Предыдущее фото"
+      >
+        <ChevronLeft className="h-5 w-5" />
+      </button>
+      <button
+        onClick={next}
+        className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-black/40 text-white opacity-0 group-hover:opacity-100 transition-opacity"
+        aria-label="Следующее фото"
+      >
+        <ChevronRight className="h-5 w-5" />
+      </button>
+    </div>
+  );
+}
 
 const PROCEDURES = [
   "Общий анализ крови",
@@ -83,7 +147,7 @@ export default function MedicalCommission() {
             </div>
 
             {/* Visual */}
-            <VisualPlaceholder id={61} ratio="4:3" label="Процедуры медкомиссии" />
+            <MedicalCarousel />
           </div>
 
           {/* Right: procedures & checklist */}
