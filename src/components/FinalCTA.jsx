@@ -4,7 +4,7 @@ export default function FinalCTA({ onOpenApplication, onCallback }) {
   const totalSlots = 200;
   const taken = 153;
   const remaining = totalSlots - taken;
-  const percent = (taken / totalSlots) * 100;
+  const percent = taken / totalSlots * 100;
 
   return (
     <section id="final-cta" className="py-24 sm:py-32 bg-primary text-primary-foreground">
@@ -46,14 +46,14 @@ export default function FinalCTA({ onOpenApplication, onCallback }) {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10">
           <button
             onClick={onOpenApplication}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-accent hover:bg-accent/90 text-accent-foreground font-inter font-bold text-base px-8 py-4 rounded-xl shadow-lg shadow-accent/25 transition-all hover:shadow-xl hover:scale-105"
-          >
+            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-accent hover:bg-accent/90 text-accent-foreground font-inter font-bold text-base px-8 py-4 rounded-xl shadow-lg shadow-accent/25 transition-all hover:shadow-xl hover:scale-105">
+            
             Оставить заявку за 2 минуты
           </button>
           <button
             onClick={onCallback}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 border border-white/20 text-white hover:bg-white/10 font-inter font-medium text-base px-8 py-4 rounded-xl transition-colors"
-          >
+            className="w-full sm:w-auto flex items-center justify-center gap-2 border border-white/20 text-white hover:bg-white/10 font-inter font-medium text-base px-8 py-4 rounded-xl transition-colors">
+            
             Задать вопрос менеджеру
           </button>
         </div>
@@ -72,11 +72,11 @@ export default function FinalCTA({ onOpenApplication, onCallback }) {
           </a>
           <a href="https://max.ru/u/f9LHodD0cOLnAxokVgBK1HcwEnGhlBy0W7dVL4IAtZFgqRBl5Imbli5RDlY" target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-2 bg-white/5 border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-colors">
             <MessageSquare className="h-5 w-5 text-accent" />
-            <span className="font-inter text-xs text-white/50">Telegram</span>
+            <span className="font-inter text-xs text-white/50">Мессенджер</span>
             <span className="font-inter text-sm font-semibold text-white">Макс</span>
           </a>
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
