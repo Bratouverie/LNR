@@ -27,16 +27,16 @@ export default function ContactsSection({ onCallback }) {
               href="https://max.ru/u/f9LHodD0cOLnAxokVgBK1HcwEnGhlBy0W7dVL4IAtZFgqRBl5Imbli5RDlY"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-lg font-inter font-semibold transition-colors"
-            >
+              className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-lg font-inter font-semibold transition-colors">
+              
               <MessageSquare className="h-4 w-4" />
               Написать в Макс
             </a>
             <Button
               onClick={onCallback}
               variant="outline"
-              className="border-accent text-accent hover:bg-accent hover:text-accent-foreground font-inter font-semibold px-6 py-3"
-            >
+              className="border-accent text-accent hover:bg-accent hover:text-accent-foreground font-inter font-semibold px-6 py-3">
+              
               <Phone className="h-4 w-4 mr-2" />
               Заказать обратный звонок
             </Button>
@@ -55,8 +55,8 @@ export default function ContactsSection({ onCallback }) {
                 <div className="text-xs text-muted-foreground">Приём заявок от агентств, партнёрские программы</div>
               </div>
             </div>
-            <a href="mailto:hh@bratouverie-snb.ru" className="block text-accent font-mono text-sm font-semibold hover:underline">
-              hh@bratouverie-snb.ru
+            <a href="mailto:hh@bratouverie-snb.ru" className="block text-accent font-mono text-sm font-semibold hover:underline">partner@bratouverie-snb.ru
+
             </a>
             <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
               По вопросам партнёрства, агентских договоров и передачи кандидатов от кадровых агентств направляйте письма на указанный адрес.
@@ -100,11 +100,11 @@ export default function ContactsSection({ onCallback }) {
               src="https://www.openstreetmap.org/export/embed.html?bbox=135.0550%2C48.4700%2C135.0850%2C48.4900&layer=mapnik&marker=48.4800%2C135.0700"
               className="w-full h-full border-0"
               title="Карта"
-              loading="lazy"
-            />
+              loading="lazy" />
+            
           </div>
         </div>
       </div>
-    </section>
-  );
+    </section>);
+
 }
