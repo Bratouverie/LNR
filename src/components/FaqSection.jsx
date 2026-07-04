@@ -112,8 +112,8 @@ export default function FaqSection() {
             <a href="tel:88002228463" className="text-accent hover:underline font-semibold text-sm font-inter">
               ☎ 8-800-222-84-63 (бесплатно)
             </a>
-            <a href="mailto:hh@bratouverie-snb.ru" className="text-accent hover:underline font-semibold text-sm font-inter">
-              📧 hh@bratouverie-snb.ru
+            <a href="mailto:hh@vosstanovim-dnr.ru" className="text-accent hover:underline font-semibold text-sm font-inter">
+              📧 hh@vosstanovim-dnr.ru
             </a>
             <a
               href="https://max.ru/u/f9LHodD0cOLnAxokVgBK1HcwEnGhlBy0W7dVL4IAtZFgqRBl5Imbli5RDlY"
@@ -121,7 +121,7 @@ export default function FaqSection() {
               rel="noopener noreferrer"
               className="text-accent hover:underline font-semibold text-sm font-inter"
             >
-              💬 Написать Максу (Максим) в Telegram
+              💬 Написать в Макс
             </a>
           </div>
           <p className="font-inter text-xs text-muted-foreground italic">Вахта запускается в июле</p>

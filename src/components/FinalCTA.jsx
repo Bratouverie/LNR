@@ -1,4 +1,4 @@
-import { Phone, Mail, Send, Users } from "lucide-react";
+import { Phone, Mail, MessageSquare, Users } from "lucide-react";
 
 export default function FinalCTA({ onOpenApplication, onCallback }) {
   const totalSlots = 200;
@@ -71,7 +71,7 @@ export default function FinalCTA({ onOpenApplication, onCallback }) {
             <span className="font-inter text-sm font-semibold text-white">hh@vosstanovim-dnr.ru</span>
           </a>
           <a href="https://max.ru/u/f9LHodD0cOLnAxokVgBK1HcwEnGhlBy0W7dVL4IAtZFgqRBl5Imbli5RDlY" target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-2 bg-white/5 border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-colors">
-            <Send className="h-5 w-5 text-accent" />
+            <MessageSquare className="h-5 w-5 text-accent" />
             <span className="font-inter text-xs text-white/50">Telegram</span>
             <span className="font-inter text-sm font-semibold text-white">Макс</span>
           </a>
