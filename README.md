@@ -40,3 +40,4 @@ Support: [https://app.base44.com/support](https://app.base44.com/support)
 noop commit
 trigger
 retry deploy
+deploy v2
