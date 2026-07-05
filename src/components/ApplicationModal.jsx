@@ -44,13 +44,19 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
     if (!form.consent || !form.full_name || !form.phone) return;
     setLoading(true);
     try {
+      const externalId = `webform_${Date.now()}`;
       const payload = { type: "application" };
       for (const [key, value] of Object.entries(form)) {
         if (value !== "" && value !== null && value !== undefined) {
           payload[key] = value;
         }
       }
-      await base44.entities.Application.create(payload);
+      await base44.functions.invoke("gatekeeperInbound", {
+        apiKey: "sk_web_form_a67191e0bb38eb17653f58eeb34e2bfceaa7f2b372ded560598cb37f27477862636de465e3d3494c1799185619b30cef",
+        source: "web_form",
+        externalId,
+        payload,
+      });
       setSuccess(true);
       setTimeout(() => {
         setSuccess(false);
