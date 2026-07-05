@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2, CheckCircle } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+const GATEKEEPER_API_KEY = "sk_web_form_a67191e0bb38eb17653f58eeb34e2bfceaa7f2b372ded560598cb37f27477862636de465e3d3494c1799185619b30cef";
 import { toast } from "@/components/ui/use-toast";
 
 export default function CallbackModal({ open, onClose }) {
@@ -18,11 +18,15 @@ export default function CallbackModal({ open, onClose }) {
     if (!form.consent || !form.phone) return;
     setLoading(true);
     try {
-      await base44.entities.Application.create({
-        full_name: form.full_name,
-        phone: form.phone,
-        consent: form.consent,
-        type: "callback",
+      const externalId = `callback_${Date.now()}`;
+      await fetch('https://bratouverie-snb.base44.app/api/gatekeeper/inbound', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-api-key': GATEKEEPER_API_KEY },
+        body: JSON.stringify({
+          source: 'callback_form',
+          externalId,
+          payload: { type: 'callback', full_name: form.full_name, phone: form.phone, consent: form.consent },
+        }),
       });
       setSuccess(true);
       setTimeout(() => {
