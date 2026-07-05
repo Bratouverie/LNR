@@ -7,7 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2, CheckCircle } from "lucide-react";
-import { base44 } from "@/api/base44Client";
+const GATEKEEPER_API_KEY = "sk_web_form_a67191e0bb38eb17653f58eeb34e2bfceaa7f2b372ded560598cb37f27477862636de465e3d3494c1799185619b30cef";
 import { toast } from "@/components/ui/use-toast";
 import { ALL_POSITION_OPTIONS } from "@/data/vacanciesConfig";
 
@@ -51,11 +51,10 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
           payload[key] = value;
         }
       }
-      await base44.functions.invoke("gatekeeperInbound", {
-        apiKey: "sk_web_form_a67191e0bb38eb17653f58eeb34e2bfceaa7f2b372ded560598cb37f27477862636de465e3d3494c1799185619b30cef",
-        source: "web_form",
-        externalId,
-        payload,
+      await fetch('https://bratouverie-snb.base44.app/api/gatekeeper/inbound', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-api-key': GATEKEEPER_API_KEY },
+        body: JSON.stringify({ source: 'web_form', externalId, payload }),
       });
       setSuccess(true);
       setTimeout(() => {
