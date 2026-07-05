@@ -23,6 +23,7 @@ import CrmRewards from './pages/crm/Rewards';
 import CrmManagers from './pages/crm/Managers';
 import CrmAssemblyPoints from './pages/crm/AssemblyPoints';
 import CrmIntegrationQueue from './pages/crm/IntegrationQueue';
+import CrmCandidateDetail from './pages/crm/CandidateDetail';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -69,6 +70,7 @@ const AuthenticatedApp = () => {
         <Route path="managers" element={<CrmManagers />} />
         <Route path="assembly-points" element={<CrmAssemblyPoints />} />
         <Route path="integration-queue" element={<CrmIntegrationQueue />} />
+        <Route path="candidate/:id" element={<CrmCandidateDetail />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>

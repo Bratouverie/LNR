@@ -1,8 +1,9 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { STATUS_LABELS, STATUS_COLORS, TRANSITIONS } from '@/lib/crmConstants';
-import { Phone, Mail, MapPin, ArrowRight } from 'lucide-react';
+import { Phone, Mail, MapPin, ArrowRight, Eye } from 'lucide-react';
 
 export default function CandidateCard({ candidate, onTransition }) {
   const status = candidate.status || 'pending';
@@ -13,7 +14,9 @@ export default function CandidateCard({ candidate, onTransition }) {
     <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between gap-3 mb-3">
         <div className="min-w-0">
-          <h3 className="font-semibold text-foreground truncate">{candidate.fullName}</h3>
+          <Link to={`/crm/candidate/${candidate.id}`} className="font-semibold text-foreground truncate hover:text-accent block">
+            {candidate.fullName}
+          </Link>
           <div className="flex flex-wrap gap-x-3 gap-y-1 mt-1 text-xs text-muted-foreground">
             {candidate.phone && (
               <span className="flex items-center gap-1"><Phone className="w-3 h-3" />{candidate.phone}</span>
@@ -40,15 +43,22 @@ export default function CandidateCard({ candidate, onTransition }) {
           Источник: {candidate.source}
         </p>
       )}
-      {canTransition ? (
-        <Button size="sm" variant="outline" onClick={() => onTransition(candidate)} className="w-full">
-          Сменить статус <ArrowRight className="w-3.5 h-3.5 ml-1" />
-        </Button>
-      ) : (
-        <p className="text-xs text-center text-muted-foreground py-2">
-          {status === 'completed' ? 'Завершён — ожидает выплаты' : 'Финальный статус'}
-        </p>
-      )}
+      <div className="flex gap-2">
+        <Link to={`/crm/candidate/${candidate.id}`} className="flex-1">
+          <Button size="sm" variant="ghost" className="w-full">
+            <Eye className="w-3.5 h-3.5" /> Детали
+          </Button>
+        </Link>
+        {canTransition ? (
+          <Button size="sm" variant="outline" onClick={() => onTransition(candidate)} className="flex-1">
+            Статус <ArrowRight className="w-3.5 h-3.5 ml-1" />
+          </Button>
+        ) : (
+          <span className="flex-1 text-xs text-center text-muted-foreground py-2">
+            {status === 'completed' ? 'Завершён' : 'Финал'}
+          </span>
+        )}
+      </div>
     </div>
   );
 }
