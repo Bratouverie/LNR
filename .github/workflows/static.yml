@@ -1,9 +1,9 @@
-# Workflow for deploying to GitHub Pages via gh-pages branch
-name: Deploy static content to Pages (gh-pages)
+name: Deploy static content to Pages
 
 on:
   push:
     branches: ['main']
+
   workflow_dispatch:
 
 permissions:
@@ -12,7 +12,7 @@ permissions:
   id-token: write
 
 concurrency:
-  group: 'pages'
+  group: pages
   cancel-in-progress: false
 
 jobs:
@@ -20,63 +20,39 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v5
+      - name: Setup Node
+        uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: '22'
           cache: 'npm'
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
 
-      - name: Build project
+      - name: Build
         run: npm run build
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v4
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v4
         with:
-          path: './dist'
+          name: dist-artifact
+          path: dist/
 
   deploy:
     needs: build
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
-          name: github-pages
-          path: ./dist
-
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-
-      - name: Checkout gh-pages branch
-        uses: actions/checkout@v4
-        with:
-          ref: gh-pages
-          fetch-depth: 0
-          token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Copy dist to gh-pages
-        run: |
-          cp -r ./dist/* .
-          if [ -f 404.html ]; then cp 404.html index.html; fi
-          echo 'vosstanovim-dnr.ru' > CNAME
-          ls -la
-
-      - name: Commit and push to gh-pages
-        run: |
-          git config --local user.email 'action@github.com'
-          git config --local user.name 'GitHub Action'
-          git add .
-          git commit -m 'Deploy: ${{ github.sha }}' || echo 'No changes to commit'
-          git push origin gh-pages --force
+          name: dist-artifact
+          path: dist/
 
       - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v5
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          cname: vosstanovim-dnr.ru
