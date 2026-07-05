@@ -51,7 +51,7 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
           payload[key] = value;
         }
       }
-      await fetch('https://bratouverie-snb.base44.app/api/gatekeeper/inbound', {
+      await fetch('https://bratouverie-snb.base44.app/functions/gatekeeperInbound', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-api-key': GATEKEEPER_API_KEY },
         body: JSON.stringify({ source: 'web_form', externalId, payload }),

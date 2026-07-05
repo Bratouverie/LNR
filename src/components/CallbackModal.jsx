@@ -19,11 +19,11 @@ export default function CallbackModal({ open, onClose }) {
     setLoading(true);
     try {
       const externalId = `callback_${Date.now()}`;
-      await fetch('https://bratouverie-snb.base44.app/api/gatekeeper/inbound', {
+      await fetch('https://bratouverie-snb.base44.app/functions/gatekeeperInbound', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'x-api-key': GATEKEEPER_API_KEY },
         body: JSON.stringify({
-          source: 'callback_form',
+          source: 'web_form',
           externalId,
           payload: { type: 'callback', full_name: form.full_name, phone: form.phone, consent: form.consent },
         }),
