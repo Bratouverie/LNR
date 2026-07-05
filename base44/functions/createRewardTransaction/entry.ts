@@ -35,8 +35,10 @@ Deno.serve(async (req) => {
     }
 
     // Fetch candidate
-    const candidate = await base44.asServiceRole.entities.Candidate.get(candidateId);
-    if (!candidate) {
+    let candidate;
+    try {
+      candidate = await base44.asServiceRole.entities.Candidate.get(candidateId);
+    } catch {
       return Response.json({ error: 'Candidate not found' }, { status: 404 });
     }
 

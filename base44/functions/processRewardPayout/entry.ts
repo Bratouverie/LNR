@@ -89,8 +89,10 @@ Deno.serve(async (req) => {
     const ipAddr = req.headers.get('x-forwarded-for') || req.headers.get('x-real-ip') || null;
 
     // ── 3. Fetch reward transaction ──
-    const rewardTx = await base44.asServiceRole.entities.RewardTransaction.get(rewardTransactionId);
-    if (!rewardTx) {
+    let rewardTx;
+    try {
+      rewardTx = await base44.asServiceRole.entities.RewardTransaction.get(rewardTransactionId);
+    } catch {
       return Response.json({ error: 'Reward transaction not found' }, { status: 404 });
     }
 
