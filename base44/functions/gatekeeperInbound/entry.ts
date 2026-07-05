@@ -4,13 +4,18 @@ import { createClientFromRequest } from 'npm:@base44/sdk@0.8.31';
 // gatekeeperInbound — Entry point for all external integrations
 // Validates X-API-KEY against IntegrationKey entity, enqueues to IntegrationQueue
 //
-// Called by: External services (Genspark, VoIP, Telegram, web forms)
+// Called by: External services (Genspark, VoIP, Telegram, web forms on vosstanovim-dnr.ru)
 // Headers: X-API-KEY: <plaintext-api-key>
 // Body: { source: string, externalId: string, payload: object }
 // Returns: { status: "queued", queueId: string } or { status: "duplicate" }
 // ═══════════════════════════════════════════════════════════════
 
 const encoder = new TextEncoder();
+
+const ALLOWED_ORIGINS = [
+  'https://vosstanovim-dnr.ru',
+  'https://www.vosstanovim-dnr.ru',
+];
 
 async function sha256Hex(text) {
   const data = encoder.encode(text);
@@ -20,7 +25,28 @@ async function sha256Hex(text) {
     .join('');
 }
 
+function corsHeaders(origin) {
+  const allowOrigin = ALLOWED_ORIGINS.includes(origin) ? origin : ALLOWED_ORIGINS[0];
+  return {
+    'Access-Control-Allow-Origin': allowOrigin,
+    'Access-Control-Allow-Methods': 'POST, OPTIONS',
+    'Access-Control-Allow-Headers': 'X-API-KEY, Content-Type',
+    'Access-Control-Max-Age': '86400',
+  };
+}
+
+function json(data, status, origin) {
+  return Response.json(data, { status, headers: corsHeaders(origin) });
+}
+
 Deno.serve(async (req) => {
+  const origin = req.headers.get('origin') || '';
+
+  // Handle CORS preflight
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { status: 204, headers: corsHeaders(origin) });
+  }
+
   try {
     const base44 = createClientFromRequest(req);
 
@@ -35,7 +61,7 @@ Deno.serve(async (req) => {
     // ── 2. Validate API key (header OR body fallback) ──
     const apiKey = req.headers.get('x-api-key') || body.apiKey;
     if (!apiKey) {
-      return Response.json({ error: 'X-API-KEY header (or apiKey in body) is required' }, { status: 401 });
+      return json({ error: 'X-API-KEY header (or apiKey in body) is required' }, 401, origin);
     }
 
     // Hash the provided key (we store hashes, never plaintext)
@@ -48,7 +74,7 @@ Deno.serve(async (req) => {
     });
 
     if (keys.length === 0) {
-      return Response.json({ error: 'Invalid API key' }, { status: 401 });
+      return json({ error: 'Invalid API key' }, 401, origin);
     }
 
     const integrationKey = keys[0];
@@ -58,41 +84,43 @@ Deno.serve(async (req) => {
 
     // Validate required fields
     if (!source || !externalId || !incomingPayload) {
-      return Response.json(
+      return json(
         { error: 'source, externalId, and payload are required' },
-        { status: 400 },
+        400,
+        origin,
       );
     }
 
     // Validate source matches the integration key's service
     if (integrationKey.service !== source && integrationKey.service !== 'web_form') {
-      // Allow web_form to submit any source, but other keys must match
-      return Response.json(
+      return json(
         {
           error: `Source mismatch: key is for "${integrationKey.service}" but received "${source}"`,
         },
-        { status: 403 },
+        403,
+        origin,
       );
     }
 
-    // ── 3. Deduplication check (source + externalId) ──
+    // ── 4. Deduplication check (source + externalId) ──
     const duplicates = await base44.asServiceRole.entities.IntegrationQueue.filter({
       source,
       externalId,
     });
 
     if (duplicates.length > 0) {
-      return Response.json(
+      return json(
         {
           status: 'duplicate',
           queueId: duplicates[0].id,
           message: 'This record has already been queued',
         },
-        { status: 409 },
+        409,
+        origin,
       );
     }
 
-    // ── 4. Enqueue ──
+    // ── 5. Enqueue ──
     const queueRecord = await base44.asServiceRole.entities.IntegrationQueue.create({
       source,
       externalId,
@@ -101,12 +129,12 @@ Deno.serve(async (req) => {
       attemptCount: 0,
     });
 
-    // ── 5. Update lastUsed on IntegrationKey ──
+    // ── 6. Update lastUsed on IntegrationKey ──
     await base44.asServiceRole.entities.IntegrationKey.update(integrationKey.id, {
       lastUsed: new Date().toISOString(),
     });
 
-    // ── 6. Audit log ──
+    // ── 7. Audit log ──
     await base44.asServiceRole.entities.AuditLog.create({
       actor: `integration:${integrationKey.service}`,
       action: 'queue_enqueue',
@@ -115,14 +143,15 @@ Deno.serve(async (req) => {
       details: { source, externalId },
     });
 
-    return Response.json(
+    return json(
       {
         status: 'queued',
         queueId: queueRecord.id,
       },
-      { status: 201 },
+      201,
+      origin,
     );
   } catch (error) {
-    return Response.json({ error: error.message }, { status: 500 });
+    return json({ error: error.message }, 500, origin);
   }
 });
