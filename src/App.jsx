@@ -20,6 +20,9 @@ import CrmLogin from './pages/crm/Login';
 import CrmLayout from '@/components/crm/CrmLayout';
 import CrmDashboard from './pages/crm/Dashboard';
 import CrmRewards from './pages/crm/Rewards';
+import CrmManagers from './pages/crm/Managers';
+import CrmAssemblyPoints from './pages/crm/AssemblyPoints';
+import CrmIntegrationQueue from './pages/crm/IntegrationQueue';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -63,6 +66,9 @@ const AuthenticatedApp = () => {
       <Route path="/crm" element={<CrmLayout />}>
         <Route path="dashboard" element={<CrmDashboard />} />
         <Route path="rewards" element={<CrmRewards />} />
+        <Route path="managers" element={<CrmManagers />} />
+        <Route path="assembly-points" element={<CrmAssemblyPoints />} />
+        <Route path="integration-queue" element={<CrmIntegrationQueue />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>

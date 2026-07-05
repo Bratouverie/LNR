@@ -2,11 +2,14 @@ import React, { useState } from 'react';
 import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import { isAuthenticated, getManager, logout, isAdmin, isSuperAdmin } from '@/lib/crmAuth';
 import { Button } from '@/components/ui/button';
-import { LayoutDashboard, Users, DollarSign, LogOut, Shield } from 'lucide-react';
+import { LayoutDashboard, Users, DollarSign, LogOut, Shield, Database, MapPin } from 'lucide-react';
 
 const navItems = [
   { to: '/crm/dashboard', label: 'Кандидаты', icon: LayoutDashboard, roles: ['manager', 'security_officer', 'super_admin'] },
   { to: '/crm/rewards', label: 'Выплаты', icon: DollarSign, roles: ['super_admin'] },
+  { to: '/crm/managers', label: 'Менеджеры', icon: Users, roles: ['super_admin'] },
+  { to: '/crm/assembly-points', label: 'Точки сбора', icon: MapPin, roles: ['super_admin'] },
+  { to: '/crm/integration-queue', label: 'Очередь интеграций', icon: Database, roles: ['super_admin'] },
 ];
 
 export default function CrmLayout() {
