@@ -1,0 +1,57 @@
+{
+  "name": "RateLimitLog",
+  "type": "object",
+  "properties": {
+    "ipAddress": {
+      "type": "string",
+      "title": "IP \u0430\u0434\u0440\u0435\u0441"
+    },
+    "endpoint": {
+      "type": "string",
+      "title": "Endpoint (\u043d\u0430\u043f\u0440\u0438\u043c\u0435\u0440 /api/auth/secret-login)"
+    },
+    "attemptCount": {
+      "type": "number",
+      "title": "\u041a\u043e\u043b\u0438\u0447\u0435\u0441\u0442\u0432\u043e \u043f\u043e\u043f\u044b\u0442\u043e\u043a",
+      "default": 1,
+      "minimum": 0
+    },
+    "blockedUntil": {
+      "type": "string",
+      "title": "\u0417\u0430\u0431\u043b\u043e\u043a\u0438\u0440\u043e\u0432\u0430\u043d \u0434\u043e (null = \u043d\u0435 \u0437\u0430\u0431\u043b\u043e\u043a\u0438\u0440\u043e\u0432\u0430\u043d)",
+      "format": "date-time"
+    },
+    "expiresAt": {
+      "type": "string",
+      "title": "\u0421\u0440\u043e\u043a \u0437\u0430\u043f\u0438\u0441\u0438 \u0438\u0441\u0442\u0435\u043a\u0430\u0435\u0442 (TTL 24\u0447)",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "ipAddress",
+    "endpoint",
+    "expiresAt"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

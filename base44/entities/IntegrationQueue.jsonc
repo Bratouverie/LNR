@@ -1,0 +1,82 @@
+{
+  "name": "IntegrationQueue",
+  "type": "object",
+  "properties": {
+    "source": {
+      "type": "string",
+      "title": "\u0418\u0441\u0442\u043e\u0447\u043d\u0438\u043a",
+      "enum": [
+        "genspark",
+        "voip",
+        "web_form",
+        "telegram"
+      ]
+    },
+    "externalId": {
+      "type": "string",
+      "title": "\u0412\u043d\u0435\u0448\u043d\u0438\u0439 ID (\u0434\u043b\u044f \u0434\u0435\u0434\u0443\u043f\u043b\u0438\u043a\u0430\u0446\u0438\u0438)"
+    },
+    "payload": {
+      "type": "object",
+      "title": "\u0421\u044b\u0440\u044b\u0435 \u0432\u0445\u043e\u0434\u044f\u0449\u0438\u0435 \u0434\u0430\u043d\u043d\u044b\u0435 (JSON)"
+    },
+    "status": {
+      "type": "string",
+      "title": "\u0421\u0442\u0430\u0442\u0443\u0441 \u043e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0438",
+      "enum": [
+        "pending",
+        "processed",
+        "error",
+        "duplicate"
+      ],
+      "default": "pending"
+    },
+    "errorMessage": {
+      "type": "string",
+      "title": "\u0421\u043e\u043e\u0431\u0449\u0435\u043d\u0438\u0435 \u043e\u0431 \u043e\u0448\u0438\u0431\u043a\u0435"
+    },
+    "candidateId": {
+      "type": "string",
+      "title": "ID \u0441\u043e\u0437\u0434\u0430\u043d\u043d\u043e\u0433\u043e \u043a\u0430\u043d\u0434\u0438\u0434\u0430\u0442\u0430 (\u043f\u043e\u0441\u043b\u0435 \u043e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0438)"
+    },
+    "attemptCount": {
+      "type": "number",
+      "title": "\u041f\u043e\u043f\u044b\u0442\u043e\u043a \u043e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0438",
+      "default": 0,
+      "minimum": 0
+    },
+    "processedAt": {
+      "type": "string",
+      "title": "\u0414\u0430\u0442\u0430 \u043e\u0431\u0440\u0430\u0431\u043e\u0442\u043a\u0438",
+      "format": "date-time"
+    }
+  },
+  "required": [
+    "source",
+    "externalId",
+    "payload",
+    "status"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}

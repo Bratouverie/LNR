@@ -1,0 +1,90 @@
+{
+  "name": "Manager",
+  "type": "object",
+  "properties": {
+    "agencyId": {
+      "type": "string",
+      "title": "ID \u0430\u0433\u0435\u043d\u0442\u0441\u0442\u0432\u0430"
+    },
+    "fullName": {
+      "type": "string",
+      "title": "\u0424\u0418\u041e",
+      "maxLength": 200
+    },
+    "phone": {
+      "type": "string",
+      "title": "\u0422\u0435\u043b\u0435\u0444\u043e\u043d"
+    },
+    "email": {
+      "type": "string",
+      "title": "Email"
+    },
+    "secretCode": {
+      "type": "string",
+      "title": "\u0425\u044d\u0448 \u0441\u0435\u043a\u0440\u0435\u0442\u043d\u043e\u0433\u043e \u043a\u043e\u0434\u0430 (SHA-256, \u041d\u0415 plaintext)"
+    },
+    "role": {
+      "type": "string",
+      "title": "\u0420\u043e\u043b\u044c",
+      "enum": [
+        "manager",
+        "security_officer",
+        "super_admin"
+      ],
+      "default": "manager"
+    },
+    "isActive": {
+      "type": "boolean",
+      "title": "\u0410\u043a\u0442\u0438\u0432\u0435\u043d",
+      "default": true
+    },
+    "isBlocked": {
+      "type": "boolean",
+      "title": "\u0417\u0430\u0431\u043b\u043e\u043a\u0438\u0440\u043e\u0432\u0430\u043d",
+      "default": false
+    },
+    "loginAttempts": {
+      "type": "number",
+      "title": "\u041f\u043e\u043f\u044b\u0442\u043e\u043a \u0432\u0445\u043e\u0434\u0430",
+      "default": 0,
+      "minimum": 0
+    },
+    "lastLogin": {
+      "type": "string",
+      "title": "\u041f\u043e\u0441\u043b\u0435\u0434\u043d\u0438\u0439 \u0432\u0445\u043e\u0434",
+      "format": "date-time"
+    },
+    "createdByManagerId": {
+      "type": "string",
+      "title": "ID \u0441\u043e\u0437\u0434\u0430\u0432\u0448\u0435\u0433\u043e \u043c\u0435\u043d\u0435\u0434\u0436\u0435\u0440\u0430 (SuperAdmin)"
+    }
+  },
+  "required": [
+    "fullName",
+    "phone",
+    "secretCode",
+    "role"
+  ],
+  "rls": {
+    "create": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "read": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "update": {
+      "user_condition": {
+        "role": "admin"
+      }
+    },
+    "delete": {
+      "user_condition": {
+        "role": "admin"
+      }
+    }
+  }
+}
