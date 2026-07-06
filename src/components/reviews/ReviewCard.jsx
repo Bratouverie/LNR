@@ -1,13 +1,17 @@
 import { MapPin, Clock } from "lucide-react";
 import ReviewStars from "./ReviewStars";
 
-export default function ReviewCard({ review, onClick }) {
+export default function ReviewCard({ review, onClick, isHighlighted = false }) {
   const truncated =
     review.text.length > 200 ? review.text.slice(0, 200) + "…" : review.text;
 
   return (
     <div
-      className="bg-card border border-border rounded-2xl p-5 cursor-pointer hover:shadow-lg hover:border-accent/30 transition-all duration-300"
+      className={`bg-card rounded-2xl p-5 cursor-pointer hover:shadow-lg transition-all duration-300 border-2 ${
+        isHighlighted
+          ? "border-accent/40 hover:border-accent/60"
+          : "border-border hover:border-accent/30"
+      }`}
       onClick={onClick}
     >
       <div className="flex items-center gap-3 mb-3">
