@@ -1,34 +1,48 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Plus, MessageSquare } from 'lucide-react';
+import { X, Plus, MessageSquare, Loader2 } from 'lucide-react';
 import ReviewCard from './ReviewCard';
 import ReviewModal from './ReviewModal';
 import ReviewForm from './ReviewForm';
-import { SEED_REVIEWS } from '@/lib/reviewSeedData';
 
-// [CLAUDE FIX 2026-07-06] Статическое отображение отзывов для GitHub Pages
-// Причина: CORS блокирует fetch() к Base44 API с домена vosstanovim-dnr.ru
-// Решение: встроили отзывы в код — рендерятся мгновенно без сетевых запросов
-// Поля в SEED: stars, monthsInProgram, photo, name, position, city, text
-// TODO: когда vosstanovim-dnr.ru добавится в CORS whitelist Base44 — вернуть fetch() из getPublicReviews
-// TODO: добавить возможность обновления seed через admin panel
+// [МАСТЕР-ПЛАН 2026-07-06, ЧАСТЬ 2.1] Fetch отзывов из статического JSON
+// Было: base44.functions.invoke('getPublicReviews') + CORS блокировка
+// Теперь: fetch('/data/reviews.json') + same-origin + zero CORS
+// Источник: все одобренные отзывы из БД (экспортированы в public/data/reviews.json)
 
 const PAGE_SIZE = 9;
 
 export default function ReviewsBlock() {
-  // [FIX] SEED_REVIEWS как начальное состояние — рендер сразу, без ожидания сети
-  const [reviews] = useState(SEED_REVIEWS);
+  const [reviews, setReviews] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [selectedReview, setSelectedReview] = useState(null);
   const [formOpen, setFormOpen] = useState(false);
 
-  // [FIX] Удалили fetchReviews, useEffect, loading, error — они блокировались CORS
-  // Оставляем только client-side логику: пагинация и модальные окна
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const response = await fetch('/data/reviews.json');
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}`);
+        }
+        const data = await response.json();
+        if (!Array.isArray(data.reviews)) {
+          throw new Error('Invalid JSON structure: reviews is not an array');
+        }
+        setReviews(data.reviews);
+      } catch (err) {
+        console.warn('[ReviewsBlock] Failed to load reviews from /data/reviews.json:', err);
+        setReviews([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchReviews();
+  }, []);
 
   const handleFormSuccess = () => {
     setFormOpen(false);
-    // NOTE: после отправки отзыва он попадает в БД как pending,
-    // в production нужно пересобрать с актуальными seed данными
   };
 
   const visibleReviews = reviews.slice(0, visibleCount);
@@ -51,8 +65,15 @@ export default function ReviewsBlock() {
           </p>
         </div>
 
-        {/* Grid — отзывы рендерятся сразу из SEED_REVIEWS, без спиннера */}
-        {visibleReviews.length === 0 ? (
+        {/* Loading state */}
+        {loading && (
+          <div className='flex justify-center py-12'>
+            <Loader2 className='h-8 w-8 animate-spin text-accent' />
+          </div>
+        )}
+
+        {/* Empty / error state */}
+        {!loading && reviews.length === 0 && (
           <div className='text-center py-12'>
             <MessageSquare className='h-10 w-10 text-muted-foreground mx-auto mb-3' />
             <p className='font-inter text-sm text-muted-foreground'>
@@ -60,7 +81,10 @@ export default function ReviewsBlock() {
             </p>
             <p className='font-inter text-sm text-muted-foreground mt-1'>Будьте первым!</p>
           </div>
-        ) : (
+        )}
+
+        {/* Grid */}
+        {!loading && reviews.length > 0 && (
           <div className='grid sm:grid-cols-2 lg:grid-cols-3 gap-5'>
             {visibleReviews.map((review) => (
               <ReviewCard
@@ -72,7 +96,7 @@ export default function ReviewsBlock() {
           </div>
         )}
 
-        {/* Load more — client-side пагинация по SEED массиву */}
+        {/* Load more */}
         {hasMore && (
           <div className='flex justify-center mt-8'>
             <button
@@ -84,7 +108,7 @@ export default function ReviewsBlock() {
           </div>
         )}
 
-        {/* CTA — кнопка открывает форму, она сама шлёт запрос к API */}
+        {/* CTA */}
         <div className='flex justify-center mt-10'>
           <button
             onClick={() => setFormOpen(true)}

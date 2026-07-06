@@ -119,6 +119,7 @@ export default function ReviewForm({ onClose, onSuccess }) {
         <h3 className="font-inter font-bold text-xl text-foreground">Спасибо за отзыв!</h3>
         <p className="font-inter text-sm text-muted-foreground mt-2 max-w-sm mx-auto">
           Ваш отзыв отправлен на модерацию и появится на сайте после проверки администратором.
+          Это обычно занимает 1-2 дня.
         </p>
       </div>
     );
