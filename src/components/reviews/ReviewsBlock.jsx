@@ -1,19 +1,21 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Plus, MessageSquare, Loader2 } from 'lucide-react';
+import { X, Plus, Loader2 } from 'lucide-react';
+import { STATIC_REVIEWS } from '@/lib/staticReviews';
 import ReviewCard from './ReviewCard';
 import ReviewModal from './ReviewModal';
 import ReviewForm from './ReviewForm';
 
-// [МАСТЕР-ПЛАН 2026-07-06, ЧАСТЬ 2.1] Fetch отзывов из статического JSON
-// Было: base44.functions.invoke('getPublicReviews') + CORS блокировка
-// Теперь: fetch('/data/reviews.json') + same-origin + zero CORS
-// Источник: все одобренные отзывы из БД (экспортированы в public/data/reviews.json)
+// [HYBRID LOADING 2026-07-06] Двухуровневая система загрузки
+// Уровень 1 (оптимизм): fetch /data/reviews.json (свежие данные с сервера)
+// Уровень 2 (пессимизм): STATIC_REVIEWS как fallback (встроенные данные)
+// Результат: 12 отзывов ВСЕГДА видны, никогда ошибка
 
 const PAGE_SIZE = 9;
+const CACHE_VERSION = '2026-07-06-12-00';
 
 export default function ReviewsBlock() {
-  const [reviews, setReviews] = useState([]);
+  const [reviews, setReviews] = useState(STATIC_REVIEWS);
   const [loading, setLoading] = useState(true);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [selectedReview, setSelectedReview] = useState(null);
@@ -22,22 +24,33 @@ export default function ReviewsBlock() {
   useEffect(() => {
     const fetchReviews = async () => {
       try {
-        const response = await fetch('/data/reviews.json');
+        const response = await fetch(`/data/reviews.json?v=${CACHE_VERSION}`, {
+          cache: 'no-store',
+        });
+
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}`);
         }
+
         const data = await response.json();
+
         if (!Array.isArray(data.reviews)) {
-          throw new Error('Invalid JSON structure: reviews is not an array');
+          throw new Error('Invalid JSON: reviews is not array');
         }
+
+        if (data.reviews.length === 0) {
+          throw new Error('Empty reviews array');
+        }
+
         setReviews(data.reviews);
       } catch (err) {
-        console.warn('[ReviewsBlock] Failed to load reviews from /data/reviews.json:', err);
-        setReviews([]);
+        console.warn('[ReviewsBlock] Failed to fetch /data/reviews.json:', err.message);
+        setReviews(STATIC_REVIEWS);
       } finally {
         setLoading(false);
       }
     };
+
     fetchReviews();
   }, []);
 
@@ -65,26 +78,15 @@ export default function ReviewsBlock() {
           </p>
         </div>
 
-        {/* Loading state */}
+        {/* Loading spinner */}
         {loading && (
           <div className='flex justify-center py-12'>
             <Loader2 className='h-8 w-8 animate-spin text-accent' />
           </div>
         )}
 
-        {/* Empty / error state */}
-        {!loading && reviews.length === 0 && (
-          <div className='text-center py-12'>
-            <MessageSquare className='h-10 w-10 text-muted-foreground mx-auto mb-3' />
-            <p className='font-inter text-sm text-muted-foreground'>
-              Пока нет одобренных отзывов.
-            </p>
-            <p className='font-inter text-sm text-muted-foreground mt-1'>Будьте первым!</p>
-          </div>
-        )}
-
-        {/* Grid */}
-        {!loading && reviews.length > 0 && (
+        {/* Grid отзывов */}
+        {!loading && reviews && reviews.length > 0 && (
           <div className='grid sm:grid-cols-2 lg:grid-cols-3 gap-5'>
             {visibleReviews.map((review) => (
               <ReviewCard

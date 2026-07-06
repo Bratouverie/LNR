@@ -4,6 +4,10 @@ import { defineConfig } from 'vite'
 
 export default defineConfig({
   base: '/',
+  publicDir: 'public',
+  build: {
+    copyPublicDir: true,
+  },
   logLevel: 'error',
   plugins: [
     base44({
