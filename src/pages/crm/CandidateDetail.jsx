@@ -8,7 +8,7 @@ import Timeline from '@/components/crm/Timeline';
 import TransitionDialog from '@/components/crm/TransitionDialog';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Loader2, ArrowLeft, ArrowRight, DollarSign } from 'lucide-react';
+import { Loader2, ArrowLeft, ArrowRight, DollarSign, Mail, Copy, Check, Shield } from 'lucide-react';
 
 export default function CandidateDetail() {
   const { id } = useParams();
@@ -19,7 +19,55 @@ export default function CandidateDetail() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showTransition, setShowTransition] = useState(false);
+  const [anketaLink, setAnketaLink] = useState('');
+  const [anketaLoading, setAnketaLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
   const token = getToken();
+
+  const canSendAnketa = candidate?.status === 'assigned' || candidate?.status === 'anketa_pending';
+  const canSendSb = candidate?.status === 'anketa_filled' || candidate?.status === 'sb_check';
+
+  const [sbLink, setSbLink] = useState('');
+  const [sbLoading, setSbLoading] = useState(false);
+
+  const handleGenerateSbLink = async () => {
+    setSbLoading(true);
+    try {
+      const res = await base44.functions.invoke('generateSbToken', { token, candidateId: id });
+      if (res.data?.link) setSbLink(res.data.link);
+    } catch (err) {
+      setError(err.response?.data?.error || 'Ошибка генерации ссылки СБ');
+    } finally {
+      setSbLoading(false);
+    }
+  };
+
+  const handleGenerateAnketaLink = async () => {
+    setAnketaLoading(true);
+    try {
+      const res = await base44.functions.invoke('generateAnketaToken', { token, candidateId: id });
+      if (res.data?.link) {
+        setAnketaLink(res.data.link);
+        // Also transition to anketa_pending if currently 'assigned'
+        if (candidate.status === 'assigned') {
+          await base44.functions.invoke('transitionCandidate', {
+            token, candidateId: id, targetStatus: 'anketa_pending',
+          });
+          handleTransitioned();
+        }
+      }
+    } catch (err) {
+      setError(err.response?.data?.error || 'Ошибка генерации ссылки');
+    } finally {
+      setAnketaLoading(false);
+    }
+  };
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(anketaLink);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
   useEffect(() => {
     const fetchDetail = async () => {
@@ -93,6 +141,68 @@ export default function CandidateDetail() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         <div className="lg:col-span-1 space-y-5">
           <CandidateInfoCard candidate={candidate} />
+
+          {canSendSb && (
+            <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-3">
+              <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
+                <Shield className="w-4 h-4" /> Проверка СБ
+              </h3>
+              {!sbLink ? (
+                <Button size="sm" variant="outline" onClick={handleGenerateSbLink} disabled={sbLoading} className="w-full">
+                  {sbLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Shield className="w-4 h-4" />}
+                  Сгенерировать ссылку для СБ
+                </Button>
+              ) : (
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 p-2 bg-slate-50 rounded-lg border border-slate-200">
+                    <input
+                      type="text"
+                      readOnly
+                      value={sbLink}
+                      className="flex-1 bg-transparent text-xs text-slate-600 outline-none truncate"
+                    />
+                    <Button size="icon" variant="ghost" onClick={() => { navigator.clipboard.writeText(sbLink); }} className="h-7 w-7 shrink-0">
+                      <Copy className="w-3.5 h-3.5" />
+                    </Button>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Ссылка действительна 24 часа. Отправьте её офицеру СБ.
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
+
+          {canSendAnketa && (
+            <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-3">
+              <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
+                <Mail className="w-4 h-4" /> Анкета кандидата
+              </h3>
+              {!anketaLink ? (
+                <Button size="sm" variant="outline" onClick={handleGenerateAnketaLink} disabled={anketaLoading} className="w-full">
+                  {anketaLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Mail className="w-4 h-4" />}
+                  Сгенерировать ссылку
+                </Button>
+              ) : (
+                <div className="space-y-2">
+                  <div className="flex items-center gap-2 p-2 bg-slate-50 rounded-lg border border-slate-200">
+                    <input
+                      type="text"
+                      readOnly
+                      value={anketaLink}
+                      className="flex-1 bg-transparent text-xs text-slate-600 outline-none truncate"
+                    />
+                    <Button size="icon" variant="ghost" onClick={handleCopyLink} className="h-7 w-7 shrink-0">
+                      {copied ? <Check className="w-3.5 h-3.5 text-green-500" /> : <Copy className="w-3.5 h-3.5" />}
+                    </Button>
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    Ссылка действительна 7 дней. Отправьте её кандидату.
+                  </p>
+                </div>
+              )}
+            </div>
+          )}
 
           {reward && (
             <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-5 space-y-3">
