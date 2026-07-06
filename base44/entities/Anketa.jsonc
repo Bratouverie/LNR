@@ -177,8 +177,9 @@
       "type": "string",
       "title": "\u0421\u0443\u0434\u0438\u043c\u043e\u0441\u0442\u0438",
       "enum": [
+        "\u043d\u0435\u0442",
         "\u0434\u0430",
-        "\u043d\u0435\u0442"
+        "\u043f\u043e\u0433\u0430\u0448\u0435\u043d\u0430"
       ]
     },
     "height": {
@@ -188,6 +189,109 @@
     "weight": {
       "type": "number",
       "title": "\u0412\u0435\u0441 (\u043a\u0433)"
+    },
+    "disabilities": {
+      "type": "string",
+      "title": "\u0418\u043d\u0432\u0430\u043b\u0438\u0434\u043d\u043e\u0441\u0442\u044c / \u043e\u0433\u0440\u0430\u043d\u0438\u0447\u0435\u043d\u0438\u044f",
+      "maxLength": 500
+    },
+    "healthNotes": {
+      "type": "string",
+      "title": "\u0414\u043e\u043f\u043e\u043b\u043d\u0438\u0442\u0435\u043b\u044c\u043d\u044b\u0435 \u0441\u0432\u0435\u0434\u0435\u043d\u0438\u044f \u043e \u0437\u0434\u043e\u0440\u043e\u0432\u044c\u0435",
+      "maxLength": 500
+    },
+    "maritalStatus": {
+      "type": "string",
+      "title": "\u0421\u0435\u043c\u0435\u0439\u043d\u043e\u0435 \u043f\u043e\u043b\u043e\u0436\u0435\u043d\u0438\u0435",
+      "enum": [
+        "\u0425\u043e\u043b\u043e\u0441\u0442 / \u041d\u0435 \u0437\u0430\u043c\u0443\u0436\u0435\u043c",
+        "\u0416\u0435\u043d\u0430\u0442 / \u0417\u0430\u043c\u0443\u0436\u0435\u043c",
+        "\u0412 \u0440\u0430\u0437\u0432\u043e\u0434\u0435",
+        "\u0412\u0434\u043e\u0432\u0435\u0446 / \u0412\u0434\u043e\u0432\u0430"
+      ]
+    },
+    "childrenCount": {
+      "type": "number",
+      "title": "\u041a\u043e\u043b\u0438\u0447\u0435\u0441\u0442\u0432\u043e \u0434\u0435\u0442\u0435\u0439",
+      "minimum": 0,
+      "default": 0
+    },
+    "emergencyContactName": {
+      "type": "string",
+      "title": "\u041a\u043e\u043d\u0442\u0430\u043a\u0442\u043d\u043e\u0435 \u043b\u0438\u0446\u043e",
+      "maxLength": 200
+    },
+    "emergencyContactPhone": {
+      "type": "string",
+      "title": "\u0422\u0435\u043b\u0435\u0444\u043e\u043d \u043a\u043e\u043d\u0442\u0430\u043a\u0442\u043d\u043e\u0433\u043e \u043b\u0438\u0446\u0430"
+    },
+    "emergencyContactRelation": {
+      "type": "string",
+      "title": "\u0421\u0442\u0435\u043f\u0435\u043d\u044c \u0440\u043e\u0434\u0441\u0442\u0432\u0430",
+      "enum": [
+        "\u0421\u0443\u043f\u0440\u0443\u0433(\u0430)",
+        "\u041e\u0442\u0435\u0446",
+        "\u041c\u0430\u0442\u044c",
+        "\u0421\u044b\u043d",
+        "\u0414\u043e\u0447\u044c",
+        "\u0411\u0440\u0430\u0442",
+        "\u0421\u0435\u0441\u0442\u0440\u0430",
+        "\u0414\u0440\u0443\u0433\u043e\u0435"
+      ]
+    },
+    "militaryRank": {
+      "type": "string",
+      "title": "\u0412\u043e\u0438\u043d\u0441\u043a\u043e\u0435 \u0437\u0432\u0430\u043d\u0438\u0435",
+      "enum": [
+        "\u041d\u0435 \u0441\u043b\u0443\u0436\u0438\u043b",
+        "\u0420\u044f\u0434\u043e\u0432\u043e\u0439",
+        "\u0415\u0444\u0440\u0435\u0439\u0442\u043e\u0440",
+        "\u041c\u043b\u0430\u0434\u0448\u0438\u0439 \u0441\u0435\u0440\u0436\u0430\u043d\u0442",
+        "\u0421\u0435\u0440\u0436\u0430\u043d\u0442",
+        "\u0421\u0442\u0430\u0440\u0448\u0438\u0439 \u0441\u0435\u0440\u0436\u0430\u043d\u0442",
+        "\u0421\u0442\u0430\u0440\u0448\u0438\u043d\u0430",
+        "\u041f\u0440\u0430\u043f\u043e\u0440\u0449\u0438\u043a",
+        "\u041b\u0435\u0439\u0442\u0435\u043d\u0430\u043d\u0442",
+        "\u0421\u0442\u0430\u0440\u0448\u0438\u0439 \u043b\u0435\u0439\u0442\u0435\u043d\u0430\u043d\u0442",
+        "\u041a\u0430\u043f\u0438\u0442\u0430\u043d",
+        "\u041c\u0430\u0439\u043e\u0440",
+        "\u041f\u043e\u0434\u043f\u043e\u043b\u043a\u043e\u0432\u043d\u0438\u043a",
+        "\u041f\u043e\u043b\u043a\u043e\u0432\u043d\u0438\u043a"
+      ]
+    },
+    "militarySpecialty": {
+      "type": "string",
+      "title": "\u0412\u043e\u0435\u043d\u043d\u0430\u044f \u0441\u043f\u0435\u0446\u0438\u0430\u043b\u044c\u043d\u043e\u0441\u0442\u044c (\u0412\u0423\u0421)",
+      "maxLength": 200
+    },
+    "militaryUnit": {
+      "type": "string",
+      "title": "\u0412\u043e\u0438\u043d\u0441\u043a\u0430\u044f \u0447\u0430\u0441\u0442\u044c / \u043c\u0435\u0441\u0442\u043e \u0441\u043b\u0443\u0436\u0431\u044b",
+      "maxLength": 300
+    },
+    "convictionDetails": {
+      "type": "string",
+      "title": "\u0414\u0435\u0442\u0430\u043b\u0438 \u0441\u0443\u0434\u0438\u043c\u043e\u0441\u0442\u0438",
+      "maxLength": 500
+    },
+    "expectedSalary": {
+      "type": "number",
+      "title": "\u041e\u0436\u0438\u0434\u0430\u0435\u043c\u0430\u044f \u0437\u0430\u0440\u043f\u043b\u0430\u0442\u0430 (\u0440\u0443\u0431)",
+      "minimum": 0
+    },
+    "motivation": {
+      "type": "string",
+      "title": "\u041c\u043e\u0442\u0438\u0432\u0430\u0446\u0438\u044f \u0443\u0447\u0430\u0441\u0442\u0438\u044f",
+      "maxLength": 1000
+    },
+    "readyDocuments": {
+      "type": "object",
+      "title": "\u0413\u043e\u0442\u043e\u0432\u044b\u0435 \u0434\u043e\u043a\u0443\u043c\u0435\u043d\u0442\u044b (JSON: {passport, militaryId, snils, inn, workBook, medicalBook, driverLicense, diploma, certificates})"
+    },
+    "readyToStartDate": {
+      "type": "string",
+      "title": "\u0413\u043e\u0442\u043e\u0432 \u043f\u0440\u0438\u0441\u0442\u0443\u043f\u0438\u0442\u044c \u0441",
+      "format": "date"
     },
     "passportPhotoUrl": {
       "type": "string",
@@ -203,7 +307,27 @@
     },
     "photoUrl": {
       "type": "string",
-      "title": "\u0424\u043e\u0442\u043e 3x4 (URL)"
+      "title": "\u0424\u043e\u0442\u043e 3x4 (URL) \u2014 DEPRECATED"
+    },
+    "innUrl": {
+      "type": "string",
+      "title": "\u0418\u041d\u041d (URL)"
+    },
+    "militaryIdUrl": {
+      "type": "string",
+      "title": "\u0412\u043e\u0435\u043d\u043d\u044b\u0439 \u0431\u0438\u043b\u0435\u0442 / \u043f\u0440\u0438\u043f\u0438\u0441\u043d\u043e\u0435 (URL)"
+    },
+    "driverLicenseUrl": {
+      "type": "string",
+      "title": "\u0412\u043e\u0434\u0438\u0442\u0435\u043b\u044c\u0441\u043a\u043e\u0435 \u0443\u0434\u043e\u0441\u0442\u043e\u0432\u0435\u0440\u0435\u043d\u0438\u0435 (URL)"
+    },
+    "workBookUrl": {
+      "type": "string",
+      "title": "\u0422\u0440\u0443\u0434\u043e\u0432\u0430\u044f \u043a\u043d\u0438\u0436\u043a\u0430 (URL)"
+    },
+    "certificatesUrl": {
+      "type": "string",
+      "title": "\u0421\u0435\u0440\u0442\u0438\u0444\u0438\u043a\u0430\u0442\u044b / \u0434\u043e\u043f\u0443\u0441\u043a\u0438 (URL)"
     },
     "diplomaUrl": {
       "type": "string",
@@ -222,6 +346,16 @@
       "type": "boolean",
       "title": "\u0421\u043e\u0433\u043b\u0430\u0441\u0438\u0435 \u0441 \u0443\u0441\u043b\u043e\u0432\u0438\u044f\u043c\u0438 \u0440\u0430\u0431\u043e\u0442\u044b",
       "default": false
+    },
+    "additionalNotes": {
+      "type": "string",
+      "title": "\u0414\u043e\u043f\u043e\u043b\u043d\u0438\u0442\u0435\u043b\u044c\u043d\u0430\u044f \u0438\u043d\u0444\u043e\u0440\u043c\u0430\u0446\u0438\u044f",
+      "maxLength": 1000
+    },
+    "version": {
+      "type": "number",
+      "title": "\u0412\u0435\u0440\u0441\u0438\u044f \u0430\u043d\u043a\u0435\u0442\u044b",
+      "default": 1
     },
     "status": {
       "type": "string",

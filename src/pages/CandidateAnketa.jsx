@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { base44 } from '@/api/base44Client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,10 +11,38 @@ import FileUpload from '@/components/anketa/FileUpload';
 import { POSITIONS } from '@/lib/anketaSkills';
 import { Loader2, CheckCircle2, AlertCircle, Send } from 'lucide-react';
 
-const DRAFT_KEY = 'anketa_draft';
-const TOTAL_SECTIONS = 11;
+const TOTAL_SECTIONS = 12;
 const EDUCATION_LEVELS = ['Среднее', 'Среднее специальное', 'Незаконченное высшее', 'Высшее'];
 const BLOOD_TYPES = ['I (O)', 'II (A)', 'III (B)', 'IV (AB)'];
+const MARITAL_STATUSES = ['Холост / Не замужем', 'Женат / Замужем', 'В разводе', 'Вдовец / Вдова'];
+const MILITARY_RANKS = ['Не служил', 'Рядовой', 'Ефрейтор', 'Младший сержант', 'Сержант', 'Старший сержант', 'Старшина', 'Прапорщик', 'Лейтенант', 'Старший лейтенант', 'Капитан', 'Майор', 'Подполковник', 'Полковник'];
+const RELATIONS = ['Супруг(а)', 'Отец', 'Мать', 'Сын', 'Дочь', 'Брат', 'Сестра', 'Другое'];
+const CONVICTION_OPTIONS = [
+  { value: 'нет', label: 'Нет' },
+  { value: 'да', label: 'Да, непогашенная' },
+  { value: 'погашена', label: 'Да, погашенная' },
+];
+const READY_DOC_TYPES = [
+  { key: 'passport', label: 'Паспорт' },
+  { key: 'militaryId', label: 'Военный билет / приписное' },
+  { key: 'snils', label: 'СНИЛС' },
+  { key: 'inn', label: 'ИНН' },
+  { key: 'workBook', label: 'Трудовая книжка' },
+  { key: 'medicalBook', label: 'Медицинская книжка' },
+  { key: 'driverLicense', label: 'Водительское удостоверение' },
+  { key: 'diploma', label: 'Диплом об образовании' },
+  { key: 'certificates', label: 'Сертификаты / допуски' },
+];
+
+const CONSENT_TEXT_152FZ = `Я даю согласие на обработку моих персональных данных оператором в соответствии с Федеральным законом от 27.07.2006 № 152-ФЗ «О персональных данных».
+
+Оператор вправе обрабатывать следующие категории данных: ФИО, дата рождения, гражданство, контактная информация, сведения о трудовой деятельности, медицинские данные (при наличии).
+
+Цели обработки: рассмотрение кандидатуры на должность, проверка информации о соискателе, заключение трудового договора, выполнение обязательств по трудовому договору.
+
+Я уведомлён(а) о праве на доступ, исправление, удаление и ограничение обработки моих персональных данных.`;
+
+const getDraftKey = (token) => `anketa_draft_${token}`;
 
 export default function CandidateAnketa() {
   const [loading, setLoading] = useState(true);
@@ -26,19 +54,44 @@ export default function CandidateAnketa() {
   const [token, setToken] = useState('');
 
   const [form, setForm] = useState({
+    // Section 1: Персональные данные
     fullName: '', birthDate: '', citizenship: '', cityOfResidence: '', placeOfBirth: '',
     registrationAddress: '', actualAddress: '', plannedArrivalDate: '',
     passportSeries: '', passportNumber: '', passportIssuedBy: '', passportIssueDate: '', passportDepartmentCode: '',
     email: '', backupPhone: '',
+    // Section 2: Специализация и квалификация
     desiredPosition: '', educationLevel: '', graduationYear: '', institution: '', speciality: '',
     professionalSkills: [],
+    // Section 3: Опыт работы
     totalWorkExperience: '', shiftWorkExperience: '', lastEmployer: '', lastPosition: '', workStartDate: '', workEndDate: '', reasonForDismissal: '',
+    // Section 4: Состояние здоровья
     chronicDiseases: '', bloodType: '', hasConvictions: '', height: '', weight: '',
+    disabilities: '', healthNotes: '',
+    // Section 5: Семья и близкие
+    maritalStatus: '', childrenCount: '',
+    emergencyContactName: '', emergencyContactPhone: '', emergencyContactRelation: '',
+    // Section 6: Воинский учёт
+    militaryRank: '', militarySpecialty: '', militaryUnit: '',
+    // Section 7: Судимость
+    convictionDetails: '',
+    // Section 8: Мотивация и ожидания
+    expectedSalary: '', motivation: '',
+    // Section 9: Готовность документов
+    readyDocuments: {},
+    readyToStartDate: '',
+    // Section 11: Согласие
     consentToDataProcessing: false, consentToWorkConditions: false,
+    // Section 12: Дополнительная информация
+    additionalNotes: '',
+    // Meta
+    version: 2,
   });
 
   const [files, setFiles] = useState({
-    passportPhotoUrl: '', passportRegistrationUrl: '', snilsUrl: '', photoUrl: '', diplomaUrl: '', medicalReportUrl: '',
+    passportPhotoUrl: '', passportRegistrationUrl: '', snilsUrl: '',
+    innUrl: '', militaryIdUrl: '', driverLicenseUrl: '', workBookUrl: '', certificatesUrl: '',
+    diplomaUrl: '', medicalReportUrl: '',
+    photoUrl: '', // DEPRECATED — kept for backward compat
   });
   const autoSaveRef = useRef(null);
 
@@ -51,6 +104,14 @@ export default function CandidateAnketa() {
     loadAnketa(t);
   }, []);
 
+  // ── Auto-save draft to localStorage every 30s ──
+  useEffect(() => {
+    autoSaveRef.current = setInterval(() => {
+      if (token) saveDraft();
+    }, 30000);
+    return () => clearInterval(autoSaveRef.current);
+  }, [form, token]);
+
   const loadAnketa = async (t) => {
     try {
       const res = await base44.functions.invoke('getAnketa', { token: t });
@@ -61,7 +122,7 @@ export default function CandidateAnketa() {
       if (data.anketa) {
         mergeAnketa(data.anketa);
       } else {
-        const draft = loadDraft();
+        const draft = loadDraft(t);
         if (draft) mergeAnketa(draft);
         if (data.candidate?.desiredPosition) {
           setForm((f) => ({ ...f, desiredPosition: data.candidate.desiredPosition }));
@@ -77,71 +138,38 @@ export default function CandidateAnketa() {
     }
   };
 
+  // ── Merge with !== undefined (not ||) to preserve false/null ──
   const mergeAnketa = (data) => {
-    setForm((f) => ({
-      ...f,
-      fullName: data.fullName || f.fullName,
-      birthDate: data.birthDate || f.birthDate,
-      citizenship: data.citizenship || f.citizenship,
-      cityOfResidence: data.cityOfResidence || f.cityOfResidence,
-      placeOfBirth: data.placeOfBirth || f.placeOfBirth,
-      registrationAddress: data.registrationAddress || f.registrationAddress,
-      actualAddress: data.actualAddress || f.actualAddress,
-      plannedArrivalDate: data.plannedArrivalDate || f.plannedArrivalDate,
-      passportSeries: data.passportSeries || f.passportSeries,
-      passportNumber: data.passportNumber || f.passportNumber,
-      passportIssuedBy: data.passportIssuedBy || f.passportIssuedBy,
-      passportIssueDate: data.passportIssueDate || f.passportIssueDate,
-      passportDepartmentCode: data.passportDepartmentCode || f.passportDepartmentCode,
-      email: data.email || f.email,
-      backupPhone: data.backupPhone || f.backupPhone,
-      desiredPosition: data.desiredPosition || f.desiredPosition,
-      educationLevel: data.educationLevel || f.educationLevel,
-      graduationYear: data.graduationYear || f.graduationYear,
-      institution: data.institution || f.institution,
-      speciality: data.speciality || f.speciality,
-      professionalSkills: data.professionalSkills || [],
-      totalWorkExperience: data.totalWorkExperience || f.totalWorkExperience,
-      shiftWorkExperience: data.shiftWorkExperience || f.shiftWorkExperience,
-      lastEmployer: data.lastEmployer || f.lastEmployer,
-      lastPosition: data.lastPosition || f.lastPosition,
-      workStartDate: data.workStartDate || f.workStartDate,
-      workEndDate: data.workEndDate || f.workEndDate,
-      reasonForDismissal: data.reasonForDismissal || f.reasonForDismissal,
-      chronicDiseases: data.chronicDiseases || f.chronicDiseases,
-      bloodType: data.bloodType || f.bloodType,
-      hasConvictions: data.hasConvictions || f.hasConvictions,
-      height: data.height || f.height,
-      weight: data.weight || f.weight,
-      consentToDataProcessing: data.consentToDataProcessing ?? f.consentToDataProcessing,
-      consentToWorkConditions: data.consentToWorkConditions ?? f.consentToWorkConditions,
-    }));
-    if (data.passportPhotoUrl || data.snilsUrl) {
-      setFiles((f) => ({
-        ...f,
-        passportPhotoUrl: data.passportPhotoUrl || f.passportPhotoUrl,
-        passportRegistrationUrl: data.passportRegistrationUrl || f.passportRegistrationUrl,
-        snilsUrl: data.snilsUrl || f.snilsUrl,
-        photoUrl: data.photoUrl || f.photoUrl,
-        diplomaUrl: data.diplomaUrl || f.diplomaUrl,
-        medicalReportUrl: data.medicalReportUrl || f.medicalReportUrl,
-      }));
-    }
+    setForm((f) => {
+      const merged = { ...f };
+      for (const key of Object.keys(f)) {
+        if (data[key] !== undefined) {
+          merged[key] = data[key];
+        }
+      }
+      if (!Array.isArray(merged.professionalSkills)) merged.professionalSkills = [];
+      if (typeof merged.readyDocuments !== 'object' || merged.readyDocuments === null) merged.readyDocuments = {};
+      return merged;
+    });
+    setFiles((f) => {
+      const merged = { ...f };
+      for (const key of Object.keys(f)) {
+        if (data[key] !== undefined) {
+          merged[key] = data[key];
+        }
+      }
+      return merged;
+    });
   };
-
-  // ── Auto-save draft to localStorage every 30s ──
-  useEffect(() => {
-    autoSaveRef.current = setInterval(() => {
-      if (token) saveDraft();
-    }, 30000);
-    return () => clearInterval(autoSaveRef.current);
-  }, [form, token]);
 
   const saveDraft = () => {
-    try { localStorage.setItem(DRAFT_KEY, JSON.stringify({ ...form, ...files })); } catch {}
+    if (!token) return;
+    try { localStorage.setItem(getDraftKey(token), JSON.stringify({ ...form, ...files })); } catch {}
   };
-  const loadDraft = () => {
-    try { return JSON.parse(localStorage.getItem(DRAFT_KEY)); } catch { return null; }
+
+  const loadDraft = (t) => {
+    if (!t) return null;
+    try { return JSON.parse(localStorage.getItem(getDraftKey(t))); } catch { return null; }
   };
 
   const update = (field) => (e) => {
@@ -158,23 +186,31 @@ export default function CandidateAnketa() {
     }));
   };
 
+  const toggleReadyDoc = (docKey) => (checked) => {
+    setForm((f) => ({
+      ...f,
+      readyDocuments: { ...f.readyDocuments, [docKey]: !!checked },
+    }));
+  };
+
   const updateFile = (field) => (url) => {
     setFiles((f) => ({ ...f, [field]: url }));
   };
 
-  // ── Calculate filled sections ──
+  // ── Calculate filled sections (12) ──
   const sectionsFilled = [
-    form.fullName && form.birthDate,
-    form.registrationAddress || form.actualAddress,
-    form.passportSeries && form.passportNumber,
-    form.email || candidateInfo?.phone,
-    form.desiredPosition,
-    form.professionalSkills.length > 0,
-    form.totalWorkExperience || form.lastEmployer,
-    form.chronicDiseases && form.hasConvictions,
-    files.passportPhotoUrl && files.passportRegistrationUrl && files.snilsUrl,
-    form.consentToDataProcessing && form.consentToWorkConditions,
-    true, // always count section 1 (progress bar itself)
+    !!(form.fullName && form.birthDate),                                                    // 1. Персональные
+    !!(form.desiredPosition || form.professionalSkills.length > 0),                          // 2. Специализация
+    !!(form.totalWorkExperience || form.lastEmployer),                                      // 3. Опыт
+    !!(form.chronicDiseases || form.bloodType),                                             // 4. Здоровье
+    !!form.maritalStatus,                                                                   // 5. Семья
+    !!(form.militaryRank || form.militaryUnit),                                             // 6. Воинский
+    !!form.hasConvictions,                                                                  // 7. Судимость
+    !!(form.motivation || form.expectedSalary),                                             // 8. Мотивация
+    !!(form.readyToStartDate || Object.values(form.readyDocuments || {}).some(Boolean)),    // 9. Готовность
+    !!(files.passportPhotoUrl && files.passportRegistrationUrl && files.snilsUrl),          // 10. Документы
+    !!(form.consentToDataProcessing && form.consentToWorkConditions),                        // 11. Согласие
+    true,                                                                                    // 12. Доп. инфо (optional)
   ].filter(Boolean).length;
 
   // ── Submit ──
@@ -185,7 +221,7 @@ export default function CandidateAnketa() {
       const res = await base44.functions.invoke('submitAnketa', { token, form, files });
       if (res.data?.success) {
         setSuccess(true);
-        localStorage.removeItem(DRAFT_KEY);
+        localStorage.removeItem(getDraftKey(token));
       } else {
         setError(res.data?.error || 'Ошибка отправки');
       }
@@ -249,8 +285,8 @@ export default function CandidateAnketa() {
           )}
         </div>
 
-        {/* Section 2: Личные данные */}
-        <Section title="2. Личные данные" filled={!!(form.fullName && form.birthDate)}>
+        {/* Section 1: Персональные данные */}
+        <Section title="1. Персональные данные" filled={!!(form.fullName && form.birthDate)}>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Field label="ФИО" required>
               <Input value={form.fullName} onChange={update('fullName')} placeholder="Иванов Иван Иванович" />
@@ -267,31 +303,19 @@ export default function CandidateAnketa() {
             <Field label="Место рождения" className="sm:col-span-2">
               <Input value={form.placeOfBirth} onChange={update('placeOfBirth')} placeholder="г. Владивосток" />
             </Field>
-          </div>
-        </Section>
-
-        {/* Section 3: Адреса */}
-        <Section title="3. Адреса" filled={!!(form.registrationAddress || form.actualAddress)}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Field label="Адрес регистрации">
+            <Field label="Адрес регистрации" className="sm:col-span-2">
               <Textarea value={form.registrationAddress} onChange={update('registrationAddress')} rows={2} placeholder="Рег., район, город, улица, дом, кв." />
             </Field>
-            <Field label="Фактический адрес">
+            <Field label="Фактический адрес" className="sm:col-span-2">
               <Textarea value={form.actualAddress} onChange={update('actualAddress')} rows={2} placeholder="Если отличается от регистрации" />
             </Field>
             <Field label="Запланированная дата прибытия">
               <Input type="date" value={form.plannedArrivalDate} onChange={update('plannedArrivalDate')} />
             </Field>
-          </div>
-        </Section>
-
-        {/* Section 4: Паспорт */}
-        <Section title="4. Паспортные данные" filled={!!(form.passportSeries && form.passportNumber)}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            <Field label="Серия" required>
+            <Field label="Серия паспорта" required>
               <Input value={form.passportSeries} onChange={update('passportSeries')} placeholder="0000" maxLength={4} />
             </Field>
-            <Field label="Номер" required>
+            <Field label="Номер паспорта" required>
               <Input value={form.passportNumber} onChange={update('passportNumber')} placeholder="000000" maxLength={6} />
             </Field>
             <Field label="Кем выдан" required className="sm:col-span-2">
@@ -303,27 +327,21 @@ export default function CandidateAnketa() {
             <Field label="Код подразделения">
               <Input value={form.passportDepartmentCode} onChange={update('passportDepartmentCode')} placeholder="000-000" maxLength={7} />
             </Field>
-          </div>
-        </Section>
-
-        {/* Section 5: Контакты */}
-        <Section title="5. Контактные данные" filled={!!(form.email)}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Field label="Телефон">
               <Input value={candidateInfo?.phone || ''} disabled className="bg-slate-50" />
             </Field>
             <Field label="Email">
               <Input type="email" value={form.email} onChange={update('email')} placeholder="example@mail.ru" />
             </Field>
-            <Field label="Резервный телефон">
+            <Field label="Резервный телефон" className="sm:col-span-2">
               <Input value={form.backupPhone} onChange={update('backupPhone')} placeholder="+7..." />
             </Field>
           </div>
         </Section>
 
-        {/* Section 6: Образование */}
-        <Section title="6. Образование и должность" filled={!!(form.desiredPosition)}>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {/* Section 2: Специализация и квалификация */}
+        <Section title="2. Специализация и квалификация" filled={!!(form.desiredPosition || form.professionalSkills.length > 0)}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
             <Field label="Желаемая должность" required className="sm:col-span-2">
               <select
                 value={form.desiredPosition}
@@ -354,10 +372,6 @@ export default function CandidateAnketa() {
               <Input value={form.speciality} onChange={update('speciality')} />
             </Field>
           </div>
-        </Section>
-
-        {/* Section 7: Профессиональные навыки */}
-        <Section title="7. Профессиональные навыки" filled={form.professionalSkills.length > 0}>
           <SkillsSelector
             position={form.desiredPosition}
             selected={form.professionalSkills}
@@ -365,8 +379,8 @@ export default function CandidateAnketa() {
           />
         </Section>
 
-        {/* Section 8: Опыт работы */}
-        <Section title="8. Опыт работы" filled={!!(form.totalWorkExperience || form.lastEmployer)}>
+        {/* Section 3: Опыт работы */}
+        <Section title="3. Опыт работы" filled={!!(form.totalWorkExperience || form.lastEmployer)}>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Field label="Общий опыт работы">
               <Input value={form.totalWorkExperience} onChange={update('totalWorkExperience')} placeholder="5 лет" />
@@ -392,24 +406,13 @@ export default function CandidateAnketa() {
           </div>
         </Section>
 
-        {/* Section 9: Здоровье */}
-        <Section title="9. Здоровье" filled={!!(form.chronicDiseases && form.hasConvictions)}>
+        {/* Section 4: Состояние здоровья */}
+        <Section title="4. Состояние здоровья" filled={!!(form.chronicDiseases || form.bloodType)}>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <Field label="Хронические заболевания">
               <select
                 value={form.chronicDiseases}
                 onChange={update('chronicDiseases')}
-                className="w-full h-9 rounded-md border border-input bg-transparent px-3 text-sm"
-              >
-                <option value="">— Выберите —</option>
-                <option value="нет">Нет</option>
-                <option value="да">Да</option>
-              </select>
-            </Field>
-            <Field label="Судимости">
-              <select
-                value={form.hasConvictions}
-                onChange={update('hasConvictions')}
                 className="w-full h-9 rounded-md border border-input bg-transparent px-3 text-sm"
               >
                 <option value="">— Выберите —</option>
@@ -427,32 +430,171 @@ export default function CandidateAnketa() {
                 {BLOOD_TYPES.map((b) => <option key={b} value={b}>{b}</option>)}
               </select>
             </Field>
-            <div className="grid grid-cols-2 gap-3">
-              <Field label="Рост (см)">
-                <Input type="number" value={form.height} onChange={update('height')} placeholder="180" />
-              </Field>
-              <Field label="Вес (кг)">
-                <Input type="number" value={form.weight} onChange={update('weight')} placeholder="75" />
-              </Field>
-            </div>
+            <Field label="Рост (см)">
+              <Input type="number" value={form.height} onChange={update('height')} placeholder="180" />
+            </Field>
+            <Field label="Вес (кг)">
+              <Input type="number" value={form.weight} onChange={update('weight')} placeholder="75" />
+            </Field>
+            <Field label="Инвалидность / ограничения" className="sm:col-span-2">
+              <Textarea value={form.disabilities} onChange={update('disabilities')} rows={2} placeholder="Если нет — оставьте пустым" />
+            </Field>
+            <Field label="Дополнительные сведения о здоровье" className="sm:col-span-2">
+              <Textarea value={form.healthNotes} onChange={update('healthNotes')} rows={2} placeholder="Аллергии, ограничения по нагрузке и т.д." />
+            </Field>
           </div>
         </Section>
 
-        {/* Section 10: Документы */}
+        {/* Section 5: Семья и близкие */}
+        <Section title="5. Семья и близкие" filled={!!form.maritalStatus}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <Field label="Семейное положение">
+              <select
+                value={form.maritalStatus}
+                onChange={update('maritalStatus')}
+                className="w-full h-9 rounded-md border border-input bg-transparent px-3 text-sm"
+              >
+                <option value="">— Выберите —</option>
+                {MARITAL_STATUSES.map((m) => <option key={m} value={m}>{m}</option>)}
+              </select>
+            </Field>
+            <Field label="Количество детей">
+              <Input type="number" value={form.childrenCount} onChange={update('childrenCount')} placeholder="0" min={0} />
+            </Field>
+            <Field label="Контактное лицо (ФИО)">
+              <Input value={form.emergencyContactName} onChange={update('emergencyContactName')} placeholder="Петров Пётр Петрович" />
+            </Field>
+            <Field label="Телефон контактного лица">
+              <Input value={form.emergencyContactPhone} onChange={update('emergencyContactPhone')} placeholder="+7..." />
+            </Field>
+            <Field label="Степень родства" className="sm:col-span-2">
+              <select
+                value={form.emergencyContactRelation}
+                onChange={update('emergencyContactRelation')}
+                className="w-full h-9 rounded-md border border-input bg-transparent px-3 text-sm"
+              >
+                <option value="">— Выберите —</option>
+                {RELATIONS.map((r) => <option key={r} value={r}>{r}</option>)}
+              </select>
+            </Field>
+          </div>
+        </Section>
+
+        {/* Section 6: Воинский учёт */}
+        <Section title="6. Воинский учёт" filled={!!(form.militaryRank || form.militaryUnit)}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <Field label="Воинское звание">
+              <select
+                value={form.militaryRank}
+                onChange={update('militaryRank')}
+                className="w-full h-9 rounded-md border border-input bg-transparent px-3 text-sm"
+              >
+                <option value="">— Выберите —</option>
+                {MILITARY_RANKS.map((r) => <option key={r} value={r}>{r}</option>)}
+              </select>
+            </Field>
+            <Field label="Военная специальность (ВУС)">
+              <Input value={form.militarySpecialty} onChange={update('militarySpecialty')} placeholder="Например: 100182" />
+            </Field>
+            <Field label="Воинская часть / место службы" className="sm:col-span-2">
+              <Textarea value={form.militaryUnit} onChange={update('militaryUnit')} rows={2} placeholder="В/ч 00000, г. ..." />
+            </Field>
+          </div>
+        </Section>
+
+        {/* Section 7: Судимость */}
+        <Section title="7. Судимость" filled={!!form.hasConvictions}>
+          <div className="space-y-3">
+            <Field label="Наличие судимости" required>
+              <div className="flex flex-wrap gap-4 pt-1">
+                {CONVICTION_OPTIONS.map((opt) => (
+                  <label key={opt.value} className="flex items-center gap-2 cursor-pointer">
+                    <input
+                      type="radio"
+                      name="hasConvictions"
+                      value={opt.value}
+                      checked={form.hasConvictions === opt.value}
+                      onChange={(e) => update('hasConvictions')(e.target.value)}
+                      className="w-4 h-4 accent-orange-600"
+                    />
+                    <span className="text-sm">{opt.label}</span>
+                  </label>
+                ))}
+              </div>
+            </Field>
+            {form.hasConvictions && form.hasConvictions !== 'нет' && (
+              <Field label="Детали судимости">
+                <Textarea
+                  value={form.convictionDetails}
+                  onChange={update('convictionDetails')}
+                  rows={3}
+                  placeholder="Статья, дата, статус погашения..."
+                />
+              </Field>
+            )}
+          </div>
+        </Section>
+
+        {/* Section 8: Мотивация и ожидания */}
+        <Section title="8. Мотивация и ожидания" filled={!!(form.motivation || form.expectedSalary)}>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <Field label="Ожидаемая зарплата (руб/мес)">
+              <Input type="number" value={form.expectedSalary} onChange={update('expectedSalary')} placeholder="350000" min={0} />
+            </Field>
+            <Field label="Готов приступить с">
+              <Input type="date" value={form.readyToStartDate} onChange={update('readyToStartDate')} />
+            </Field>
+            <Field label="Мотивация участия" className="sm:col-span-2">
+              <Textarea
+                value={form.motivation}
+                onChange={update('motivation')}
+                rows={3}
+                placeholder="Почему вы хотите участвовать в программе восстановления?"
+              />
+            </Field>
+          </div>
+        </Section>
+
+        {/* Section 9: Готовность документов */}
+        <Section title="9. Готовность документов" filled={!!(form.readyToStartDate || Object.values(form.readyDocuments || {}).some(Boolean))}>
+          <p className="text-sm text-muted-foreground mb-3">Отметьте документы, которые у вас готовы:</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {READY_DOC_TYPES.map(({ key, label }) => (
+              <div key={key} className="flex items-center gap-2">
+                <Checkbox
+                  checked={!!form.readyDocuments[key]}
+                  onCheckedChange={toggleReadyDoc(key)}
+                />
+                <Label className="text-sm font-normal cursor-pointer" onClick={() => toggleReadyDoc(key)(!form.readyDocuments[key])}>
+                  {label}
+                </Label>
+              </div>
+            ))}
+          </div>
+        </Section>
+
+        {/* Section 10: Загрузка документов */}
         <Section title="10. Загрузка документов" filled={!!(files.passportPhotoUrl && files.passportRegistrationUrl && files.snilsUrl)}>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <FileUpload label="Паспорт — разворот с фото" required onChange={updateFile('passportPhotoUrl')} />
             <FileUpload label="Паспорт — страница с пропиской" required onChange={updateFile('passportRegistrationUrl')} />
             <FileUpload label="СНИЛС" required onChange={updateFile('snilsUrl')} />
-            <FileUpload label="Фото 3x4" onChange={updateFile('photoUrl')} />
+            <FileUpload label="ИНН" onChange={updateFile('innUrl')} />
+            <FileUpload label="Военный билет / приписное" onChange={updateFile('militaryIdUrl')} />
+            <FileUpload label="Водительское удостоверение" onChange={updateFile('driverLicenseUrl')} />
+            <FileUpload label="Трудовая книжка" onChange={updateFile('workBookUrl')} />
             <FileUpload label="Диплом" onChange={updateFile('diplomaUrl')} />
             <FileUpload label="Медсправка" onChange={updateFile('medicalReportUrl')} />
+            <FileUpload label="Сертификаты / допуски" onChange={updateFile('certificatesUrl')} />
           </div>
         </Section>
 
         {/* Section 11: Согласие */}
-        <Section title="11. Согласие" filled={form.consentToDataProcessing && form.consentToWorkConditions}>
+        <Section title="11. Согласие" filled={!!(form.consentToDataProcessing && form.consentToWorkConditions)}>
           <div className="space-y-3">
+            <div className="bg-slate-50 border border-slate-200 rounded-lg p-4 text-xs text-slate-700 max-h-40 overflow-y-auto whitespace-pre-line">
+              {CONSENT_TEXT_152FZ}
+            </div>
             <div className="flex items-start gap-3">
               <Checkbox
                 checked={form.consentToDataProcessing}
@@ -472,6 +614,18 @@ export default function CandidateAnketa() {
               </Label>
             </div>
           </div>
+        </Section>
+
+        {/* Section 12: Дополнительная информация */}
+        <Section title="12. Дополнительная информация" filled={true}>
+          <Field label="Дополнительные сведения" className="sm:col-span-2">
+            <Textarea
+              value={form.additionalNotes}
+              onChange={update('additionalNotes')}
+              rows={3}
+              placeholder="Любая дополнительная информация, которую хотите сообщить..."
+            />
+          </Field>
         </Section>
 
         {error && (
