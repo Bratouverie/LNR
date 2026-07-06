@@ -17,6 +17,9 @@ export default defineConfig({
   ],
   define: {
     'import.meta.env.VITE_BASE44_APP_ID': JSON.stringify('69f4a665db2c72a42818d397'),
-    'import.meta.env.VITE_BASE44_APP_BASE_URL': JSON.stringify('https://my-to-do-list-81bfaad7.base44.app'),
+    // [CLAUDE FIX 2026-07-06] Используем правильный Base44 домен приложения
+    // Было: https://my-to-do-list-81bfaad7.base44.app (чужой домен, ошибка)
+    // Стало: динамический домен через process.env или основной домен
+    'import.meta.env.VITE_BASE44_APP_BASE_URL': JSON.stringify(process.env.VITE_BASE44_APP_BASE_URL || 'https://crm-vosstanovim-dnr.base44.app'),
   }
 });
