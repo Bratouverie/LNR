@@ -1,6 +1,16 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.31';
 
 Deno.serve(async (req) => {
+  const corsHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+    'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+  };
+
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { status: 204, headers: corsHeaders });
+  }
+
   try {
     const base44 = createClientFromRequest(req);
 
@@ -21,8 +31,12 @@ Deno.serve(async (req) => {
     return Response.json({
       reviews: sliced,
       total: reviews.length,
-    });
+    }, { headers: corsHeaders });
   } catch (error) {
-    return Response.json({ error: error.message }, { status: 500 });
+    return Response.json({
+      reviews: [],
+      total: 0,
+      error: error.message,
+    }, { headers: corsHeaders });
   }
 });
