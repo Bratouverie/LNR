@@ -77,6 +77,7 @@ const AuthenticatedApp = () => {
         <Route path="assembly-points" element={<CrmAssemblyPoints />} />
         <Route path="integration-queue" element={<CrmIntegrationQueue />} />
         <Route path="candidate/:id" element={<CrmCandidateDetail />} />
+        <Route path="admin/reviews" element={<AdminReviews />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>
