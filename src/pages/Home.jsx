@@ -29,7 +29,7 @@ import ApplicationModal from "../components/ApplicationModal";
 import CallbackModal from "../components/CallbackModal";
 import StickyCommandBar from "../components/StickyCommandBar";
 import VisitorCounter from "../components/VisitorCounter";
-import LiveChat from "../components/LiveChat";
+import MariaChatWidget from "../components/MariaChatWidget";
 
 export default function Home() {
   const [appModalOpen, setAppModalOpen] = useState(false);
@@ -143,7 +143,7 @@ export default function Home() {
       {/* Sticky elements */}
       <StickyCommandBar onOpenApplication={() => openApplication("")} />
       <VisitorCounter />
-      <LiveChat />
+      <MariaChatWidget />
 
       {/* Modals */}
       <ApplicationModal
