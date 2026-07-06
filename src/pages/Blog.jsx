@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, Clock, ArrowRight, TrendingUp, Phone } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { BLOG_ARTICLES } from "@/lib/blogData";
-import LiveChat from "@/components/LiveChat";
+import MariaChatWidget from "@/components/MariaChatWidget";
 import VisitorCounter from "@/components/VisitorCounter";
+import ApplicationModal from "@/components/ApplicationModal";
+import { getImageUrl } from "@/lib/imageUtils";
 
 const CATEGORY_COLORS = {
   "Вакансии": "bg-blue-100 text-blue-700",
@@ -18,6 +20,7 @@ const CATEGORY_COLORS = {
 export default function Blog() {
   const [articles, setArticles] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [appModalOpen, setAppModalOpen] = useState(false);
 
   useEffect(() => {
     loadArticles();
@@ -78,7 +81,7 @@ export default function Blog() {
           <div className="flex flex-wrap gap-6 mt-8">
             {[
               { label: "Зарплата от", value: "300 000 ₽/мес" },
-              { label: "Подъёмные", value: "2 500 000 ₽" },
+              { label: "Единовременная выплата", value: "625 000 ₽" },
               { label: "Страховка", value: "до 14,7 млн ₽" },
             ].map((s) => (
               <div key={s.label} className="bg-white/10 rounded-xl px-4 py-2.5 text-center">
@@ -98,8 +101,11 @@ export default function Blog() {
             {featured.image && (
               <div className="h-56 sm:h-auto overflow-hidden">
                 <img
-                  src={featured.image}
+                  src={getImageUrl(featured.image, 'large')}
+                  srcSet={`${getImageUrl(featured.image, 'small')} 400w, ${getImageUrl(featured.image, 'medium')} 800w, ${getImageUrl(featured.image, 'large')} 1200w`}
+                  sizes="(max-width: 640px) 100vw, 50vw"
                   alt={featured.title}
+                  loading="lazy"
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
@@ -150,8 +156,11 @@ export default function Blog() {
               {article.image && (
                 <div className="h-44 overflow-hidden">
                   <img
-                    src={article.image}
+                    src={getImageUrl(article.image, 'medium')}
+                    srcSet={`${getImageUrl(article.image, 'small')} 400w, ${getImageUrl(article.image, 'medium')} 800w`}
+                    sizes="(max-width: 640px) 100vw, 33vw"
                     alt={article.title}
+                    loading="lazy"
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   />
                 </div>
@@ -204,18 +213,19 @@ export default function Blog() {
               <Phone className="h-4 w-4" />
               8-800-222-84-63
             </a>
-            <Link
-              to="/"
+            <button
+              onClick={() => setAppModalOpen(true)}
               className="flex items-center justify-center bg-white/10 hover:bg-white/20 text-white font-inter font-semibold py-3 px-6 rounded-xl transition-colors text-sm"
             >
-              Все вакансии
-            </Link>
+              Оставить заявку
+            </button>
           </div>
         </div>
       </div>
 
-      <LiveChat />
+      <MariaChatWidget />
       <VisitorCounter />
+      <ApplicationModal open={appModalOpen} onClose={() => setAppModalOpen(false)} />
     </div>
   );
 }

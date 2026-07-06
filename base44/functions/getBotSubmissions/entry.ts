@@ -1,16 +1,10 @@
 import { createClientFromRequest } from 'npm:@base44/sdk@0.8.31';
 
 // ═══════════════════════════════════════════════════════════════
-// saveBlogPost — CRUD for BlogPost via CRM JWT auth (asServiceRole)
+// getBotSubmissions — Returns BotSubmission records via CRM JWT auth
 //
-// Body: {
-//   token: string,            // CRM JWT
-//   action: 'save'|'delete'|'get'|'list',
-//   id?: string,              // for save (update), delete, get
-//   data?: object,            // for save (create/update payload)
-//   limit?: number,           // for list (default 100)
-// }
-// Returns: { success, post } | { success, posts } | { success }
+// Body: { token: string, status?: string, limit?: number }
+// Returns: { success, submissions }
 // ═══════════════════════════════════════════════════════════════
 
 const encoder = new TextEncoder();
@@ -47,9 +41,8 @@ Deno.serve(async (req) => {
       return Response.json({ error: 'Invalid JSON body' }, { status: 400 });
     }
 
-    const { token, action, id, data, limit } = body;
+    const { token, status, limit, action, id } = body;
     if (!token) return Response.json({ error: 'token is required' }, { status: 401 });
-    if (!action) return Response.json({ error: 'action is required' }, { status: 400 });
 
     const payload = await verifyJWT(token, Deno.env.get('JWT_SECRET'));
     if (!payload) return Response.json({ error: 'Invalid or expired token' }, { status: 401 });
@@ -58,46 +51,24 @@ Deno.serve(async (req) => {
     if (!caller || !caller.isActive || caller.isBlocked) {
       return Response.json({ error: 'Account inactive or blocked' }, { status: 403 });
     }
-    if (caller.role !== 'super_admin') {
-      return Response.json({ error: 'Insufficient permissions' }, { status: 403 });
-    }
 
-    if (action === 'list') {
-      const posts = await base44.asServiceRole.entities.BlogPost.list('-date', limit || 100);
-      // Strip heavy content field from list results for faster loading
-      const light = posts.map(p => {
-        const { content, chartData, ...rest } = p;
-        return rest;
-      });
-      return Response.json({ success: true, posts: light });
+    // Handle assign/delete actions
+    if (action === 'assign') {
+      if (!id) return Response.json({ error: 'id is required' }, { status: 400 });
+      await base44.asServiceRole.entities.BotSubmission.update(id, { status: 'manager_assigned', managerId: payload.managerId });
+      return Response.json({ success: true });
     }
-
-    if (action === 'get') {
-      if (!id) return Response.json({ error: 'id is required for get' }, { status: 400 });
-      const post = await base44.asServiceRole.entities.BlogPost.get(id);
-      return Response.json({ success: true, post });
-    }
-
     if (action === 'delete') {
-      if (!id) return Response.json({ error: 'id is required for delete' }, { status: 400 });
-      await base44.asServiceRole.entities.BlogPost.delete(id);
+      if (!id) return Response.json({ error: 'id is required' }, { status: 400 });
+      await base44.asServiceRole.entities.BotSubmission.delete(id);
       return Response.json({ success: true });
     }
 
-    if (action === 'save') {
-      if (!data || !data.title || !data.slug || !data.content) {
-        return Response.json({ error: 'title, slug, content are required' }, { status: 400 });
-      }
-      let post;
-      if (id) {
-        post = await base44.asServiceRole.entities.BlogPost.update(id, data);
-      } else {
-        post = await base44.asServiceRole.entities.BlogPost.create(data);
-      }
-      return Response.json({ success: true, post });
-    }
+    // Default: list
+    const filter = status ? { status } : {};
+    const submissions = await base44.asServiceRole.entities.BotSubmission.filter(filter, '-created_date', limit || 100);
 
-    return Response.json({ error: 'Unknown action: ' + action }, { status: 400 });
+    return Response.json({ success: true, submissions });
   } catch (error) {
     return Response.json({ error: error.message }, { status: 500 });
   }

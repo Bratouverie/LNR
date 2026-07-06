@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
-import LiveChat from "@/components/LiveChat";
+import MariaChatWidget from "@/components/MariaChatWidget";
 import VisitorCounter from "@/components/VisitorCounter";
+import ApplicationModal from "@/components/ApplicationModal";
+import { getImageUrl } from "@/lib/imageUtils";
 import { ArrowLeft, Clock, Tag, Phone, ChevronRight, Calendar, User, TrendingUp } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
@@ -16,6 +18,7 @@ export default function BlogArticle() {
   const [related, setRelated] = useState([]);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
+  const [appModalOpen, setAppModalOpen] = useState(false);
 
   useEffect(() => {
     loadArticle();
@@ -135,15 +138,19 @@ export default function BlogArticle() {
       {article.image && (
         <div className="w-full h-56 sm:h-72 overflow-hidden">
           <img
-            src={article.image}
+            src={getImageUrl(article.image, 'large')}
+            srcSet={`${getImageUrl(article.image, 'small')} 400w, ${getImageUrl(article.image, 'medium')} 800w, ${getImageUrl(article.image, 'large')} 1200w`}
+            sizes="100vw"
             alt={article.title}
+            loading="lazy"
             className="w-full h-full object-cover"
           />
         </div>
       )}
 
       <VisitorCounter />
-      <LiveChat />
+      <MariaChatWidget />
+      <ApplicationModal open={appModalOpen} onClose={() => setAppModalOpen(false)} />
       {/* Body */}
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="grid lg:grid-cols-3 gap-10">
@@ -151,15 +158,15 @@ export default function BlogArticle() {
           {/* Main content */}
           <article className="lg:col-span-2 space-y-10">
 
-            {/* Chart / infographic block */}
-            {article.chartData && article.chartData.type !== "timeline" && (
-              <ArticleChart data={article.chartData} />
-            )}
-
-            {/* Timeline chart */}
-            {article.chartData && article.chartData.type === "timeline" && (
-              <ArticleTimeline data={article.chartData} />
-            )}
+            {/* Chart / infographic block — supports array of variants (random pick) */}
+            {(() => {
+              const cd = article.chartData;
+              if (!cd) return null;
+              const chart = Array.isArray(cd) ? cd[Math.floor(Math.random() * cd.length)] : cd;
+              if (!chart || !chart.type) return null;
+              if (chart.type === "timeline") return <ArticleTimeline data={chart} />;
+              return <ArticleChart data={chart} />;
+            })()}
 
             {/* Article text */}
             <div className="prose-custom">
@@ -271,8 +278,8 @@ export default function BlogArticle() {
                   <span className="font-bold text-accent">300 000 ₽/мес</span>
                 </div>
                 <div className="flex justify-between text-xs font-inter">
-                  <span className="text-white/60">Подъёмные</span>
-                  <span className="font-bold text-accent">2 500 000 ₽</span>
+                  <span className="text-white/60">Единовременная выплата</span>
+                  <span className="font-bold text-accent">625 000 ₽</span>
                 </div>
                 <div className="flex justify-between text-xs font-inter">
                   <span className="text-white/60">Страховка</span>
@@ -290,12 +297,12 @@ export default function BlogArticle() {
                 <Phone className="h-4 w-4" />
                 8-800-222-84-63
               </a>
-              <Link
-                to="/"
+              <button
+                onClick={() => setAppModalOpen(true)}
                 className="flex items-center justify-center w-full bg-white/10 hover:bg-white/20 text-white font-inter font-semibold py-3 rounded-xl transition-colors text-sm"
               >
                 Оставить заявку онлайн
-              </Link>
+              </button>
             </div>
 
             {/* Key facts */}
@@ -303,7 +310,7 @@ export default function BlogArticle() {
               <h3 className="font-inter font-bold text-foreground mb-4 text-sm">📌 Ключевые факты</h3>
               <div className="space-y-3">
                 {[
-                  { label: "Срок вахты", value: "1 год" },
+                  { label: "Срок вахты", value: "3 месяца" },
                   { label: "Место работы", value: "Мариуполь, Луганск, Макеевка, Алчевск" },
                   { label: "Формат занятости", value: "Официальный трудовой договор" },
                   { label: "Выплата зарплаты", value: "2 раза в месяц" },
@@ -326,7 +333,7 @@ export default function BlogArticle() {
                     <Link key={r.id || r.slug} to={`/blog/${r.slug}`} className="block group">
                       {r.image && (
                         <div className="w-full h-24 rounded-lg overflow-hidden mb-2">
-                          <img src={r.image} alt={r.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                          <img src={getImageUrl(r.image, 'small')} alt={r.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                         </div>
                       )}
                       <p className="font-inter text-sm text-foreground group-hover:text-accent transition-colors leading-snug font-medium">

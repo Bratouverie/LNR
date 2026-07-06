@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { Loader2, Save, Sparkles, ArrowLeft, Upload, Eye, Pencil, Image as ImageIcon, Wand2, BarChart3 } from 'lucide-react';
+import { Loader2, Save, Sparkles, ArrowLeft, Upload, Eye, Pencil, Image as ImageIcon, Wand2, BarChart3, FileText } from 'lucide-react';
 
 export default function BlogEditor() {
   const navigate = useNavigate();
@@ -21,6 +21,7 @@ export default function BlogEditor() {
   const [coverLoading, setCoverLoading] = useState(false);
   const [styleLoading, setStyleLoading] = useState(false);
   const [chartLoading, setChartLoading] = useState(false);
+  const [articleLoading, setArticleLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [view, setView] = useState('split');
 
@@ -199,47 +200,91 @@ ${form.content}
     setChartLoading(true);
     try {
       const res = await base44.integrations.Core.InvokeLLM({
-        prompt: `Проанализируй статью и создай данные для инфографики (графика).
+        prompt: `На основе статьи создай 4 РАЗНЫХ варианта инфографики. Каждый — уникальный тип и данные.
 
+ЗАГОЛОВОК: ${form.title}
+КАТЕГОРИЯ: ${form.category}
 КОНТЕНТ:
 ${form.content}
 
-Верни JSON для столбчатой диаграммы со зарплатами или сравнением показателей:
-{
-  "type": "bar",
-  "title": "Заголовок графика",
-  "data": [
-    {"label": "Специальность или показатель", "value": число}
-  ]
-}
+Создай 4 РАЗНЫХ графика:
+1. bar — сравнение зарплат по специальностям (используй name/value)
+2. pie — структура дохода (зарплата, единовременная выплата 625000, бонусы)
+3. bar — экономия на бесплатных льготах (жильё, питание, проезд, страховка)
+4. bar — страховые выплаты по случаям (лёгкая травма, тяжёлая, инвалидность, гибель)
 
-Используй реальные данные из статьи. 4-8 позиций.`,
+Используй ТОЛЬКО реальные данные из статьи. Для pie укажи поле color.
+
+Верни JSON:
+{
+  "variants": [
+    {"type": "bar", "title": "...", "data": [{"name": "...", "value": число}]},
+    {"type": "pie", "title": "...", "data": [{"name": "...", "value": число, "color": "#hex"}]},
+    {"type": "bar", "title": "...", "data": [{"name": "...", "value": число}]},
+    {"type": "bar", "title": "...", "data": [{"name": "...", "value": число}]}
+  ]
+}`,
         response_json_schema: {
           type: 'object',
           properties: {
-            type: { type: 'string' },
-            title: { type: 'string' },
-            data: {
+            variants: {
               type: 'array',
               items: {
                 type: 'object',
                 properties: {
-                  label: { type: 'string' },
-                  value: { type: 'number' },
+                  type: { type: 'string' },
+                  title: { type: 'string' },
+                  data: { type: 'array' },
                 },
               },
             },
           },
         },
       });
-      if (res && res.data) {
-        setForm((f) => ({ ...f, chartData: res }));
-        setChartText(JSON.stringify(res, null, 2));
+      if (res && res.variants && res.variants.length > 0) {
+        setForm((f) => ({ ...f, chartData: res.variants }));
+        setChartText(JSON.stringify(res.variants, null, 2));
       }
     } catch (err) {
       alert('Ошибка генерации инфографики: ' + (err.response?.data?.error || err.message));
     } finally {
       setChartLoading(false);
+    }
+  };
+
+  const generateFullArticle = async () => {
+    setArticleLoading(true);
+    try {
+      const res = await base44.functions.invoke('generateBlogArticle', {
+        token: getToken(),
+        keyword: form.title || undefined,
+        category: form.category || undefined,
+      });
+      const article = res.data?.article || res.data;
+      if (!article || !article.content) {
+        throw new Error('Не удалось сгенерировать статью');
+      }
+      setForm((f) => ({
+        ...f,
+        title: article.title || f.title,
+        slug: article.slug || f.slug,
+        description: article.description || f.description,
+        category: article.category || f.category,
+        content: article.content || f.content,
+        keywords: article.keywords || f.keywords,
+        seoTitle: article.seoTitle || f.seoTitle,
+        seoDescription: article.seoDescription || f.seoDescription,
+        readTime: article.readTime || f.readTime,
+        chartData: (article.chartVariants && article.chartVariants.length > 0) ? article.chartVariants : f.chartData,
+      }));
+      setKeywordsText((article.keywords || []).join(', '));
+      if (article.chartVariants && article.chartVariants.length > 0) {
+        setChartText(JSON.stringify(article.chartVariants, null, 2));
+      }
+    } catch (err) {
+      alert('Ошибка генерации статьи: ' + (err.response?.data?.error || err.data?.error || err.message));
+    } finally {
+      setArticleLoading(false);
     }
   };
 
@@ -283,6 +328,7 @@ ${form.content}
   }
 
   const aiBtn = 'w-full bg-accent hover:bg-accent/90 text-white';
+  const aiBusy = seoLoading || coverLoading || styleLoading || chartLoading || articleLoading;
 
   return (
     <div>
@@ -386,24 +432,30 @@ ${form.content}
               <span className="font-semibold text-sm">ИИ-инструменты</span>
             </div>
             <p className="text-xs text-muted-foreground">
-              Автоматизация: SEO, стиль, обложка, инфографика.
+              Полный цикл: генерация статьи, SEO, стиль, обложка, инфографика.
             </p>
-            <Button onClick={optimizeSeo} disabled={seoLoading || coverLoading || styleLoading || chartLoading} className={aiBtn} size="sm">
+            <Button onClick={generateFullArticle} disabled={aiBusy} className="w-full bg-primary hover:bg-primary/90 text-primary-foreground" size="sm">
+              {articleLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <FileText className="w-4 h-4" />}
+              Генерация статьи (v3.1)
+            </Button>
+            <div className="border-t border-accent/20 pt-2 space-y-2">
+            <Button onClick={optimizeSeo} disabled={aiBusy} className={aiBtn} size="sm">
               {seoLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
               SEO-оптимизация
             </Button>
-            <Button onClick={improveStyle} disabled={seoLoading || coverLoading || styleLoading || chartLoading} className={aiBtn} size="sm">
+            <Button onClick={improveStyle} disabled={aiBusy} className={aiBtn} size="sm">
               {styleLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wand2 className="w-4 h-4" />}
               Стиль и форматирование
             </Button>
-            <Button onClick={generateCover} disabled={seoLoading || coverLoading || styleLoading || chartLoading} className={aiBtn} size="sm">
+            <Button onClick={generateCover} disabled={aiBusy} className={aiBtn} size="sm">
               {coverLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ImageIcon className="w-4 h-4" />}
               Сгенерировать обложку
             </Button>
-            <Button onClick={generateInfographic} disabled={seoLoading || coverLoading || styleLoading || chartLoading} className={aiBtn} size="sm">
+            <Button onClick={generateInfographic} disabled={aiBusy} className={aiBtn} size="sm">
               {chartLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <BarChart3 className="w-4 h-4" />}
-              Создать инфографику
+              Создать инфографику (4 варианта)
             </Button>
+            </div>
           </div>
 
           {/* Image */}

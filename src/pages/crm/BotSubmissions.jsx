@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { base44 } from "@/api/base44Client";
+import { getToken } from "@/lib/crmAuth";
 import { Button } from "@/components/ui/button";
 import { Bot, Phone, User, Briefcase, Clock, CheckCircle, Trash2, Loader2 } from "lucide-react";
 
@@ -14,8 +15,10 @@ export default function CrmBotSubmissions() {
   const loadSubmissions = async () => {
     setLoading(true);
     try {
-      const data = await base44.entities.BotSubmission.list("-created_date", 100);
-      setSubmissions(data);
+      const res = await base44.functions.invoke("getBotSubmissions", {
+        token: getToken(), limit: 100,
+      });
+      setSubmissions(res.data?.submissions || []);
     } catch (err) {
       console.error("Failed to load submissions:", err);
     } finally {
@@ -25,7 +28,9 @@ export default function CrmBotSubmissions() {
 
   const handleAssign = async (id) => {
     try {
-      await base44.entities.BotSubmission.update(id, { status: "manager_assigned" });
+      await base44.functions.invoke("getBotSubmissions", {
+        token: getToken(), action: "assign", id,
+      });
       loadSubmissions();
     } catch (err) {
       console.error("Failed to update:", err);
@@ -34,7 +39,9 @@ export default function CrmBotSubmissions() {
 
   const handleDelete = async (id) => {
     try {
-      await base44.entities.BotSubmission.delete(id);
+      await base44.functions.invoke("getBotSubmissions", {
+        token: getToken(), action: "delete", id,
+      });
       loadSubmissions();
     } catch (err) {
       console.error("Failed to delete:", err);
