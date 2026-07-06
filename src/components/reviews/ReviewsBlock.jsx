@@ -1,39 +1,27 @@
 import { useState, useEffect, useCallback } from "react";
 import { base44 } from "@/api/base44Client";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Plus, Loader2, MessageSquare, AlertCircle } from "lucide-react";
+import { X, Plus, Loader2, MessageSquare } from "lucide-react";
 import ReviewCard from "./ReviewCard";
 import ReviewModal from "./ReviewModal";
 import ReviewForm from "./ReviewForm";
-import { getCachedReviews, setCachedReviews, clearReviewCache } from "@/lib/reviewCache";
 
 const PAGE_SIZE = 9;
 
 export default function ReviewsBlock() {
   const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [selectedReview, setSelectedReview] = useState(null);
   const [formOpen, setFormOpen] = useState(false);
 
   const fetchReviews = useCallback(async () => {
-    const cached = getCachedReviews();
-    if (cached) {
-      setReviews(cached);
-      setLoading(false);
-    }
-
     try {
       const res = await base44.functions.invoke("getPublicReviews", { limit: 100, offset: 0 });
       const data = res.data?.reviews || [];
       setReviews(data);
-      setCachedReviews(data);
-      setError(null);
     } catch (err) {
-      if (!cached) {
-        setError("Не удалось загрузить отзывы. Попробуйте позже.");
-      }
+      setReviews([]);
     } finally {
       setLoading(false);
     }
@@ -45,7 +33,6 @@ export default function ReviewsBlock() {
 
   const handleFormSuccess = () => {
     setFormOpen(false);
-    clearReviewCache();
     setTimeout(() => fetchReviews(), 1500);
   };
 
@@ -66,20 +53,6 @@ export default function ReviewsBlock() {
           </p>
         </div>
 
-        {/* Error */}
-        {error && (
-          <div className="flex flex-col items-center gap-3 py-12">
-            <AlertCircle className="h-10 w-10 text-muted-foreground" />
-            <p className="font-inter text-sm text-muted-foreground">{error}</p>
-            <button
-              onClick={fetchReviews}
-              className="font-inter text-sm text-accent hover:underline"
-            >
-              Попробовать снова
-            </button>
-          </div>
-        )}
-
         {/* Loading */}
         {loading && (
           <div className="flex justify-center py-12">
@@ -88,7 +61,7 @@ export default function ReviewsBlock() {
         )}
 
         {/* Grid */}
-        {!loading && !error && (
+        {!loading && (
           <>
             {reviews.length === 0 ? (
               <div className="text-center py-12">
