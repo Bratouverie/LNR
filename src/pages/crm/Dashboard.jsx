@@ -6,6 +6,8 @@ import CandidateCard from '@/components/crm/CandidateCard';
 import TransitionDialog from '@/components/crm/TransitionDialog';
 import { Button } from '@/components/ui/button';
 import { Loader2, RefreshCw, Users } from 'lucide-react';
+import CreateCandidateDialog from '@/components/crm/CreateCandidateDialog';
+import { isSuperAdmin } from '@/lib/crmAuth';
 
 export default function Dashboard() {
   const [candidates, setCandidates] = useState([]);
@@ -54,9 +56,12 @@ export default function Dashboard() {
             {admin ? 'Все кандидаты' : 'Ваши кандидаты'} — всего: {candidates.length}
           </p>
         </div>
-        <Button variant="outline" size="sm" onClick={fetchCandidates} disabled={loading}>
-          <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} /> Обновить
-        </Button>
+        <div className="flex gap-2">
+          {isSuperAdmin() && <CreateCandidateDialog onCreated={fetchCandidates} />}
+          <Button variant="outline" size="sm" onClick={fetchCandidates} disabled={loading}>
+            <RefreshCw className={`w-4 h-4 ${loading ? 'animate-spin' : ''}`} /> Обновить
+          </Button>
+        </div>
       </div>
 
       <div className="flex flex-wrap gap-2">

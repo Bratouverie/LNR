@@ -16,6 +16,9 @@ import About from './pages/About';
 import Contact from './pages/Contact';
 import Calculator from './pages/Calculator';
 import AdminReviews from './pages/AdminReviews';
+import CandidateAnketa from './pages/CandidateAnketa';
+import SbReview from './pages/SbReview';
+import CandidateReview from './pages/CandidateReview';
 import CrmLogin from './pages/crm/Login';
 import CrmLayout from '@/components/crm/CrmLayout';
 import CrmDashboard from './pages/crm/Dashboard';
@@ -63,6 +66,9 @@ const AuthenticatedApp = () => {
       <Route path="/contact" element={<Contact />} />
       <Route path="/calculator" element={<Calculator />} />
       <Route path="/admin/reviews" element={<AdminReviews />} />
+      <Route path="/candidate-anketa" element={<CandidateAnketa />} />
+      <Route path="/sb-review" element={<SbReview />} />
+      <Route path="/candidate-review" element={<CandidateReview />} />
       <Route path="/crm/login" element={<CrmLogin />} />
       <Route path="/crm" element={<CrmLayout />}>
         <Route path="dashboard" element={<CrmDashboard />} />
@@ -71,6 +77,7 @@ const AuthenticatedApp = () => {
         <Route path="assembly-points" element={<CrmAssemblyPoints />} />
         <Route path="integration-queue" element={<CrmIntegrationQueue />} />
         <Route path="candidate/:id" element={<CrmCandidateDetail />} />
+        <Route path="admin/reviews" element={<AdminReviews />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
     </Routes>
