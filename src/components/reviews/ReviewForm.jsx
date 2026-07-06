@@ -75,12 +75,11 @@ export default function ReviewForm({ onClose, onSuccess }) {
     setSubmitError(null);
 
     try {
-      // Upload photo
-      const uploadRes = await base44.integrations.Core.UploadFile({ file: photoFile });
+      // Convert photo to base64 — sent to submitReview which uploads via service role
+      const photoBase64 = await fileToBase64(photoFile);
 
-      // Submit review
       const response = await base44.functions.invoke("submitReview", {
-        photo: uploadRes.file_url,
+        photoBase64,
         name: formData.name,
         position: formData.position,
         city: formData.city,
@@ -102,6 +101,15 @@ export default function ReviewForm({ onClose, onSuccess }) {
     } finally {
       setSubmitting(false);
     }
+  };
+
+  const fileToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result);
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
   };
 
   if (success) {
