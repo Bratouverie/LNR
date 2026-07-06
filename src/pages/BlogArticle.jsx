@@ -1,18 +1,84 @@
+import { useState, useEffect } from "react";
 import { useParams, Link } from "react-router-dom";
 import LiveChat from "@/components/LiveChat";
 import VisitorCounter from "@/components/VisitorCounter";
 import { ArrowLeft, Clock, Tag, Phone, ChevronRight, Calendar, User, TrendingUp } from "lucide-react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
+import { base44 } from "@/api/base44Client";
 import { BLOG_ARTICLES } from "@/lib/blogData";
 import ArticleChart from "@/components/blog/ArticleChart";
 import ArticleTimeline from "@/components/blog/ArticleTimeline";
 
 export default function BlogArticle() {
   const { slug } = useParams();
-  const article = BLOG_ARTICLES.find((a) => a.slug === slug);
+  const [article, setArticle] = useState(null);
+  const [related, setRelated] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [notFound, setNotFound] = useState(false);
 
-  if (!article) {
+  useEffect(() => {
+    loadArticle();
+  }, [slug]);
+
+  const loadArticle = async () => {
+    setLoading(true);
+    setNotFound(false);
+    try {
+      const posts = await base44.entities.BlogPost.filter({ slug, status: "published" }, "-date", 1);
+      if (posts && posts.length > 0) {
+        setArticle(posts[0]);
+        try {
+          const all = await base44.entities.BlogPost.filter({ status: "published" }, "-date", 4);
+          setRelated(all.filter((p) => p.id !== posts[0].id).slice(0, 3));
+        } catch {
+          setRelated([]);
+        }
+      } else {
+        setNotFound(true);
+      }
+    } catch (err) {
+      // Fallback to static data
+      const staticArticle = BLOG_ARTICLES.find((a) => a.slug === slug);
+      if (staticArticle) {
+        setArticle(staticArticle);
+        setRelated(BLOG_ARTICLES.filter((a) => a.id !== staticArticle.id).slice(0, 3));
+      } else {
+        setNotFound(true);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // SEO: update document title
+  useEffect(() => {
+    if (article) {
+      document.title = article.seoTitle || `${article.title} — Восстановим ДНР`;
+      if (article.seoDescription || article.description) {
+        let meta = document.querySelector('meta[name="description"]');
+        if (!meta) {
+          meta = document.createElement("meta");
+          meta.setAttribute("name", "description");
+          document.head.appendChild(meta);
+        }
+        meta.setAttribute("content", article.seoDescription || article.description);
+      }
+    }
+    return () => {
+      document.title = "Восстановим ДНР — Работа на восстановлении ЛНР и ДНР";
+    };
+  }, [article]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="w-8 h-8 border-4 border-slate-200 border-t-accent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (notFound || !article) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-4">
         <p className="text-muted-foreground font-inter">Статья не найдена</p>
@@ -20,8 +86,6 @@ export default function BlogArticle() {
       </div>
     );
   }
-
-  const related = BLOG_ARTICLES.filter((a) => a.id !== article.id).slice(0, 3);
 
   return (
     <div className="min-h-screen bg-background">
@@ -59,10 +123,10 @@ export default function BlogArticle() {
           </div>
 
           <h1 className="text-2xl sm:text-4xl lg:text-5xl font-inter font-black text-white tracking-tight leading-tight max-w-4xl mb-4">
-            {article.title}
+            {article.seoTitle || article.title}
           </h1>
           <p className="text-white/70 font-inter text-base max-w-3xl leading-relaxed">
-            {article.description}
+            {article.seoDescription || article.description}
           </p>
         </div>
       </div>
@@ -166,15 +230,17 @@ export default function BlogArticle() {
             </div>
 
             {/* Tags */}
-            <div className="pt-6 border-t border-border">
-              <div className="flex flex-wrap gap-2">
-                {article.keywords.map((kw) => (
-                  <span key={kw} className="text-xs font-inter text-muted-foreground bg-secondary px-3 py-1.5 rounded-full hover:bg-secondary/80 transition-colors">
-                    #{kw.replace(/\s+/g, "_")}
-                  </span>
-                ))}
+            {article.keywords && article.keywords.length > 0 && (
+              <div className="pt-6 border-t border-border">
+                <div className="flex flex-wrap gap-2">
+                  {article.keywords.map((kw) => (
+                    <span key={kw} className="text-xs font-inter text-muted-foreground bg-secondary px-3 py-1.5 rounded-full hover:bg-secondary/80 transition-colors">
+                      #{kw.replace(/\s+/g, "_")}
+                    </span>
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
 
             {/* Author / source block */}
             <div className="bg-card border border-border rounded-2xl p-5 flex items-start gap-4">
@@ -257,7 +323,7 @@ export default function BlogArticle() {
                 <h3 className="font-inter font-bold text-foreground mb-4 text-sm">Читайте также</h3>
                 <div className="space-y-4">
                   {related.map((r) => (
-                    <Link key={r.id} to={`/blog/${r.slug}`} className="block group">
+                    <Link key={r.id || r.slug} to={`/blog/${r.slug}`} className="block group">
                       {r.image && (
                         <div className="w-full h-24 rounded-lg overflow-hidden mb-2">
                           <img src={r.image} alt={r.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />

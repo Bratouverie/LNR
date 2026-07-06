@@ -1,5 +1,7 @@
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-import { ArrowLeft, Clock, Tag, ArrowRight, TrendingUp, Phone } from "lucide-react";
+import { ArrowLeft, Clock, ArrowRight, TrendingUp, Phone } from "lucide-react";
+import { base44 } from "@/api/base44Client";
 import { BLOG_ARTICLES } from "@/lib/blogData";
 import LiveChat from "@/components/LiveChat";
 import VisitorCounter from "@/components/VisitorCounter";
@@ -14,8 +16,43 @@ const CATEGORY_COLORS = {
 };
 
 export default function Blog() {
-  const featured = BLOG_ARTICLES[0];
-  const rest = BLOG_ARTICLES.slice(1);
+  const [articles, setArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    loadArticles();
+  }, []);
+
+  const loadArticles = async () => {
+    try {
+      const data = await base44.entities.BlogPost.filter({ status: "published" }, "-date", 50);
+      setArticles(data && data.length > 0 ? data : BLOG_ARTICLES);
+    } catch (err) {
+      setArticles(BLOG_ARTICLES);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="w-8 h-8 border-4 border-slate-200 border-t-accent rounded-full animate-spin" />
+      </div>
+    );
+  }
+
+  if (articles.length === 0) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4 bg-background">
+        <p className="text-muted-foreground font-inter">Статей пока нет</p>
+        <Link to="/" className="text-accent hover:underline font-inter">← На главную</Link>
+      </div>
+    );
+  }
+
+  const featured = articles[0];
+  const rest = articles.slice(1);
 
   return (
     <div className="min-h-screen bg-background">
@@ -105,7 +142,7 @@ export default function Blog() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {rest.map((article) => (
             <Link
-              key={article.id}
+              key={article.id || article.slug}
               to={`/blog/${article.slug}`}
               className="group bg-card border border-border rounded-2xl overflow-hidden hover:border-accent/30 hover:shadow-lg transition-all duration-300 flex flex-col"
             >
@@ -176,6 +213,9 @@ export default function Blog() {
           </div>
         </div>
       </div>
+
+      <LiveChat />
+      <VisitorCounter />
     </div>
   );
 }
