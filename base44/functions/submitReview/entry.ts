@@ -53,6 +53,15 @@ Deno.serve(async (req) => {
       ipAddress: ip
     });
 
+    await base44.asServiceRole.entities.AuditLog.create({
+      actor: 'public_form',
+      action: 'review_submitted',
+      resource: `review:${review.id}`,
+      statusCode: 200,
+      ipAddress: ip,
+      details: { name, position, city, stars },
+    });
+
     return Response.json({
       success: true,
       id: review.id,

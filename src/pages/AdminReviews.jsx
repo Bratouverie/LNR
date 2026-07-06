@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { base44 } from '@/api/base44Client';
 import { getToken } from '@/lib/crmAuth';
-import { Check, X, Trash2, Loader2, Search, Star, AlertCircle } from 'lucide-react';
+import { Check, X, Trash2, Loader2, Search, Star, AlertCircle, Plus } from 'lucide-react';
 import ReviewStars from '@/components/reviews/ReviewStars';
 
 const TABS = [
@@ -28,6 +28,37 @@ export default function AdminReviews() {
   const [rejectReason, setRejectReason] = useState('spam');
   const [rejectLoading, setRejectLoading] = useState(false);
   const token = getToken();
+
+  const handleCreateTest = async () => {
+    setActionLoading((p) => ({ ...p, test: true }));
+    setError('');
+    try {
+      const names = ['Иван Петров', 'Анна Сидорова', 'Сергей Иванов', 'Мария Кузнецова', 'Дмитрий Соколов'];
+      const cities = ['Донецк', 'Мариуполь', 'Луганск', 'Макеевка', 'Горловка'];
+      const positions = ['Разнорабочий', 'Водитель', 'Сварщик', 'Электрик', 'Прораб'];
+      const texts = [
+        'Отличная программа! Спасибо за возможность заработка и восстановления.',
+        'Работаю уже 4 месяца, всё устраивает. Зарплата вовремя, условия нормальные.',
+        'Благодарю за шанс начать новую жизнь. Коллектив хороший.',
+        'Программа помогла встать на ноги. Рекомендую всем кто ищет работу.',
+        'Работа тяжёлая но честная. Платят стабильно, питание и проживание предоставляют.',
+      ];
+      await base44.functions.invoke('submitReview', {
+        photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop',
+        name: names[Math.floor(Math.random() * names.length)],
+        position: positions[Math.floor(Math.random() * positions.length)],
+        city: cities[Math.floor(Math.random() * cities.length)],
+        stars: Math.floor(Math.random() * 2) + 4,
+        text: texts[Math.floor(Math.random() * texts.length)],
+        monthsInProgram: Math.floor(Math.random() * 12) + 1,
+      });
+      fetchReviews();
+    } catch (err) {
+      setError(err.response?.data?.message || 'Ошибка создания тестового отзыва');
+    } finally {
+      setActionLoading((p) => ({ ...p, test: false }));
+    }
+  };
 
   const fetchReviews = useCallback(async () => {
     setLoading(true);
@@ -98,9 +129,19 @@ export default function AdminReviews() {
 
   return (
     <div className="space-y-5">
-      <div>
-        <h1 className="text-xl font-bold text-foreground">Модерация отзывов</h1>
-        <p className="text-sm text-muted-foreground mt-0.5">Управление отзывами с сайта и от кандидатов</p>
+      <div className="flex items-center justify-between flex-wrap gap-3">
+        <div>
+          <h1 className="text-xl font-bold text-foreground">Модерация отзывов</h1>
+          <p className="text-sm text-muted-foreground mt-0.5">Управление отзывами с сайта и от кандидатов</p>
+        </div>
+        <button
+          onClick={handleCreateTest}
+          disabled={actionLoading.test}
+          className="flex items-center gap-2 rounded-lg bg-accent text-accent-foreground px-4 py-2 text-sm font-medium hover:opacity-90 disabled:opacity-50"
+        >
+          {actionLoading.test ? <Loader2 className="w-4 h-4 animate-spin" /> : <Plus className="w-4 h-4" />}
+          Создать тестовый отзыв
+        </button>
       </div>
 
       {error && (

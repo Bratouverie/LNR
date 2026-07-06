@@ -25,7 +25,8 @@ export default function ReviewsBlock() {
     }
 
     try {
-      const data = await base44.entities.Review.list("-created_date", 100);
+      const res = await base44.functions.invoke("getPublicReviews", { limit: 100, offset: 0 });
+      const data = res.data?.reviews || [];
       setReviews(data);
       setCachedReviews(data);
       setError(null);
