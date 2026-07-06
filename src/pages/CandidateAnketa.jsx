@@ -9,6 +9,7 @@ import AnketaProgress from '@/components/anketa/AnketaProgress';
 import SkillsSelector from '@/components/anketa/SkillsSelector';
 import FileUpload from '@/components/anketa/FileUpload';
 import { POSITIONS } from '@/lib/anketaSkills';
+import AnketaReadOnly from '@/components/anketa/AnketaReadOnly';
 import { Loader2, CheckCircle2, AlertCircle, Send } from 'lucide-react';
 
 const TOTAL_SECTIONS = 12;
@@ -52,6 +53,7 @@ export default function CandidateAnketa() {
   const [candidateInfo, setCandidateInfo] = useState(null);
   const [daysRemaining, setDaysRemaining] = useState(7);
   const [token, setToken] = useState('');
+  const [submittedAnketa, setSubmittedAnketa] = useState(null);
 
   const [form, setForm] = useState({
     // Section 1: Персональные данные
@@ -120,7 +122,11 @@ export default function CandidateAnketa() {
       setDaysRemaining(data.daysRemaining || 7);
 
       if (data.anketa) {
-        mergeAnketa(data.anketa);
+        if (data.anketa.status === 'submitted') {
+          setSubmittedAnketa(data.anketa);
+        } else {
+          mergeAnketa(data.anketa);
+        }
       } else {
         const draft = loadDraft(t);
         if (draft) mergeAnketa(draft);
@@ -268,6 +274,17 @@ export default function CandidateAnketa() {
           <p className="text-sm text-muted-foreground">{error}</p>
         </div>
       </div>
+    );
+  }
+
+  // ── Read-only mode: anketa already submitted ──
+  if (submittedAnketa) {
+    return (
+      <AnketaReadOnly
+        anketa={submittedAnketa}
+        candidateInfo={candidateInfo}
+        submittedAt={submittedAnketa.submittedAt}
+      />
     );
   }
 
