@@ -11,8 +11,10 @@ import { SEED_REVIEWS } from "@/lib/reviewSeedData";
 const PAGE_SIZE = 9;
 
 export default function ReviewsBlock() {
-  const [reviews, setReviews] = useState([]);
-  const [loading, setLoading] = useState(true);
+  // Начальное состояние — seed-данные. Отзывы видны мгновенно,
+  // даже если CORS блокирует сетевой запрос на неверефицированном домене.
+  const [reviews, setReviews] = useState(SEED_REVIEWS);
+  const [loading, setLoading] = useState(false);
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [selectedReview, setSelectedReview] = useState(null);
   const [formOpen, setFormOpen] = useState(false);
@@ -24,14 +26,10 @@ export default function ReviewsBlock() {
       if (data.length > 0) {
         setReviews(data);
         setCachedReviews(data);
-      } else {
-        setReviews(getCachedReviews() || SEED_REVIEWS);
       }
+      // Если data пустой — оставляем текущие (seed) данные
     } catch (err) {
-      // Сеть недоступна (CORS на неверефицированном домене) — fallback на кеш или seed
-      setReviews(getCachedReviews() || SEED_REVIEWS);
-    } finally {
-      setLoading(false);
+      // Сеть недоступна (CORS) — молча оставляем seed-данные
     }
   }, []);
 
