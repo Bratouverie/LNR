@@ -1,13 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
+import { getToken } from '@/lib/crmAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
-import { Loader2, Save, Sparkles, ArrowLeft, Upload, Eye, Pencil } from 'lucide-react';
+import { Loader2, Save, Sparkles, ArrowLeft, Upload, Eye, Pencil, Image as ImageIcon, Wand2, BarChart3 } from 'lucide-react';
 
 export default function BlogEditor() {
   const navigate = useNavigate();
@@ -17,6 +18,9 @@ export default function BlogEditor() {
   const [loading, setLoading] = useState(isEdit);
   const [saving, setSaving] = useState(false);
   const [seoLoading, setSeoLoading] = useState(false);
+  const [coverLoading, setCoverLoading] = useState(false);
+  const [styleLoading, setStyleLoading] = useState(false);
+  const [chartLoading, setChartLoading] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [view, setView] = useState('split');
 
@@ -35,7 +39,10 @@ export default function BlogEditor() {
 
   const loadPost = async () => {
     try {
-      const post = await base44.entities.BlogPost.get(id);
+      const res = await base44.functions.invoke('saveBlogPost', {
+        token: getToken(), action: 'get', id,
+      });
+      const post = res.data?.post || res.data;
       setForm({
         title: post.title || '', slug: post.slug || '', description: post.description || '',
         content: post.content || '', category: post.category || '', image: post.image || '',
@@ -127,6 +134,115 @@ ${form.content}
     }
   };
 
+  const generateCover = async () => {
+    if (!form.title) {
+      alert('Сначала укажите заголовок статьи');
+      return;
+    }
+    setCoverLoading(true);
+    try {
+      const res = await base44.integrations.Core.GenerateImage({
+        prompt: `Создай профессиональную обложку для статьи блога. Тема: "${form.title}". Категория: ${form.category || 'общая'}. Стиль: современный, реалистичный, с элементами строительства/восстановления/работы. Цветовая гамма: тёплые оттенки (оранжевый, коричневый) с тёмно-синими акцентами. Без текста на изображении. Соотношение сторон 16:9.`,
+      });
+      if (res.url) {
+        setForm((f) => ({ ...f, image: res.url }));
+      }
+    } catch (err) {
+      alert('Ошибка генерации обложки: ' + (err.response?.data?.error || err.message));
+    } finally {
+      setCoverLoading(false);
+    }
+  };
+
+  const improveStyle = async () => {
+    if (!form.content || form.content.length < 50) {
+      alert('Сначала добавьте контент статьи');
+      return;
+    }
+    setStyleLoading(true);
+    try {
+      const res = await base44.integrations.Core.InvokeLLM({
+        prompt: `Ты профессиональный редактор блога о государственной программе восстановления ЛНР и ДНР. Перепиши контент статьи в фирменном стиле нашего блога.
+
+ПРАВИЛА СТИЛЯ:
+- Структура: вступление → основная часть с подзаголовками (##) → выводы
+- Тон: информативный, позитивный, но честный (без преувеличений)
+- Используй маркированные списки для преимуществ и условий
+- Добавь таблицы (Markdown) для сравнения зарплат, специальностей, условий
+- Вставляй блоки с цитатами (>) для важных замечаний
+- Числа и факты: конкретные суммы в рублях, сроки в месяцах
+- Включи призыв к действию в конце
+- Сохраняй всю фактическую информацию из оригинала
+
+ТЕКУЩИЙ КОНТЕНТ:
+${form.content}
+
+ЗАГОЛОВОК: ${form.title}
+
+Верни улучшенный Markdown-контент статьи.`,
+      });
+      if (res && typeof res === 'string' && res.length > 100) {
+        setForm((f) => ({ ...f, content: res }));
+      }
+    } catch (err) {
+      alert('Ошибка ИИ: ' + (err.response?.data?.error || err.message));
+    } finally {
+      setStyleLoading(false);
+    }
+  };
+
+  const generateInfographic = async () => {
+    if (!form.content || form.content.length < 50) {
+      alert('Сначала добавьте контент статьи');
+      return;
+    }
+    setChartLoading(true);
+    try {
+      const res = await base44.integrations.Core.InvokeLLM({
+        prompt: `Проанализируй статью и создай данные для инфографики (графика).
+
+КОНТЕНТ:
+${form.content}
+
+Верни JSON для столбчатой диаграммы со зарплатами или сравнением показателей:
+{
+  "type": "bar",
+  "title": "Заголовок графика",
+  "data": [
+    {"label": "Специальность или показатель", "value": число}
+  ]
+}
+
+Используй реальные данные из статьи. 4-8 позиций.`,
+        response_json_schema: {
+          type: 'object',
+          properties: {
+            type: { type: 'string' },
+            title: { type: 'string' },
+            data: {
+              type: 'array',
+              items: {
+                type: 'object',
+                properties: {
+                  label: { type: 'string' },
+                  value: { type: 'number' },
+                },
+              },
+            },
+          },
+        },
+      });
+      if (res && res.data) {
+        setForm((f) => ({ ...f, chartData: res }));
+        setChartText(JSON.stringify(res, null, 2));
+      }
+    } catch (err) {
+      alert('Ошибка генерации инфографики: ' + (err.response?.data?.error || err.message));
+    } finally {
+      setChartLoading(false);
+    }
+  };
+
   const handleSave = async (status) => {
     if (!form.title || !form.slug || !form.content) {
       alert('Заполните: заголовок, slug и контент');
@@ -146,14 +262,13 @@ ${form.content}
         }
       }
       const payload = { ...form, keywords, chartData, status: status || form.status };
-      if (isEdit) {
-        await base44.entities.BlogPost.update(id, payload);
-      } else {
-        await base44.entities.BlogPost.create(payload);
-      }
+      const res = await base44.functions.invoke('saveBlogPost', {
+        token: getToken(), action: 'save', id: isEdit ? id : undefined, data: payload,
+      });
+      if (res.data?.error) throw new Error(res.data.error);
       navigate('/crm/blog');
     } catch (err) {
-      alert('Ошибка сохранения: ' + (err.response?.data?.error || err.message));
+      alert('Ошибка сохранения: ' + (err.response?.data?.error || err.data?.error || err.message));
     } finally {
       setSaving(false);
     }
@@ -166,6 +281,8 @@ ${form.content}
       </div>
     );
   }
+
+  const aiBtn = 'w-full bg-accent hover:bg-accent/90 text-white';
 
   return (
     <div>
@@ -260,25 +377,32 @@ ${form.content}
           </div>
         </div>
 
-        {/* Sidebar: meta + SEO */}
+        {/* Sidebar: meta + SEO + AI */}
         <div className="space-y-4">
-          {/* AI SEO */}
-          <div className="bg-gradient-to-br from-accent/10 to-primary/5 rounded-xl border border-accent/20 p-4">
-            <div className="flex items-center gap-2 mb-2">
+          {/* AI Tools */}
+          <div className="bg-gradient-to-br from-accent/10 to-primary/5 rounded-xl border border-accent/20 p-4 space-y-3">
+            <div className="flex items-center gap-2">
               <Sparkles className="w-4 h-4 text-accent" />
-              <span className="font-semibold text-sm">ИИ SEO-оптимизация</span>
+              <span className="font-semibold text-sm">ИИ-инструменты</span>
             </div>
-            <p className="text-xs text-muted-foreground mb-3">
-              Автоматически оптимизирует заголовок, описание, ключевые слова и slug на основе контента.
+            <p className="text-xs text-muted-foreground">
+              Автоматизация: SEO, стиль, обложка, инфографика.
             </p>
-            <Button
-              onClick={optimizeSeo}
-              disabled={seoLoading}
-              className="w-full bg-accent hover:bg-accent/90"
-              size="sm"
-            >
+            <Button onClick={optimizeSeo} disabled={seoLoading || coverLoading || styleLoading || chartLoading} className={aiBtn} size="sm">
               {seoLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Sparkles className="w-4 h-4" />}
-              Оптимизировать
+              SEO-оптимизация
+            </Button>
+            <Button onClick={improveStyle} disabled={seoLoading || coverLoading || styleLoading || chartLoading} className={aiBtn} size="sm">
+              {styleLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <Wand2 className="w-4 h-4" />}
+              Стиль и форматирование
+            </Button>
+            <Button onClick={generateCover} disabled={seoLoading || coverLoading || styleLoading || chartLoading} className={aiBtn} size="sm">
+              {coverLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <ImageIcon className="w-4 h-4" />}
+              Сгенерировать обложку
+            </Button>
+            <Button onClick={generateInfographic} disabled={seoLoading || coverLoading || styleLoading || chartLoading} className={aiBtn} size="sm">
+              {chartLoading ? <Loader2 className="w-4 h-4 animate-spin" /> : <BarChart3 className="w-4 h-4" />}
+              Создать инфографику
             </Button>
           </div>
 
@@ -342,7 +466,7 @@ ${form.content}
           {/* Chart data */}
           <div className="bg-white rounded-xl border border-border p-4 space-y-2">
             <Label className="text-sm font-medium">Данные графика (JSON)</Label>
-            <p className="text-xs text-muted-foreground">Опционально. Оставьте пустым, если графика нет.</p>
+            <p className="text-xs text-muted-foreground">Опционально. Сгенерируйте через ИИ или оставьте пустым.</p>
             <Textarea
               value={chartText}
               onChange={(e) => setChartText(e.target.value)}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { base44 } from '@/api/base44Client';
+import { getToken } from '@/lib/crmAuth';
 import { Button } from '@/components/ui/button';
 import { Plus, Edit, Trash2, Loader2, Newspaper } from 'lucide-react';
 
@@ -15,8 +16,10 @@ export default function BlogList() {
 
   const loadPosts = async () => {
     try {
-      const data = await base44.entities.BlogPost.list('-date', 100);
-      setPosts(data);
+      const res = await base44.functions.invoke('saveBlogPost', {
+        token: getToken(), action: 'list', limit: 100,
+      });
+      setPosts(res.data?.posts || []);
     } catch (err) {
       console.error('Blog load error:', err);
     } finally {
@@ -27,7 +30,9 @@ export default function BlogList() {
   const handleDelete = async (id) => {
     if (!confirm('Удалить статью безвозвратно?')) return;
     try {
-      await base44.entities.BlogPost.delete(id);
+      await base44.functions.invoke('saveBlogPost', {
+        token: getToken(), action: 'delete', id,
+      });
       setPosts((prev) => prev.filter((p) => p.id !== id));
     } catch (err) {
       alert('Ошибка удаления: ' + (err.response?.data?.error || err.message));
