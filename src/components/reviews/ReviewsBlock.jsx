@@ -5,6 +5,8 @@ import { X, Plus, Loader2, MessageSquare } from "lucide-react";
 import ReviewCard from "./ReviewCard";
 import ReviewModal from "./ReviewModal";
 import ReviewForm from "./ReviewForm";
+import { getCachedReviews, setCachedReviews } from "@/lib/reviewCache";
+import { SEED_REVIEWS } from "@/lib/reviewSeedData";
 
 const PAGE_SIZE = 9;
 
@@ -19,9 +21,15 @@ export default function ReviewsBlock() {
     try {
       const res = await base44.functions.invoke("getPublicReviews", { limit: 100, offset: 0 });
       const data = res.data?.reviews || [];
-      setReviews(data);
+      if (data.length > 0) {
+        setReviews(data);
+        setCachedReviews(data);
+      } else {
+        setReviews(getCachedReviews() || SEED_REVIEWS);
+      }
     } catch (err) {
-      setReviews([]);
+      // Сеть недоступна (CORS на неверефицированном домене) — fallback на кеш или seed
+      setReviews(getCachedReviews() || SEED_REVIEWS);
     } finally {
       setLoading(false);
     }
