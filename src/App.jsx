@@ -29,6 +29,8 @@ import CrmIntegrationQueue from './pages/crm/IntegrationQueue';
 import CrmCandidateDetail from './pages/crm/CandidateDetail';
 import CrmBlogList from './pages/crm/BlogList';
 import CrmBlogEditor from './pages/crm/BlogEditor';
+import CrmBotSubmissions from './pages/crm/BotSubmissions';
+import ConsultantMaria from './pages/ConsultantMaria';
 // Add page imports here
 
 const AuthenticatedApp = () => {
@@ -71,6 +73,7 @@ const AuthenticatedApp = () => {
       <Route path="/candidate-anketa" element={<CandidateAnketa />} />
       <Route path="/sb-review" element={<SbReview />} />
       <Route path="/candidate-review" element={<CandidateReview />} />
+      <Route path="/consultant" element={<ConsultantMaria />} />
       <Route path="/crm/login" element={<CrmLogin />} />
       <Route path="/crm" element={<CrmLayout />}>
         <Route path="dashboard" element={<CrmDashboard />} />
@@ -82,6 +85,7 @@ const AuthenticatedApp = () => {
         <Route path="blog" element={<CrmBlogList />} />
         <Route path="blog/new" element={<CrmBlogEditor />} />
         <Route path="blog/edit/:id" element={<CrmBlogEditor />} />
+        <Route path="bot-submissions" element={<CrmBotSubmissions />} />
         <Route path="admin/reviews" element={<AdminReviews />} />
       </Route>
       <Route path="*" element={<PageNotFound />} />
