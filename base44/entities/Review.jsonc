@@ -98,21 +98,7 @@
   ],
   "rls": {
     "create": {},
-    "read": {
-      "$or": [
-        {
-          "data.status": "approved"
-        },
-        {
-          "created_by": "{{user.email}}"
-        },
-        {
-          "user_condition": {
-            "role": "admin"
-          }
-        }
-      ]
-    },
+    "read": {},
     "update": {
       "user_condition": {
         "role": "admin"
