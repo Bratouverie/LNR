@@ -39,7 +39,7 @@ const NAV_GROUPS = [
       { label: "Руководство", href: "#leadership" },
       { label: "Объекты", href: "#objects" },
       { label: "День специалиста", href: "#day-of-specialist" },
-      { label: "Отзывы", href: "#testimonials" },
+
     ],
   },
   {
