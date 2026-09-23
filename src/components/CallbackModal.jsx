@@ -5,7 +5,6 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2, CheckCircle } from "lucide-react";
-const GATEKEEPER_API_KEY = "sk_web_form_a67191e0bb38eb17653f58eeb34e2bfceaa7f2b372ded560598cb37f27477862636de465e3d3494c1799185619b30cef";
 import { toast } from "@/components/ui/use-toast";
 
 export default function CallbackModal({ open, onClose }) {
@@ -18,22 +17,24 @@ export default function CallbackModal({ open, onClose }) {
     if (!form.consent || !form.phone) return;
     setLoading(true);
     try {
-      const externalId = `callback_${Date.now()}`;
-      await fetch('https://bratouverie-snb.base44.app/functions/gatekeeperInbound', {
+      // ТЗ w 24.09: заявки на звонок уходят напрямую в БРО-СРМ
+      const res = await fetch('https://bro-crm.ru/api/public/lead', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-api-key': GATEKEEPER_API_KEY },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          source: 'web_form',
-          externalId,
-          payload: { type: 'callback', full_name: form.full_name, phone: form.phone, consent: form.consent },
+          full_name: form.full_name || 'Без имени (запрос звонка)',
+          phone: form.phone,
+          comment: 'Запрос обратного звонка',
+          source: 'vosstanovim-dnr.ru',
         }),
       });
+      if (!res.ok) throw new Error('lead API error: ' + res.status);
       setSuccess(true);
       setTimeout(() => {
         setSuccess(false);
         setForm({ full_name: "", phone: "", consent: false });
         onClose();
-      }, 2500);
+      }, 6000);
     } catch (err) {
       toast({
         title: "Не удалось отправить заявку",
@@ -51,7 +52,11 @@ export default function CallbackModal({ open, onClose }) {
         {success ? (
           <div className="flex flex-col items-center py-8 gap-4">
             <CheckCircle className="h-14 w-14 text-green-500" />
-            <h3 className="font-inter font-bold text-lg text-foreground">Мы перезвоним!</h3>
+            <h3 className="font-inter font-bold text-lg text-foreground">🎉 Заявка принята!</h3>
+            <p className="text-muted-foreground font-inter text-center text-sm">
+              Менеджер свяжется с вами в порядке очереди. Обращений сейчас очень
+              много — спасибо за терпение!
+            </p>
           </div>
         ) : (
           <>

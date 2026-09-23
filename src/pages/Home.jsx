@@ -30,6 +30,7 @@ import CallbackModal from "../components/CallbackModal";
 import StickyCommandBar from "../components/StickyCommandBar";
 import VisitorCounter from "../components/VisitorCounter";
 import MariaChatWidget from "../components/MariaChatWidget";
+import ReviewsBlock from "@/components/reviews/ReviewsBlock";
 
 export default function Home() {
   const [appModalOpen, setAppModalOpen] = useState(false);
@@ -83,8 +84,8 @@ export default function Home() {
       {/* SECTION 4 – DAY OF SPECIALIST */}
       <DayOfSpecialist />
 
-      {/* SECTION 5 – REVIEWS (temporarily hidden) */}
-      {/* <ReviewsBlock /> */}
+      {/* SECTION 5 – REVIEWS (ТЗ w 24.09: блок отзывов возвращён на сайт) */}
+      <ReviewsBlock />
 
       {/* SECTION 6 – RECOVERY OBJECTS */}
       <RecoveryObjects />

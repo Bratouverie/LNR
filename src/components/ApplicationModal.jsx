@@ -7,7 +7,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Loader2, CheckCircle } from "lucide-react";
-const GATEKEEPER_API_KEY = "sk_web_form_a67191e0bb38eb17653f58eeb34e2bfceaa7f2b372ded560598cb37f27477862636de465e3d3494c1799185619b30cef";
 import { toast } from "@/components/ui/use-toast";
 import { ALL_POSITION_OPTIONS } from "@/data/vacanciesConfig";
 
@@ -44,24 +43,27 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
     if (!form.consent || !form.full_name || !form.phone) return;
     setLoading(true);
     try {
-      const externalId = `webform_${Date.now()}`;
-      const payload = { type: "application" };
-      for (const [key, value] of Object.entries(form)) {
-        if (value !== "" && value !== null && value !== undefined) {
-          payload[key] = value;
-        }
-      }
-      await fetch('https://bratouverie-snb.base44.app/functions/gatekeeperInbound', {
+      // ТЗ w 24.09: заявки уходят напрямую в БРО-СРМ с отметкой источника
+      const res = await fetch('https://bro-crm.ru/api/public/lead', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'x-api-key': GATEKEEPER_API_KEY },
-        body: JSON.stringify({ source: 'web_form', externalId, payload }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          full_name: form.full_name,
+          phone: form.phone,
+          email: form.email || null,
+          position: form.vacancy || null,
+          experience: form.experience || null,
+          comment: form.comment || null,
+          source: 'vosstanovim-dnr.ru',
+        }),
       });
+      if (!res.ok) throw new Error('lead API error: ' + res.status);
       setSuccess(true);
       setTimeout(() => {
         setSuccess(false);
         setForm({ full_name: "", phone: "", email: "", vacancy: "", experience: "", comment: "", consent: false });
         onClose();
-      }, 2500);
+      }, 6000);
     } catch (err) {
       toast({
         title: "Не удалось отправить заявку",
@@ -79,8 +81,14 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
         {success ? (
           <div className="flex flex-col items-center py-12 gap-4">
             <CheckCircle className="h-16 w-16 text-green-500" />
-            <h3 className="font-inter font-bold text-xl text-foreground">Заявка отправлена!</h3>
-            <p className="text-muted-foreground font-inter text-center">Мы свяжемся с вами в ближайшее время</p>
+            <h3 className="font-inter font-bold text-xl text-foreground">🎉 Заявка принята!</h3>
+            <p className="text-muted-foreground font-inter text-center">
+              Менеджер свяжется с вами в порядке очереди. Сейчас очень много обращений —
+              спасибо за терпение!
+            </p>
+            <p className="text-xs text-muted-foreground font-inter text-center">
+              Заявка зарегистрирована в системе подбора персонала
+            </p>
           </div>
         ) : (
           <>

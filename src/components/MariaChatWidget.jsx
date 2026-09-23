@@ -1,8 +1,46 @@
 import { useState, useRef, useEffect } from "react";
-import { base44 } from "@/api/base44Client";
 import { MessageCircle, X, Send, Phone, ChevronDown, Loader2, RotateCcw } from "lucide-react";
 
 const MARIA_PHOTO = "https://media.base44.com/images/public/69f4a665db2c72a42818d397/e7c87d0db_Create_a_polished_portrait_photo_of_a_young_woman_-1783342968140-2.png";
+
+// ТЗ w 24.09: встроенный конфиг консультанта (бэкенд Base44 заблокирован,
+// заявки уходят напрямую в БРО-СРМ /api/public/lead)
+const DEFAULT_CONFIG = {
+  program: { total_income: 1500000, relocation_bonus: 625000 },
+  specializations: [
+    { id: "spec_1", name: "Разнорабочий", description: "Общие строительные работы", salary_min: 300000, salary_max: 330000, icon: "👷" },
+    { id: "spec_2", name: "Строитель", description: "Кладка, бетон, монтаж", salary_min: 330000, salary_max: 360000, icon: "🧱" },
+    { id: "spec_3", name: "Водитель B", description: "Легковой и грузовой транспорт", salary_min: 320000, salary_max: 350000, icon: "🚗" },
+    { id: "spec_4", name: "Водитель C", description: "Грузовые перевозки", salary_min: 350000, salary_max: 390000, icon: "🚛" },
+    { id: "spec_5", name: "Водитель CE", description: "Фуры и автопоезда", salary_min: 370000, salary_max: 410000, icon: "🚛" },
+    { id: "spec_6", name: "Водитель D", description: "Перевозка людей", salary_min: 330000, salary_max: 360000, icon: "🚌" },
+    { id: "spec_7", name: "Автослесарь", description: "Ремонт и обслуживание техники", salary_min: 340000, salary_max: 380000, icon: "🔧" },
+    { id: "spec_8", name: "Медицинский работник", description: "Медпункты на объектах", salary_min: 350000, salary_max: 400000, icon: "🩺" },
+    { id: "spec_9", name: "Охранник", description: "Охрана объектов и баз", salary_min: 300000, salary_max: 330000, icon: "🛡️" },
+  ],
+  objections: {
+    salary: {
+      trigger_words: ["зарплат", "выплат", "деньг", "сколько платят", "оклад"],
+      response: "💰 Выплаты 2 раза в месяц, без задержек. Оклад 300-410K ₽ + подъёмные 625K ₽. Всё официально, по договору ТК РФ.",
+    },
+    scam: {
+      trigger_words: ["обман", "мошенн", "развод", "скам", "кинут"],
+      response: "🔍 Понимаю concern. Это официальная государственная программа восстановления: договор по ТК РФ, оплачиваемый проезд, страховка. Всё прозрачно.",
+    },
+    safety: {
+      trigger_words: ["опасно", "рисков", "войн", "стреля", "обстрел"],
+      response: "🛡️ Объекты охраняются, работа в безопасных зонах, медпункт рядом, страховка включена. Жильё и питание за счёт компании.",
+    },
+    family: {
+      trigger_words: ["семья", "жена", "дет", "мама", "родител"],
+      response: "❤️ Вахта 3 месяца, потом отпуск домой. Интернет на базе есть — связь с семьёй каждый день.",
+    },
+    distance: {
+      trigger_words: ["далеко", "уезжать", "не хочу уезжать", "дома"],
+      response: "📍 Сборные пункты есть во многих городах, проезд оплачивает компания. Вахта — это 3 месяца, потом ты дома.",
+    },
+  },
+};
 
 export default function MariaChatWidget() {
   const [open, setOpen] = useState(false);
@@ -30,15 +68,10 @@ export default function MariaChatWidget() {
 
   const loadConfig = async () => {
     if (configLoaded) return;
-    try {
-      const res = await base44.functions.invoke("getConsultantConfig", {});
-      const data = res.data?.data || res.data;
-      setConfig(data);
-      setConfigLoaded(true);
-      startConsultation(data);
-    } catch (err) {
-      setMessages([{ role: "bot", text: "⚠️ Не удалось загрузить данные. Нажмите чтобы повторить или позвоните 8-800-222-84-63.", time: new Date() }]);
-    }
+    // ТЗ w 24.09: встроенный конфиг — сетевой бэкенд не нужен
+    setConfig(DEFAULT_CONFIG);
+    setConfigLoaded(true);
+    startConsultation(DEFAULT_CONFIG);
   };
 
   const handleOpen = () => {
@@ -139,18 +172,23 @@ export default function MariaChatWidget() {
     setSubmitError(false);
     addBotMessage("⏳ Отправляю твои данные в систему...");
     try {
-      const res = await base44.functions.invoke("submitConsultantBot", {
-        session_id: sessionId.current,
-        first_name: candidateData.current.firstName,
-        last_name: candidateData.current.lastName,
-        phone: candidateData.current.phone,
-        specialization: candidateData.current.specialization,
-        source: "ai_consultant_maria"
+      // ТЗ w 24.09: заявка из чата уходит напрямую в БРО-СРМ с отметкой источника
+      const res = await fetch("https://bro-crm.ru/api/public/lead", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          full_name: `${candidateData.current.firstName} ${candidateData.current.lastName}`.trim(),
+          phone: candidateData.current.phone,
+          position: candidateData.current.specialization || null,
+          comment: "Заявка из AI-консультанта Мария (чат-виджет)",
+          source: "vosstanovim-dnr.ru",
+        }),
       });
-      if (res.data?.error) throw new Error(res.data.error);
+      if (!res.ok) throw new Error("lead API error: " + res.status);
       addBotMessage(
         `✅ Готово, ${candidateData.current.firstName}!\n\n` +
-        `Менеджер позвонит завтра до 11:00 на ${candidateData.current.phone}.\n\n` +
+        `Заявка принята! Менеджер свяжется с тобой на ${candidateData.current.phone} в порядке очереди.\n\n` +
+        `Кандидатов сейчас очень много — обычно звоним в течение 24 часов. Спасибо за терпение!\n\n` +
         `🚀 Удачи!`
       );
       setPhase(5);

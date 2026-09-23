@@ -1,5 +1,4 @@
 import { useState, useRef } from "react";
-import { base44 } from "@/api/base44Client";
 import { Upload, X, Loader2, CheckCircle, AlertCircle } from "lucide-react";
 import ReviewStars from "./ReviewStars";
 import { validateReview, validatePhoto } from "@/lib/reviewValidator";
@@ -78,21 +77,28 @@ export default function ReviewForm({ onClose, onSuccess }) {
       // Convert photo to base64 — sent to submitReview which uploads via service role
       const photoBase64 = await fileToBase64(photoFile);
 
-      const response = await base44.functions.invoke("submitReview", {
-        photoBase64,
-        name: formData.name,
-        position: formData.position,
-        city: formData.city,
-        stars: Number(formData.stars),
-        text: formData.text,
-        monthsInProgram: Number(formData.monthsInProgram),
+      // ТЗ w 24.09: отзывы уходят напрямую в БРО-СРМ на модерацию
+      const response = await fetch("https://bro-crm.ru/api/public/review", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          photoBase64: photoBase64 || null,
+          name: formData.name,
+          position: formData.position,
+          city: formData.city,
+          stars: Number(formData.stars),
+          text: formData.text,
+          monthsInProgram: Number(formData.monthsInProgram),
+          source: "vosstanovim-dnr.ru",
+        }),
       });
+      const data = await response.json().catch(() => null);
 
-      if (response.data?.success) {
+      if (response.ok && data?.data?.success) {
         setSuccess(true);
         setTimeout(() => onSuccess(), 2500);
       } else {
-        setSubmitError(response.data?.message || "Ошибка отправки");
+        setSubmitError(data?.error || "Ошибка отправки");
       }
     } catch (err) {
       setSubmitError(
