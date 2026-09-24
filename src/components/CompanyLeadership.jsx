@@ -2,19 +2,19 @@ import { Phone, Mail } from "lucide-react";
 
 const IMG_BASE = "https://media.base44.com/images/public/69f4a665db2c72a42818d397";
 const LEADER_PHOTOS = {
-  96: `${IMG_BASE}/8cbc0245c_96.png`,
+  96: "https://media.base44.com/images/public/6a566f8a929d4d3f8d94fe66/7617a5a31_generated_image.png",
   97: `${IMG_BASE}/de0af4154_97.png`,
   98: `${IMG_BASE}/cd5ca3013_98.png`
 };
 
 const LEADERS = [
 {
-  name: "Игорь Андреевич Михляев",
+  name: "Прутин Владимир Викторович",
   role: "Генеральный директор, руководитель проекта отбора",
   experience: "18 лет в кадровом менеджменте, 5 лет гос. контрактов",
   education: "МГУ им. Ломоносова (экономика)",
   phone: "+7 (4212) 51-59-30 доб. 702",
-  email: "igor.mikhlayev@bratouverie-snb.ru",
+  email: "vladimir.prutin@bratouverie-snb.ru",
   visualId: 96
 },
 {
