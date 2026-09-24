@@ -1,16 +1,13 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Wrench, Truck, Radio, Bomb, Stethoscope, Plane, ShieldCheck, HardHat, HardHatIcon, Building2, ArrowRight } from "lucide-react";
+import { Wrench, Truck, Stethoscope, ShieldCheck, HardHat, HardHatIcon, Building2, ArrowRight } from "lucide-react";
 
 const ICONS = {
   "raznorabochiy": HardHat,
   "stroitel": Building2,
   "avtoslesarj": Wrench,
   "voditel": Truck,
-  "inzhener-svyazist": Radio,
-  "vzryvotekhnik": Bomb,
   "medik": Stethoscope,
-  "operator-bpla": Plane,
   "okhrannik": ShieldCheck,
 };
 
