@@ -463,7 +463,7 @@ export default function ContractView() {
                     <div className="mt-4 space-y-3">
                       <div>
                         <p className="text-gray-500 text-xs mb-1">Генеральный директор:</p>
-                        <p className="text-sm">______________ Я.Е. Ануфриев &nbsp;&nbsp;&nbsp;&nbsp; М.П.</p>
+                        <p className="text-sm">______________ В.В. Прутин &nbsp;&nbsp;&nbsp;&nbsp; М.П.</p>
                       </div>
                       <div>
                         <p className="text-gray-500 text-xs mb-1">Дата:</p>

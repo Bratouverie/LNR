@@ -56,7 +56,7 @@ export default function Footer() {
             <div className="space-y-1 text-xs text-white/50 font-inter">
               <div>ИНН: 2511135442</div>
               <div>ОГРН: 1132511007591</div>
-              <div>Ген. директор: Ануфриев Я.Е.</div>
+              <div>Ген. директор: Прутин В.В.</div>
               <div className="pt-1">Юр. адрес: Приморский край, г. Уссурийск, пер. Мирный, д. 1</div>
               <div>Факт. адрес: г. Хабаровск, ул. Карла Маркса, д. 66</div>
               <div>Доп. офис: г. Тамбов, ул. Коммунальная, 6</div>

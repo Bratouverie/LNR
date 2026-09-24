@@ -157,7 +157,7 @@ export function buildContractBlocks(vacancyId) {
   b.push({ type: "paragraph", text: "Банк: ФИЛИАЛ «ХАБАРОВСКИЙ» АО «АЛЬФА-БАНК»" });
   b.push({ type: "paragraph", text: "БИК: 040813770 | Корр. счёт: 30101810800000000770" });
   b.push({ type: "paragraph", text: "Тел.: +7(4212) 51-59-30 | hh@bratouverie-snb.ru | bratouverie-snb.ru" });
-  b.push({ type: "paragraph", text: "Генеральный директор: ______________ Я.Е. Ануфриев   М.П." });
+  b.push({ type: "paragraph", text: "Генеральный директор: ______________ В.В. Прутин   М.П." });
   b.push({ type: "paragraph", text: "Дата: ______________" });
 
   // Приложения
