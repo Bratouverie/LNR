@@ -34,6 +34,11 @@ jobs:
       - name: Build
         run: npm run build
 
+      # SPA-роутинг на GitHub Pages: 404.html = копия index.html,
+      # иначе саброуты (/blog, /vacancy) отдают пустую заглушку
+      - name: SPA 404 fallback
+        run: cp dist/index.html dist/404.html
+
       # ТЗ w 24.09: Pages переключён на build_type=workflow (Base44 миграция 03.09),
       # поэтому деплой через actions/deploy-pages, а не пуш в gh-pages
       - name: Upload Pages artifact
