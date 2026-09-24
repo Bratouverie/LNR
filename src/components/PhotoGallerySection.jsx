@@ -59,9 +59,6 @@ const PHOTOS = [
   { src: `${B}83dce5a49_Young_Russian_male_construction_laborer_age_25-30-1782925908181.png`, caption: "Разнорабочий на объекте" },
   { src: `${B}84828d63e_622c43fca_Portrait_of_young_Russian_construction_specialist-1777979799754.png`, caption: "Молодой специалист программы" },
   { src: `${B}724bc9435_0069169d4_Portrait_of_successful_Russian_female_medical_work-1777979812293.png`, caption: "Медицинский работник" },
-  // Связь / инженер-связист
-
-  { src: `${B}3bbeb9829_Russian_male_telecom_engineer_age_38_plain_Russi-1782925943055.png`, caption: "Техник связи на объекте" },
   // Быт и жизнь
   { src: `${B}51cd94f09_9821.png`, caption: "Бытовка — жильё на объекте" },
   { src: `${B}b9eb5e243_0854b0981_Worker_living_quarters_interior_in_reconstruction_-1777979748607.png`, caption: "Жилая комната вахтового посёлка" },
