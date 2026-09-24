@@ -761,10 +761,10 @@ export const BLOG_ARTICLES = [
       type: "pie",
       title: "Оценка совокупных выгод участника за 3 месяца",
       data: [
-        { name: "Зарплата + бонусы", value: 290, color: "#1e3a5f" },
+        { name: "Зарплата + бонусы", value: 1160, color: "#1e3a5f" },
         { name: "Единовременная выплата", value: 625, color: "#f97316" },
-        { name: "Бесплатный соцпакет", value: 88, color: "#22c55e" },
-        { name: "Земельный участок", value: 125, color: "#64748b" },
+        { name: "Бесплатный соцпакет", value: 129, color: "#22c55e" },
+        { name: "Земельный участок", value: 500, color: "#64748b" },
       ],
     },
     content: `
