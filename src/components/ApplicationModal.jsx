@@ -40,7 +40,9 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!form.consent || !form.full_name || !form.phone) return;
+    const emailTrim = (form.email || "").trim();
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(emailTrim);
+    if (!form.consent || !form.full_name || !form.phone || !emailOk) return;
     setLoading(true);
     try {
       // ТЗ w 24.09: заявки уходят напрямую в БРО-СРМ с отметкой источника
@@ -117,12 +119,13 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
                 />
               </div>
               <div>
-                <Label className="font-inter">E-mail</Label>
+                <Label className="font-inter">E-mail *</Label>
                 <Input
                   value={form.email}
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
                   placeholder="email@example.com"
                   type="email"
+                  required
                   className="mt-1"
                 />
               </div>
