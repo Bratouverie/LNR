@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,11 +23,17 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
     vacancy: preselectedVacancy || "",
     experience: "",
     comment: preselectedObject ? `Интересует объект: ${preselectedObject}` : "",
+    max_status: "",
     consent: false,
   });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [successKind, setSuccessKind] = useState("new");
+  // ТЗ w 27.09 (П3): МАКС — подтверждение «Сделал» после заявки
+  const [maxDone, setMaxDone] = useState(false);
+  const [maxDoneSending, setMaxDoneSending] = useState(false);
+  const [maxDoneSent, setMaxDoneSent] = useState(false);
+  const phoneRef = useRef("");
 
   // Sync preselected values when modal opens
   useEffect(() => {
@@ -40,6 +46,24 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
     }
   }, [open, preselectedVacancy, preselectedObject]);
 
+  // ТЗ w 27.09 (П3): кандидат подтвердил настройку МАКС «Могут все»
+  const confirmMaxDone = async () => {
+    setMaxDoneSending(true);
+    try {
+      const res = await fetch('https://bro-crm.ru/api/public/max-confirm', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone: phoneRef.current }),
+      });
+      if (!res.ok) throw new Error();
+      setMaxDoneSent(true);
+    } catch {
+      toast({ title: "Не удалось сохранить подтверждение", description: "Нажмите «Сделал» ещё раз", variant: "destructive" });
+    } finally {
+      setMaxDoneSending(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const emailTrim = (form.email || "").trim();
@@ -51,6 +75,7 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
     if (!emailOk) miss.push("E-mail");
     if (!form.birth_date) miss.push("дата рождения");
     if (!form.consent) miss.push("согласие на обработку персональных данных");
+    if (!form.max_status) miss.push("МАКС");
     if (miss.length) {
       toast({
         title: "Заполните обязательные поля",
@@ -60,6 +85,7 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
       return;
     }
     setLoading(true);
+    phoneRef.current = form.phone;
     try {
       // ТЗ w 24.09: заявки уходят напрямую в БРО-СРМ с отметкой источника
       // ТЗ w 27.09: + дата рождения передаётся в карточку кандидата
@@ -74,6 +100,7 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
           position: form.vacancy || null,
           experience: form.experience || null,
           comment: form.comment || null,
+          max_status: form.max_status || null,
           source: 'vosstanovim-dnr.ru',
         }),
       });
@@ -92,9 +119,11 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
       setTimeout(() => {
         setSuccess(false);
         setSuccessKind("new");
-        setForm({ full_name: "", phone: "", email: "", birth_date: "", vacancy: "", experience: "", comment: "", consent: false });
+        setMaxDone(false);
+        setMaxDoneSent(false);
+        setForm({ full_name: "", phone: "", email: "", birth_date: "", vacancy: "", experience: "", comment: "", max_status: "", consent: false });
         onClose();
-      }, 12000);
+      }, 45000);
     } catch (err) {
       toast({
         title: "Не удалось отправить заявку",
@@ -124,6 +153,48 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
               Хотите ускорить рассмотрение? Напишите нашему ИИ-консультанту в MAX —
               он ответит на вопросы и сразу пришлёт персональную ссылку на анкету.
             </p>
+            <div className="w-full rounded-lg border border-accent/40 bg-accent/5 p-4 text-left space-y-3">
+              <p className="font-inter font-bold text-sm text-foreground">📨 Важно: настройка МАКС</p>
+              <p className="text-sm text-muted-foreground font-inter">
+                Связь с менеджером идёт в мессенджере <b>МАКС</b> на вашем номере телефона. Чтобы менеджер смог вам написать, откройте в МАКС:
+              </p>
+              <p className="text-sm font-inter font-bold text-foreground">
+                Настройки → Безопасность → «Найти меня по номеру» → «Могут все»
+              </p>
+              <img
+                src="https://bro-crm.ru/max-settings.png"
+                alt="Настройка МАКС: Найти меня по номеру → Могут все"
+                className="rounded-lg border w-full max-w-[220px]"
+                loading="lazy"
+              />
+              {maxDoneSent ? (
+                <p className="text-xs font-inter font-bold text-green-600">✅ Спасибо! Настройка подтверждена — менеджер сможет вам написать.</p>
+              ) : (
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center gap-2">
+                    <Checkbox
+                      checked={maxDone}
+                      onCheckedChange={(c) => setMaxDone(!!c)}
+                      id="max-done"
+                    />
+                    <Label htmlFor="max-done" className="text-sm text-muted-foreground font-inter cursor-pointer">
+                      «Сделал» — подтверждаю, что включил «Могут все»
+                    </Label>
+                  </div>
+                  {maxDone && (
+                    <Button
+                      type="button"
+                      onClick={confirmMaxDone}
+                      disabled={maxDoneSending}
+                      variant="outline"
+                      className="w-full font-inter font-bold"
+                    >
+                      {maxDoneSending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Подтвердить настройку"}
+                    </Button>
+                  )}
+                </div>
+              )}
+            </div>
             <a
               href="https://max.ru/se13611113_bot"
               target="_blank"
@@ -132,6 +203,9 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
             >
               💬 Написать консультанту в MAX
             </a>
+            <button type="button" onClick={onClose} className="text-xs text-muted-foreground font-inter underline hover:no-underline">
+              Закрыть окно
+            </button>
             <p className="text-xs text-muted-foreground font-inter text-center">
               Заявка зарегистрирована в системе подбора персонала
             </p>
@@ -161,6 +235,22 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
                   className="mt-1"
                   required
                 />
+              </div>
+              <div>
+                <Label className="font-inter">Мессенджер МАКС на этом номере *</Label>
+                <p className="text-xs text-muted-foreground font-inter mt-1">
+                  Связь по заявке идёт в МАКС. Если он не установлен — установите (App Store / Google Play / max.ru).
+                </p>
+                <Select value={form.max_status} onValueChange={(v) => setForm({ ...form, max_status: v })}>
+                  <SelectTrigger className="mt-1">
+                    <SelectValue placeholder="Выберите вариант" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="yes">МАКС есть</SelectItem>
+                    <SelectItem value="no">МАКС нет</SelectItem>
+                    <SelectItem value="will">Сделаю (установлю)</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
               <div>
                 <Label className="font-inter">E-mail *</Label>
