@@ -9,7 +9,8 @@ import {
 } from "@/components/ui/toast";
 
 export function Toaster() {
-  const { toasts } = useToast();
+  // ТЗ w 27.09 (22:42): крестик закрытия тоста должен работать
+  const { toasts, dismiss } = useToast();
 
   return (
     <ToastProvider>
@@ -23,7 +24,7 @@ export function Toaster() {
               )}
             </div>
             {action}
-            <ToastClose />
+            <ToastClose onClick={() => dismiss(id)} />
           </Toast>
         );
       })}

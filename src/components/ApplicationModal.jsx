@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from "react";
+import { cn } from "@/lib/utils";
+import { Calendar } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,6 +13,140 @@ import { toast } from "@/components/ui/use-toast";
 import { ALL_POSITION_OPTIONS } from "@/data/vacanciesConfig";
 
 const VACANCIES = ALL_POSITION_OPTIONS;
+
+// ── ТЗ w 27.09 (22:42): удобный ввод даты рождения ─────────────────────────
+const MONTHS = ["январь","февраль","март","апрель","май","июнь","июль","август","сентябрь","октябрь","ноябрь","декабрь"];
+const YEARS = []; for (let y = 2012; y >= 1935; y--) YEARS.push(y);
+const pad2 = (n) => String(n).padStart(2, "0");
+
+const isoToDmy = (iso) => {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || "");
+  return m ? `${m[3]}.${m[2]}.${m[1]}` : "";
+};
+const dmyToIso = (dmy) => {
+  const m = /^(\d{2})\.(\d{2})\.(\d{4})$/.exec(dmy || "");
+  return m ? `${m[3]}-${m[2]}-${m[1]}` : "";
+};
+const validDmy = (dmy) => {
+  const m = /^(\d{2})\.(\d{2})\.(\d{4})$/.exec(dmy || "");
+  if (!m) return false;
+  const dd = +m[1], mm = +m[2], yy = +m[3];
+  if (mm < 1 || mm > 12 || yy < 1935 || yy > 2012) return false;
+  const dim = new Date(yy, mm, 0).getDate();
+  return dd >= 1 && dd <= dim;
+};
+
+function DateField({ value, onChange, invalid }) {
+  const [open, setOpen] = useState(false);
+  const [raw, setRaw] = useState(isoToDmy(value));
+  const [view, setView] = useState(() => {
+    const d = value ? new Date(value) : new Date(2000, 0, 1);
+    return { y: d.getFullYear(), m: d.getMonth() };
+  });
+  const wrapRef = useRef(null);
+
+  useEffect(() => { setRaw(isoToDmy(value)); }, [value]);
+
+  useEffect(() => {
+    if (!open) return;
+    const h = (e) => { if (wrapRef.current && !wrapRef.current.contains(e.target)) setOpen(false); };
+    document.addEventListener("mousedown", h);
+    return () => document.removeEventListener("mousedown", h);
+  }, [open]);
+
+  // Ввод с автопереходом: число → месяц → год, без ручного переключения блоков
+  const handleType = (v) => {
+    const d = (v || "").replace(/\D/g, "").slice(0, 8);
+    const disp = d.length > 4 ? `${d.slice(0,2)}.${d.slice(2,4)}.${d.slice(4)}`
+      : d.length > 2 ? `${d.slice(0,2)}.${d.slice(2)}`
+      : d;
+    setRaw(disp);
+    if (d.length === 8) {
+      const iso = dmyToIso(disp);
+      if (validDmy(disp)) { onChange(iso); setOpen(false); }
+    }
+  };
+
+  // Календарь с выбором месяца И года (не только дня)
+  const firstDay = new Date(view.y, view.m, 1);
+  const daysInMonth = new Date(view.y, view.m + 1, 0).getDate();
+  const lead = (firstDay.getDay() + 6) % 7; // Пн=0
+  const cells = [];
+  for (let i = 0; i < lead; i++) cells.push(null);
+  for (let d = 1; d <= daysInMonth; d++) cells.push(d);
+  const iso = `${view.y}-${pad2(view.m + 1)}-`;
+
+  return (
+    <div className="relative mt-1" ref={wrapRef}>
+      <div className="flex gap-2">
+        <Input
+          value={raw}
+          onChange={(e) => handleType(e.target.value)}
+          placeholder="ДД.ММ.ГГГГ"
+          inputMode="numeric"
+          autoComplete="bday"
+          className={cn(invalid && "border-red-500 bg-red-50/60 focus-visible:ring-red-400")}
+        />
+        <Button
+          type="button"
+          variant="outline"
+          onClick={() => {
+            const d = value ? new Date(value) : new Date(2000, 0, 1);
+            setView({ y: d.getFullYear(), m: d.getMonth() });
+            setOpen(!open);
+          }}
+          className={cn("shrink-0 px-3", invalid && "border-red-500")}
+          aria-label="Выбрать дату в календаре"
+        >
+          <Calendar className="h-4 w-4" />
+        </Button>
+      </div>
+      {open && (
+        <div className="absolute z-50 mt-2 left-0 right-0 rounded-lg border border-border bg-background shadow-xl p-3">
+          <div className="flex items-center gap-2 mb-2">
+            <select
+              value={view.m}
+              onChange={(e) => setView({ ...view, m: +e.target.value })}
+              className="flex-1 h-8 rounded-md border border-input bg-transparent px-2 text-sm"
+              aria-label="Месяц"
+            >
+              {MONTHS.map((m, i) => <option key={m} value={i}>{m}</option>)}
+            </select>
+            <select
+              value={view.y}
+              onChange={(e) => setView({ ...view, y: +e.target.value })}
+              className="h-8 rounded-md border border-input bg-transparent px-2 text-sm"
+              aria-label="Год"
+            >
+              {YEARS.map((y) => <option key={y} value={y}>{y}</option>)}
+            </select>
+          </div>
+          <div className="grid grid-cols-7 text-center text-[10px] text-muted-foreground mb-1">
+            {["Пн","Вт","Ср","Чт","Пт","Сб","Вс"].map((d) => <div key={d}>{d}</div>)}
+          </div>
+          <div className="grid grid-cols-7 gap-0.5 text-center text-sm">
+            {cells.map((d, i) => d === null ? (
+              <div key={i} />
+            ) : (
+              <button
+                key={i}
+                type="button"
+                onClick={() => { onChange(iso + pad2(d)); setOpen(false); }}
+                className={cn(
+                  "h-8 w-full rounded-md hover:bg-accent hover:text-accent-foreground transition-colors",
+                  value === iso + pad2(d) && "bg-accent text-accent-foreground font-bold"
+                )}
+              >
+                {d}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+// ──────────────────────────────────────────────────────────────────────────
 
 const EXPERIENCE = ["до 1 года", "1–3 года", "3+ года"];
 
@@ -33,7 +169,11 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
   const [maxDone, setMaxDone] = useState(false);
   const [maxDoneSending, setMaxDoneSending] = useState(false);
   const [maxDoneSent, setMaxDoneSent] = useState(false);
+  // ТЗ w 27.09 (22:42): подсветка незаполненных обязательных полей
+  const [errs, setErrs] = useState({});
   const phoneRef = useRef("");
+
+  const clearErr = (k) => setErrs((p) => (p[k] ? { ...p, [k]: false } : p));
 
   // Sync preselected values when modal opens
   useEffect(() => {
@@ -58,7 +198,7 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
       if (!res.ok) throw new Error();
       setMaxDoneSent(true);
     } catch {
-      toast({ title: "Не удалось сохранить подтверждение", description: "Нажмите «Сделал» ещё раз", variant: "destructive" });
+      toast({ id: "lead-max", title: "Не удалось сохранить подтверждение", description: "Нажмите «Сделал» ещё раз", variant: "destructive" });
     } finally {
       setMaxDoneSending(false);
     }
@@ -68,22 +208,30 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
     e.preventDefault();
     const emailTrim = (form.email || "").trim();
     const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(emailTrim);
-    // ТЗ w 27.09: сообщение со списком незаполненных обязательных полей
+    const phoneDigits = (form.phone || "").replace(/\D/g, "");
+    const phoneOk = phoneDigits.length >= 10;
+    // ТЗ w 27.09 (22:42): красная подсветка незаполненных полей + тост без дублей
     const miss = [];
-    if (!form.full_name.trim()) miss.push("ФИО");
-    if (!form.phone.trim()) miss.push("телефон");
-    if (!emailOk) miss.push("E-mail");
-    if (!form.birth_date) miss.push("дата рождения");
-    if (!form.consent) miss.push("согласие на обработку персональных данных");
-    if (!form.max_status) miss.push("МАКС");
+    const e2 = {};
+    if (!form.full_name.trim()) { miss.push("ФИО"); e2.full_name = true; }
+    if (!phoneOk) { miss.push("телефон (в формате +7 ...)"); e2.phone = true; }
+    if (!emailOk) { miss.push("E-mail"); e2.email = true; }
+    if (!form.birth_date) { miss.push("дата рождения"); e2.birth_date = true; }
+    if (!form.consent) { miss.push("согласие на обработку персональных данных"); e2.consent = true; }
+    if (!form.max_status) { miss.push("МАКС"); e2.max_status = true; }
     if (miss.length) {
+      setErrs(e2);
+      const first = document.querySelector("[data-err='1']");
+      if (first) first.scrollIntoView({ behavior: "smooth", block: "center" });
       toast({
+        id: "lead-miss",
         title: "Заполните обязательные поля",
         description: "Не заполнено: " + miss.join(", "),
         variant: "destructive",
       });
       return;
     }
+    setErrs({});
     setLoading(true);
     phoneRef.current = form.phone;
     try {
@@ -122,10 +270,12 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
         setMaxDone(false);
         setMaxDoneSent(false);
         setForm({ full_name: "", phone: "", email: "", birth_date: "", vacancy: "", experience: "", comment: "", max_status: "", consent: false });
+        setErrs({});
         onClose();
       }, 45000);
     } catch (err) {
       toast({
+        id: "lead-fail",
         title: "Не удалось отправить заявку",
         description: err.message || "Проверьте интернет-соединение и попробуйте снова",
         variant: "destructive",
@@ -216,33 +366,34 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
               <DialogTitle className="font-inter font-bold text-xl">Оставить заявку</DialogTitle>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-              <div>
-                <Label className="font-inter">ФИО *</Label>
+              <div data-err={errs.full_name ? "1" : undefined}>
+                <Label className={cn("font-inter", errs.full_name && "text-red-600")}>ФИО *</Label>
                 <Input
                   value={form.full_name}
-                  onChange={(e) => setForm({ ...form, full_name: e.target.value })}
+                  onChange={(e) => { setForm({ ...form, full_name: e.target.value }); clearErr("full_name"); }}
                   placeholder="Иванов Иван Иванович"
-                  className="mt-1"
+                  className={cn("mt-1", errs.full_name && "border-red-500 bg-red-50/60 focus-visible:ring-red-400")}
                   required
                 />
               </div>
-              <div>
-                <Label className="font-inter">Телефон *</Label>
+              <div data-err={errs.phone ? "1" : undefined}>
+                <Label className={cn("font-inter", errs.phone && "text-red-600")}>Телефон *</Label>
                 <Input
                   value={form.phone}
-                  onChange={(e) => setForm({ ...form, phone: e.target.value })}
+                  onChange={(e) => { setForm({ ...form, phone: e.target.value }); clearErr("phone"); }}
                   placeholder="+7 (999) 123-45-67"
-                  className="mt-1"
+                  inputMode="tel"
+                  className={cn("mt-1", errs.phone && "border-red-500 bg-red-50/60 focus-visible:ring-red-400")}
                   required
                 />
               </div>
-              <div>
-                <Label className="font-inter">Мессенджер МАКС на этом номере *</Label>
+              <div data-err={errs.max_status ? "1" : undefined}>
+                <Label className={cn("font-inter", errs.max_status && "text-red-600")}>Мессенджер МАКС на этом номере *</Label>
                 <p className="text-xs text-muted-foreground font-inter mt-1">
                   Связь по заявке идёт в МАКС. Если он не установлен — установите (App Store / Google Play / max.ru).
                 </p>
-                <Select value={form.max_status} onValueChange={(v) => setForm({ ...form, max_status: v })}>
-                  <SelectTrigger className="mt-1">
+                <Select value={form.max_status} onValueChange={(v) => { setForm({ ...form, max_status: v }); clearErr("max_status"); }}>
+                  <SelectTrigger className={cn("mt-1", errs.max_status && "border-red-500 bg-red-50/60")}>
                     <SelectValue placeholder="Выберите вариант" />
                   </SelectTrigger>
                   <SelectContent>
@@ -252,25 +403,26 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
                   </SelectContent>
                 </Select>
               </div>
-              <div>
-                <Label className="font-inter">E-mail *</Label>
+              <div data-err={errs.email ? "1" : undefined}>
+                <Label className={cn("font-inter", errs.email && "text-red-600")}>E-mail *</Label>
                 <Input
                   value={form.email}
-                  onChange={(e) => setForm({ ...form, email: e.target.value })}
+                  onChange={(e) => { setForm({ ...form, email: e.target.value }); clearErr("email"); }}
                   placeholder="email@example.com"
                   type="email"
                   required
-                  className="mt-1"
+                  className={cn("mt-1", errs.email && "border-red-500 bg-red-50/60 focus-visible:ring-red-400")}
                 />
               </div>
-              <div>
-                <Label className="font-inter">Дата рождения *</Label>
-                <Input
+              <div data-err={errs.birth_date ? "1" : undefined}>
+                <Label className={cn("font-inter", errs.birth_date && "text-red-600")}>Дата рождения *</Label>
+                <p className="text-xs text-muted-foreground font-inter mt-0.5">
+                  Введите в формате ДД.ММ.ГГГГ (переход по блокам автоматический) или выберите в календаре.
+                </p>
+                <DateField
                   value={form.birth_date}
-                  onChange={(e) => setForm({ ...form, birth_date: e.target.value })}
-                  type="date"
-                  required
-                  className="mt-1"
+                  onChange={(v) => { setForm({ ...form, birth_date: v }); clearErr("birth_date"); }}
+                  invalid={!!errs.birth_date}
                 />
               </div>
               <div>
@@ -309,13 +461,14 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
                   rows={3}
                 />
               </div>
-              <div className="flex items-start gap-3">
+              <div data-err={errs.consent ? "1" : undefined} className="flex items-start gap-3">
                 <Checkbox
                   checked={form.consent}
-                  onCheckedChange={(c) => setForm({ ...form, consent: !!c })}
+                  onCheckedChange={(c) => { setForm({ ...form, consent: !!c }); clearErr("consent"); }}
                   id="consent"
+                  className={cn(errs.consent && "data-[state=unchecked]:border-red-500 data-[state=unchecked]:bg-red-50")}
                 />
-                <Label htmlFor="consent" className="text-sm text-muted-foreground font-inter leading-snug cursor-pointer">
+                <Label htmlFor="consent" className={cn("text-sm text-muted-foreground font-inter leading-snug cursor-pointer", errs.consent && "text-red-600")}>
                   Согласен на{" "}
                   <a href="/consent" target="_blank" className="text-accent underline hover:no-underline">
                     обработку персональных данных

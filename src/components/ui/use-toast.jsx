@@ -2,7 +2,8 @@
 import { useState, useEffect } from "react";
 
 const TOAST_LIMIT = 20;
-const TOAST_REMOVE_DELAY = 1000000;
+// ТЗ w 27.09 (22:42): тост ошибки не дублируется, а обновляется; авто-скрытие 6с
+const TOAST_REMOVE_DELAY = 6000;
 
 const actionTypes = {
   ADD_TOAST: "ADD_TOAST",
@@ -110,8 +111,10 @@ function dispatch(action) {
   });
 }
 
-function toast({ ...props }) {
-  const id = genId();
+function toast({ id: wantedId, ...props }) {
+  // ТЗ w 27.09 (22:42): при повторной ошибке тост с тем же id обновляется, а не плодится
+  const id = wantedId || genId();
+  const exists = memoryState.toasts.some((t) => t.id === id);
 
   const update = (props) =>
     dispatch({
@@ -122,17 +125,27 @@ function toast({ ...props }) {
   const dismiss = () =>
     dispatch({ type: actionTypes.DISMISS_TOAST, toastId: id });
 
-  dispatch({
-    type: actionTypes.ADD_TOAST,
-    toast: {
-      ...props,
-      id,
-      open: true,
-      onOpenChange: (open) => {
-        if (!open) dismiss();
+  if (exists) {
+    _clearFromRemoveQueue(id);
+    dispatch({
+      type: actionTypes.UPDATE_TOAST,
+      toast: { ...props, id, open: true },
+    });
+    addToRemoveQueue(id);
+  } else {
+    dispatch({
+      type: actionTypes.ADD_TOAST,
+      toast: {
+        ...props,
+        id,
+        open: true,
+        onOpenChange: (open) => {
+          if (!open) dismiss();
+        },
       },
-    },
-  });
+    });
+    addToRemoveQueue(id);
+  }
 
   return {
     id,
