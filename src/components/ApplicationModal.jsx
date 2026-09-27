@@ -162,8 +162,8 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
                 Настройки → Безопасность → «Найти меня по номеру» → «Могут все»
               </p>
               <img
-                src="https://bro-crm.ru/max-settings.png"
-                alt="Настройка МАКС: Найти меня по номеру → Могут все"
+                src="/max-settings.jpg"
+                alt="Настройка МАКС: Настройки → Безопасность → Найти меня по номеру → Могут все"
                 className="rounded-lg border w-full max-w-[220px]"
                 loading="lazy"
               />
