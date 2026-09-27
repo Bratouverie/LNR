@@ -19,6 +19,7 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
     full_name: "",
     phone: "",
     email: "",
+    birth_date: "",
     vacancy: preselectedVacancy || "",
     experience: "",
     comment: preselectedObject ? `Интересует объект: ${preselectedObject}` : "",
@@ -26,6 +27,7 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
   });
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+  const [successKind, setSuccessKind] = useState("new");
 
   // Sync preselected values when modal opens
   useEffect(() => {
@@ -42,10 +44,25 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
     e.preventDefault();
     const emailTrim = (form.email || "").trim();
     const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(emailTrim);
-    if (!form.consent || !form.full_name || !form.phone || !emailOk) return;
+    // ТЗ w 27.09: сообщение со списком незаполненных обязательных полей
+    const miss = [];
+    if (!form.full_name.trim()) miss.push("ФИО");
+    if (!form.phone.trim()) miss.push("телефон");
+    if (!emailOk) miss.push("E-mail");
+    if (!form.birth_date) miss.push("дата рождения");
+    if (!form.consent) miss.push("согласие на обработку персональных данных");
+    if (miss.length) {
+      toast({
+        title: "Заполните обязательные поля",
+        description: "Не заполнено: " + miss.join(", "),
+        variant: "destructive",
+      });
+      return;
+    }
     setLoading(true);
     try {
       // ТЗ w 24.09: заявки уходят напрямую в БРО-СРМ с отметкой источника
+      // ТЗ w 27.09: + дата рождения передаётся в карточку кандидата
       const res = await fetch('https://bro-crm.ru/api/public/lead', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -53,23 +70,35 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
           full_name: form.full_name,
           phone: form.phone,
           email: form.email || null,
+          birth_date: form.birth_date || null,
           position: form.vacancy || null,
           experience: form.experience || null,
           comment: form.comment || null,
           source: 'vosstanovim-dnr.ru',
         }),
       });
-      if (!res.ok) throw new Error('lead API error: ' + res.status);
+      if (!res.ok) {
+        let msg = "Проверьте интернет-соединение и попробуйте снова";
+        try {
+          const j = await res.json();
+          if (j && j.error) msg = j.error;
+        } catch {}
+        throw new Error(msg);
+      }
+      const j = await res.json();
+      // Антидубль (ТЗ w 27.09): сервер мог ответить «заявка уже принята»
+      setSuccessKind(j && j.data && j.data.already ? "already" : "new");
       setSuccess(true);
       setTimeout(() => {
         setSuccess(false);
-        setForm({ full_name: "", phone: "", email: "", vacancy: "", experience: "", comment: "", consent: false });
+        setSuccessKind("new");
+        setForm({ full_name: "", phone: "", email: "", birth_date: "", vacancy: "", experience: "", comment: "", consent: false });
         onClose();
-      }, 6000);
+      }, 12000);
     } catch (err) {
       toast({
         title: "Не удалось отправить заявку",
-        description: "Проверьте интернет-соединение и попробуйте снова",
+        description: err.message || "Проверьте интернет-соединение и попробуйте снова",
         variant: "destructive",
       });
     } finally {
@@ -83,11 +112,26 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
         {success ? (
           <div className="flex flex-col items-center py-12 gap-4">
             <CheckCircle className="h-16 w-16 text-green-500" />
-            <h3 className="font-inter font-bold text-xl text-foreground">🎉 Заявка принята!</h3>
+            <h3 className="font-inter font-bold text-xl text-foreground">
+              {successKind === "already" ? "✅ Ваша заявка уже принята!" : "🎉 Заявка принята!"}
+            </h3>
             <p className="text-muted-foreground font-inter text-center">
-              Менеджер свяжется с вами в порядке очереди. Сейчас очень много обращений —
-              спасибо за терпение!
+              {successKind === "already"
+                ? "Она уже находится на рассмотрении. Менеджер свяжется с вами в порядке очереди — спасибо за терпение!"
+                : "Менеджер свяжется с вами в порядке очереди. Сейчас очень много обращений — спасибо за терпение!"}
             </p>
+            <p className="text-sm text-muted-foreground font-inter text-center">
+              Хотите ускорить рассмотрение? Напишите нашему ИИ-консультанту в MAX —
+              он ответит на вопросы и сразу пришлёт персональную ссылку на анкету.
+            </p>
+            <a
+              href="https://max.ru/se13611113_bot"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="w-full inline-flex items-center justify-center gap-2 rounded-md bg-accent hover:bg-accent/90 text-accent-foreground font-inter font-bold py-6 px-4"
+            >
+              💬 Написать консультанту в MAX
+            </a>
             <p className="text-xs text-muted-foreground font-inter text-center">
               Заявка зарегистрирована в системе подбора персонала
             </p>
@@ -125,6 +169,16 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
                   onChange={(e) => setForm({ ...form, email: e.target.value })}
                   placeholder="email@example.com"
                   type="email"
+                  required
+                  className="mt-1"
+                />
+              </div>
+              <div>
+                <Label className="font-inter">Дата рождения *</Label>
+                <Input
+                  value={form.birth_date}
+                  onChange={(e) => setForm({ ...form, birth_date: e.target.value })}
+                  type="date"
                   required
                   className="mt-1"
                 />
@@ -180,7 +234,7 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
               </div>
               <Button
                 type="submit"
-                disabled={loading || !form.consent || !form.full_name || !form.phone}
+                disabled={loading}
                 className="w-full bg-accent hover:bg-accent/90 text-accent-foreground font-inter font-bold py-6"
               >
                 {loading ? <Loader2 className="h-5 w-5 animate-spin" /> : "Отправить заявку"}
