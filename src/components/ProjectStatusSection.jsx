@@ -52,6 +52,10 @@ const REQUISITES = [
   { label: "ОКТМО", value: "45308000000" },
   { label: "ОКФС", value: "16" },
   { label: "Юридический адрес", value: "111675, город Москва, Лухмановская ул, д. 34, помещ. 15/1" },
+  { label: "Банк", value: "ПАО Сбербанк, г. Москва" },
+  { label: "Расчётный счёт", value: "40702810438000123456 (RUR)" },
+  { label: "БИК", value: "044525225" },
+  { label: "Корреспондентский счёт", value: "30101810400000000225" },
 ];
 
 export default function ProjectStatusSection() {
