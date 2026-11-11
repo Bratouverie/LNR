@@ -3,10 +3,11 @@ import { COMPANY_INFO } from "@/lib/calculatorData";
 
 const IMG_BASE = "https://media.base44.com/images/public/69f4a665db2c72a42818d397";
 const AWARDS = [
-  { src: `${IMG_BASE}/b3e2a9181_9cb9620f5_Official_Russian_Certificate_of_Honor_Pochetnaya_-1779972088305.jpg`, alt: "Почётная грамота Минпросвещения РФ", landscape: true },
-  { src: `${IMG_BASE}/0a6f2d63f_11d8178ed_.jpg`, alt: "Благодарность Минздрава РФ" },
-  { src: `${IMG_BASE}/f411dc883_994da1168_--.jpg`, alt: "Благодарность Правительства РФ" },
-  { src: `${IMG_BASE}/9937d325f_1148d61b5_Official_Russian_Certificate_of_Honor_Pochetnaya_-1779974154437.jpg`, alt: "Почётная грамота Минцифры РФ" },
+  { src: "/awards/award-belarus-2025.jpg", alt: "Благодарность Президента Республики Беларусь", note: "Благодарность Президента Республики Беларусь", year: "2025" },
+  { src: "/awards/award-fobos-mosobl.jpg", alt: "Благодарность Министра строительства Московской области", note: "Благодарность Министра строительства Правительства Московской области", year: "" },
+  { src: "/awards/award-yakutagroproekt-2021.webp", alt: "Благодарность Правительства Республики Саха (Якутия)", note: "Благодарность Правительства Республики Саха (Якутия)", year: "2021" },
+  { src: "/awards/award-zhukova-2023.jpg", alt: "Благодарность депутата Государственной Думы", note: "Благодарность депутата Государственной Думы ФС РФ", year: "2023" },
+  { src: "/awards/award-dimaks-kremlin.png", alt: "Благодарность за поставку для Кремлёвского дворца", note: "Благодарность за поставку фурнитуры для Государственного Кремлёвского дворца", year: "" },
 ];
 
 const DIRECTIONS = [
@@ -129,17 +130,22 @@ export default function AboutCompany() {
           </div>
 
           {/* Right: awards */}
-          <div className="space-y-4">
-            <img src={AWARDS[0].src} alt={AWARDS[0].alt} loading="lazy" className="w-full aspect-[4/3] object-cover rounded-xl border border-border shadow-sm" />
-            <div className="grid grid-cols-3 gap-3">
-              {AWARDS.slice(1).map((award) => (
-                <img key={award.src} src={award.src} alt={award.alt} loading="lazy" className="w-full aspect-[3/4] object-cover rounded-xl border border-border shadow-sm" />
-              ))}
+          <div className="space-y-5">
+            <div>
+              <h3 className="font-display text-xl font-semibold text-foreground">Благодарности сотрудников компании</h3>
+              <p className="font-inter text-xs text-muted-foreground mt-1">Официальные благодарности за работу на государственных объектах</p>
             </div>
-            <div className="bg-primary/5 border border-primary/20 rounded-xl p-4 text-center">
-              <p className="font-inter text-xs text-muted-foreground">Всего 12 грамот и благодарностей от Министерств и Правительства РФ
-
-              </p>
+            <figure className="space-y-2">
+              <img src={AWARDS[0].src} alt={AWARDS[0].alt} loading="lazy" className="w-full aspect-[4/3] object-contain bg-white rounded-xl border border-border shadow-sm" />
+              <figcaption className="font-inter text-xs text-muted-foreground">{AWARDS[0].note}</figcaption>
+            </figure>
+            <div className="grid grid-cols-2 gap-4">
+              {AWARDS.slice(1).map((award) => (
+                <figure key={award.src} className="space-y-2">
+                  <img src={award.src} alt={award.alt} loading="lazy" className="w-full aspect-[3/4] object-contain bg-white rounded-xl border border-border shadow-sm" />
+                  <figcaption className="font-inter text-xs text-muted-foreground leading-snug">{award.note}</figcaption>
+                </figure>
+              ))}
             </div>
           </div>
         </div>
