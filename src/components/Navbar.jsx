@@ -3,7 +3,7 @@ import { Menu, X, ChevronDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 
-const GOV_LOGO = "/logo-nvs.jpg";
+const GOV_LOGO = "https://media.base44.com/images/public/69f4a665db2c72a42818d397/b880d120f_mediapreview.jpeg";
 
 const NAV_GROUPS = [
   {

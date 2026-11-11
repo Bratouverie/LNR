@@ -159,7 +159,7 @@ export default function ContractView() {
 
             {/* Шапка с логотипом компании */}
             <div className="flex items-center gap-4 border-b border-gray-300 pb-4">
-              <img src="/logo-nvs.jpg" alt="ООО «НВС»" style={{ height: "64px", width: "64px", objectFit: "contain" }} />
+              <img src="https://media.base44.com/images/public/69f4a665db2c72a42818d397/341496496_Logosvg.png" alt="ООО «НВС»" style={{ height: "64px", width: "64px", objectFit: "contain" }} />
               <div>
                 <div className="font-semibold text-base">ООО «НВС»</div>
                 <div className="text-xs text-gray-600">Программа восстановления ЛНР и ДНР</div>

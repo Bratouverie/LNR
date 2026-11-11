@@ -23,7 +23,7 @@ export default function Footer() {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-8 mb-10">
           <div className="flex items-center gap-3">
             <img
-              src="/logo-nvs.jpg"
+              src="https://media.base44.com/images/public/69f4a665db2c72a42818d397/341496496_Logosvg.png"
               alt="Логотип"
               className="h-12 w-auto object-contain"
             />
