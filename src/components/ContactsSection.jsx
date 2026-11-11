@@ -24,7 +24,7 @@ export default function ContactsSection({ onCallback }) {
           <div className="text-white/60 font-inter text-sm mt-2">По вопросам трудоустройства граждан и сотрудничества с кадровыми агентствами · Звонок бесплатный</div>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mt-6">
             <a
-              href="https://max.ru/u/f9LHodD0cOLnAxokVgBK1HcwEnGhlBy0W7dVL4IAtZFgqRBl5Imbli5RDlY"
+              href="https://max.ru/se13611113_bot"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-white/10 hover:bg-white/20 text-white px-6 py-3 rounded-lg font-inter font-semibold transition-colors"

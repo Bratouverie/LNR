@@ -70,7 +70,7 @@ export default function FinalCTA({ onOpenApplication, onCallback }) {
             <span className="font-inter text-xs text-white/50">Email</span>
             <span className="font-inter text-sm font-semibold text-white">hh@vosstanovim-dnr.ru</span>
           </a>
-          <a href="https://max.ru/u/f9LHodD0cOLnAxokVgBK1HcwEnGhlBy0W7dVL4IAtZFgqRBl5Imbli5RDlY" target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-2 bg-white/5 border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-colors">
+          <a href="https://max.ru/se13611113_bot" target="_blank" rel="noopener noreferrer" className="flex flex-col items-center gap-2 bg-white/5 border border-white/10 rounded-xl p-4 hover:bg-white/10 transition-colors">
             <MessageSquare className="h-5 w-5 text-accent" />
             <span className="font-inter text-xs text-white/50">Мессенджер</span>
             <span className="font-inter text-sm font-semibold text-white">Макс</span>

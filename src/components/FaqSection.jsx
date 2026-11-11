@@ -116,7 +116,7 @@ export default function FaqSection() {
               📧 hh@vosstanovim-dnr.ru
             </a>
             <a
-              href="https://max.ru/u/f9LHodD0cOLnAxokVgBK1HcwEnGhlBy0W7dVL4IAtZFgqRBl5Imbli5RDlY"
+              href="https://max.ru/se13611113_bot"
               target="_blank"
               rel="noopener noreferrer"
               className="text-accent hover:underline font-semibold text-sm font-inter"
