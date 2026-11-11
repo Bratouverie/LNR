@@ -453,7 +453,6 @@ export default function ContractView() {
                     <p className="font-semibold">ООО «НВС»</p>
                     <p className="text-xs text-gray-600">ОГРН: 1247700464880 | ИНН: 9725162767 | КПП: 772001001</p>
                     <p className="text-xs text-gray-600">111675, город Москва, Лухмановская ул, д. 34, помещ. 15/1</p>
-                    <p className="text-xs text-gray-600">Р/сч: 40702810820110001074</p>
                     <p className="text-xs text-gray-600">Тел.: 8 (800) 222-84-63 | hh@vosstanovim-dnr.ru | vosstanovim-dnr.ru</p>
                     <div className="mt-4 space-y-3">
                       <div>

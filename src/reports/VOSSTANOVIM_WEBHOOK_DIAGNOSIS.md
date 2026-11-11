@@ -11,7 +11,7 @@
 **vosstanovim-dnr.ru — это ВНЕШНИЙ сайт с отдельным репозиторием кода.** 
 Доступа к его файлам (.git, .env, dist/) из этого Base44-приложения **НЕТ**.
 
-Это Base44-приложение (bratouverie-snb) — это **бэкенд**, который vosstanovim-dnr.ru 
+Это Base44-приложение (Base44) — это **бэкенд**, который vosstanovim-dnr.ru 
 должен вызывать через публичный URL функции. Диагностика ниже проверяет **только бэкенд**.
 
 ---
@@ -82,17 +82,17 @@ sk_web_form_a67191e0bb38eb17653f58eeb34e2bfceaa7f2b372ded560598cb37f27477862636d
 ### Публичный URL функции:
 
 ```
-https://bratouverie-snb.base44.app/functions/gatekeeperInbound
+https://app.base44.com/functions/gatekeeperInbound
 ```
 
 > Примечание: точный домен Base44-приложения нужно подтвердить в dashboard → settings. 
-> Замените `bratouverie-snb.base44.app` на актуальный домен приложения.
+> Замените `app.base44.com` на актуальный домен приложения.
 
 ### Код для формы на vosstanovim-dnr.ru:
 
 ```javascript
 async function submitApplication(formData) {
-  const response = await fetch('https://bratouverie-snb.base44.app/functions/gatekeeperInbound', {
+  const response = await fetch('https://app.base44.com/functions/gatekeeperInbound', {
     method: 'POST',
     headers: {
       'X-API-KEY': 'sk_web_form_a67191e0bb38eb17653f58eeb34e2bfceaa7f2b372ded560598cb37f27477862636de465e3d3494c1799185619b30cef',

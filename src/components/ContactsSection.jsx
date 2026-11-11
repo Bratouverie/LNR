@@ -11,7 +11,7 @@ export default function ContactsSection({ onCallback }) {
             Приём заявок и сотрудничество
           </h2>
           <p className="text-muted-foreground font-inter mt-4 max-w-xl mx-auto">
-            Программу реализует ООО «БРАТОУВЕРИЕ-СНБ» по поручению Правительства РФ
+            Программу реализует ООО «НВС» по поручению Правительства РФ
           </p>
         </div>
 
