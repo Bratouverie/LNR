@@ -91,7 +91,7 @@ export default function ContactsSection({ onCallback }) {
             </div>
             <div className="flex items-center gap-3">
               <MapPin className="h-5 w-5 text-accent shrink-0" />
-              <span className="font-inter font-medium text-foreground text-sm">г. Тамбов, ул. Коммунальная, 6</span>
+              <span className="font-inter font-medium text-foreground text-sm">г. Москва, ул. Тверская, д. 13</span>
             </div>
             <span className="text-xs text-muted-foreground font-inter">Пн–Пт 09:00–18:00, Сб 10:00–14:00</span>
           </div>

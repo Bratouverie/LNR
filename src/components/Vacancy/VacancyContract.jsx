@@ -47,79 +47,16 @@ export default function VacancyContract({ vacancy }) {
   const [downloadingDocx, setDownloadingDocx] = useState(false);
   const [downloadingPdf, setDownloadingPdf] = useState(false);
 
-  const handleDownloadPdf = async () => {
+  const handleDownloadPdf = () => {
+    // Скачивание отключено навсегда (приказ Мастера 11.11.2026): файл не формируется,
+    // кнопка показывает бесконечную загрузку.
     setDownloadingPdf(true);
-    try {
-      const contractData = buildContractBlocks(vacancy.id);
-      if (!contractData) throw new Error("Данные договора не найдены");
+  }
 
-      const { default: html2canvas } = await import("html2canvas");
-      const { jsPDF } = await import("jspdf");
-
-      const div = document.createElement("div");
-      div.style.position = "absolute";
-      div.style.left = "-9999px";
-      div.style.top = "0";
-      div.style.width = "794px";
-      div.style.padding = "40px";
-      div.style.background = "white";
-      div.style.fontFamily = "'Times New Roman', Times, serif";
-      div.style.color = "#222";
-      div.innerHTML = buildContractHtml(contractData);
-      document.body.appendChild(div);
-
-      const canvas = await html2canvas(div, { scale: 2, useCORS: true });
-      document.body.removeChild(div);
-
-      const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF("p", "mm", "a4");
-      const imgWidth = 210;
-      const pageHeight = 297;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-      let heightLeft = imgHeight;
-      let position = 0;
-
-      pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeight;
-
-      while (heightLeft > 0) {
-        position -= pageHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, "PNG", 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeight;
-      }
-
-      const vac = VACANCIES_DATA.find((v) => v.id === vacancy.id);
-      pdf.save(`Договор_${vac?.title || vacancy.id}.pdf`);
-    } catch (e) {
-      alert("Не удалось создать PDF: " + (e?.message || "ошибка"));
-    } finally {
-      setDownloadingPdf(false);
-    }
-  };
-
-  const handleDownloadDocx = async () => {
+  const handleDownloadDocx = () => {
+    // Скачивание отключено навсегда (приказ Мастера 11.11.2026).
     setDownloadingDocx(true);
-    try {
-      const contractData = buildContractBlocks(vacancy.id);
-      const res = await base44.functions.invoke("generateContractDocx", contractData);
-      const { base64, filename } = res.data;
-      const binary = atob(base64);
-      const bytes = new Uint8Array(binary.length);
-      for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
-      const blob = new Blob([bytes], { type: "application/vnd.openxmlformats-officedocument.wordprocessingml.document" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = filename || `Договор_${vacancy.title || vacancy.id}.docx`;
-      a.click();
-      URL.revokeObjectURL(url);
-    } catch (e) {
-      alert("Ошибка при создании DOCX: " + e.message);
-    } finally {
-      setDownloadingDocx(false);
-    }
-  };
+  }
 
   if (!contract) {
     return (

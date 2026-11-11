@@ -151,7 +151,7 @@ export function buildContractBlocks(vacancyId) {
   b.push({ type: "paragraph", text: "ОГРН: 1247700464880 | ИНН: 9725162767 | КПП: 772001001" });
   b.push({ type: "paragraph", text: "111675, город Москва, Лухмановская ул, д. 34, помещ. 15/1" });
   b.push({ type: "paragraph", text: "Тел.: 8 (800) 222-84-63 | hh@vosstanovim-dnr.ru | vosstanovim-dnr.ru" });
-  b.push({ type: "paragraph", text: "Генеральный директор: ______________ С.В. Бобровский   М.П." });
+  b.push({ type: "paragraph", text: "Генеральный директор: С.В. Бобровский   М.П." });
   b.push({ type: "paragraph", text: "Дата: ______________" });
 
   // Приложения

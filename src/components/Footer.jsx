@@ -23,7 +23,7 @@ export default function Footer() {
         <div className="flex flex-col sm:flex-row items-center justify-between gap-8 mb-10">
           <div className="flex items-center gap-3">
             <img
-              src="https://media.base44.com/images/public/69f4a665db2c72a42818d397/341496496_Logosvg.png"
+              src="/logo-nvs.jpg"
               alt="Логотип"
               className="h-12 w-auto object-contain"
             />
@@ -59,7 +59,7 @@ export default function Footer() {
               <div>Ген. директор: Бобровский С.В.</div>
               <div className="pt-1">Юр. адрес: 111675, город Москва, Лухмановская ул, д. 34, помещ. 15/1</div>
               <div>Факт. адрес: 111675, город Москва, Лухмановская ул, д. 34, помещ. 15/1</div>
-              <div>Доп. офис: г. Тамбов, ул. Коммунальная, 6</div>
+              <div>Доп. офис: г. Москва, ул. Тверская, д. 13</div>
             </div>
           </div>
 

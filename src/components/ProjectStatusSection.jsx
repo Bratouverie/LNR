@@ -197,7 +197,7 @@ export default function ProjectStatusSection() {
                   </div>
                   <div className="flex items-start gap-3 text-sm font-inter text-muted-foreground">
                     <MapPin className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    г. Тамбов, ул. Коммунальная, 6 (Тамбовская область)
+                    г. Москва, ул. Тверская, д. 13
                   </div>
                 </div>
               </div>
