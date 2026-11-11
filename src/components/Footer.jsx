@@ -52,13 +52,13 @@ export default function Footer() {
           {/* Company */}
           <div>
             <div className="font-inter font-bold text-xs text-white/40 uppercase tracking-widest mb-3">Подрядчик</div>
-            <div className="font-inter font-semibold text-sm text-white mb-2">ООО «Братоуверие-СНБ»</div>
+            <div className="font-inter font-semibold text-sm text-white mb-2">ООО «НВС»</div>
             <div className="space-y-1 text-xs text-white/50 font-inter">
-              <div>ИНН: 2511135442</div>
-              <div>ОГРН: 1132511007591</div>
-              <div>Ген. директор: Прутин В.В.</div>
-              <div className="pt-1">Юр. адрес: Приморский край, г. Уссурийск, пер. Мирный, д. 1</div>
-              <div>Факт. адрес: г. Хабаровск, ул. Карла Маркса, д. 66</div>
+              <div>ИНН: 9725162767</div>
+              <div>ОГРН: 1247700464880</div>
+              <div>Ген. директор: Бобровский С.В.</div>
+              <div className="pt-1">Юр. адрес: 111675, город Москва, Лухмановская ул, д. 34, помещ. 15/1</div>
+              <div>Факт. адрес: 111675, город Москва, Лухмановская ул, д. 34, помещ. 15/1</div>
               <div>Доп. офис: г. Тамбов, ул. Коммунальная, 6</div>
             </div>
           </div>
@@ -71,7 +71,7 @@ export default function Footer() {
               <div className="text-white/30">Единый номер приёма заявок</div>
               <div className="pt-1"><a href="mailto:hh@vosstanovim-dnr.ru" className="hover:text-white transition-colors">hh@vosstanovim-dnr.ru</a></div>
               <div className="text-white/30">Трудоустройство граждан</div>
-              <div className="pt-1"><a href="mailto:partner@bratouverie-snb.ru" className="hover:text-white transition-colors">partner@bratouverie-snb.ru</a></div>
+              <div className="pt-1"><a href="mailto:partner@vosstanovim-dnr.ru" className="hover:text-white transition-colors">partner@vosstanovim-dnr.ru</a></div>
               <div className="text-white/30">Сотрудничество с агентствами</div>
               <div className="pt-1"><a href="mailto:support@vosstanovim-dnr.ru" className="hover:text-white transition-colors">support@vosstanovim-dnr.ru</a></div>
               <div className="text-white/30">Поддержка</div>
@@ -109,7 +109,7 @@ export default function Footer() {
         {/* Bottom */}
         <div className="mt-6 text-center space-y-2">
           <p className="text-xs text-white/30 font-inter">
-            © {new Date().getFullYear()} Правительство РФ · ООО «Братоуверие-СНБ». Все права защищены.
+            © {new Date().getFullYear()} Правительство РФ · ООО «НВС». Все права защищены.
           </p>
           <p className="text-xs text-white/30 font-inter">
             <a href="https://vosstanovim-dnr.ru" className="hover:text-white transition-colors">https://vosstanovim-dnr.ru</a>

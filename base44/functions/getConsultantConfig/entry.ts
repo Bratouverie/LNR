@@ -70,7 +70,7 @@ Deno.serve(async (req) => {
         messages: {
           intro: strOr('intro_message', 'Привет, я Мария! За 3 месяца работы можно заработать {total_income} ₽.'),
           success: strOr('final_message_success', '✅ Готово! Менеджер позвонит завтра до 11:00.'),
-          error: strOr('error_message', 'Ошибка при отправке. Позвони +7(4212)51-59-30')
+          error: strOr('error_message', 'Ошибка при отправке. Позвони 8(800)222-84-63')
         },
         specializations: specData,
         objections: objData

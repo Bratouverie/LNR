@@ -19,13 +19,13 @@ export function buildContractBlocks(vacancyId) {
 
   // 1
   b.push({ type: "heading", text: "1. СТОРОНЫ ДОГОВОРА" });
-  b.push({ type: "paragraph", text: "Работодатель: ООО «Братоуверие-СНБ»" });
-  b.push({ type: "paragraph", text: "ОГРН: 1262500006966 | ИНН: 2511135442 | КПП: 251101001" });
-  b.push({ type: "paragraph", text: "Юридический адрес: 692510, Приморский край, г.о. Уссурийский, г. Уссурийск, пер. Мирный, д. 1" });
+  b.push({ type: "paragraph", text: "Работодатель: ООО «НВС»" });
+  b.push({ type: "paragraph", text: "ОГРН: 1247700464880 | ИНН: 9725162767 | КПП: 772001001" });
+  b.push({ type: "paragraph", text: "Юридический адрес: 111675, город Москва, Лухмановская ул, д. 34, помещ. 15/1" });
   b.push({ type: "paragraph", text: "Расчётный счёт: 40702810820110001074" });
   b.push({ type: "paragraph", text: "Банк: ФИЛИАЛ «ХАБАРОВСКИЙ» АО «АЛЬФА-БАНК»" });
   b.push({ type: "paragraph", text: "БИК: 040813770 | Корр. счёт: 30101810800000000770" });
-  b.push({ type: "paragraph", text: "Тел.: +7(4212) 51-59-30 | E-mail: hh@bratouverie-snb.ru | Сайт: bratouverie-snb.ru" });
+  b.push({ type: "paragraph", text: "Тел.: 8 (800) 222-84-63 | E-mail: hh@vosstanovim-dnr.ru | Сайт: vosstanovim-dnr.ru" });
   b.push({ type: "paragraph", text: "Работник: _______________________________ (ФИО), паспорт РФ серия __________, номер __________, выданный _________________________, дата выдачи ______________. Дата рождения: ______________. Постоянное место проживания: _________________________________________________." });
   b.push({ type: "subheading", text: "1.1 Организация безопасности и доставки Федеральной службой безопасности РФ" });
   b.push({ type: "paragraph", text: CONTRACT_COMMON.contractSections.moSection });
@@ -150,14 +150,14 @@ export function buildContractBlocks(vacancyId) {
   b.push({ type: "paragraph", text: "Дата: ______________   Подпись: ______________" });
   b.push({ type: "paragraph", text: "" });
   b.push({ type: "paragraph", text: "РАБОТОДАТЕЛЬ:" });
-  b.push({ type: "paragraph", text: "ООО «Братоуверие-СНБ»" });
-  b.push({ type: "paragraph", text: "ОГРН: 1262500006966 | ИНН: 2511135442 | КПП: 251101001" });
-  b.push({ type: "paragraph", text: "692510, Приморский край, г.о. Уссурийский, г. Уссурийск, пер. Мирный, д. 1" });
+  b.push({ type: "paragraph", text: "ООО «НВС»" });
+  b.push({ type: "paragraph", text: "ОГРН: 1247700464880 | ИНН: 9725162767 | КПП: 772001001" });
+  b.push({ type: "paragraph", text: "111675, город Москва, Лухмановская ул, д. 34, помещ. 15/1" });
   b.push({ type: "paragraph", text: "Р/сч: 40702810820110001074" });
   b.push({ type: "paragraph", text: "Банк: ФИЛИАЛ «ХАБАРОВСКИЙ» АО «АЛЬФА-БАНК»" });
   b.push({ type: "paragraph", text: "БИК: 040813770 | Корр. счёт: 30101810800000000770" });
-  b.push({ type: "paragraph", text: "Тел.: +7(4212) 51-59-30 | hh@bratouverie-snb.ru | bratouverie-snb.ru" });
-  b.push({ type: "paragraph", text: "Генеральный директор: ______________ В.В. Прутин   М.П." });
+  b.push({ type: "paragraph", text: "Тел.: 8 (800) 222-84-63 | hh@vosstanovim-dnr.ru | vosstanovim-dnr.ru" });
+  b.push({ type: "paragraph", text: "Генеральный директор: ______________ С.В. Бобровский   М.П." });
   b.push({ type: "paragraph", text: "Дата: ______________" });
 
   // Приложения

@@ -144,13 +144,13 @@ export default function ConsultantMaria() {
       addBotMessage(
         `✅ Готово, ${candidateData.current.firstName}!\n\n` +
         `Твои данные отправлены. Менеджер позвонит завтра до 11:00 на номер ${candidateData.current.phone}.\n\n` +
-        `Если есть вопросы — позвони: +7(4212)51-59-30 доб.702\n\n` +
+        `Если есть вопросы — позвони: 8(800)222-84-63 доб.702\n\n` +
         `🚀 Удачи!`
       );
       setPhase(5);
     } catch (err) {
       setSubmitError(true);
-      addBotMessage("❌ Ошибка при отправке. Нажми «Повторить» или позвони +7(4212)51-59-30");
+      addBotMessage("❌ Ошибка при отправке. Нажми «Повторить» или позвони 8(800)222-84-63");
     }
     setSubmitting(false);
   };

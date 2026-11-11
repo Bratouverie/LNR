@@ -43,14 +43,15 @@ const SUPPORT = [
 ];
 
 const REQUISITES = [
-  { label: "ИНН", value: "2511135442" },
-  { label: "КПП", value: "251101001" },
-  { label: "ОГРН", value: "1262500006966" },
+  { label: "ИНН", value: "9725162767" },
+  { label: "КПП", value: "772001001" },
+  { label: "ОГРН", value: "1247700464880" },
   { label: "Орг.-прав. форма", value: "ООО (частная компания)" },
-  { label: "Юридический адрес", value: "Приморский край, г. Уссурийск, переулок Мирный, д. 1" },
-  { label: "Банк", value: "Филиал «Хабаровский» АО «Альфа-Банк»" },
-  { label: "Расчётный счёт", value: "40702810820110001074 (RUR)" },
-  { label: "БИК", value: "40813770" },
+  { label: "ОКПО", value: "96788300" },
+  { label: "ОКАТО", value: "45263573000" },
+  { label: "ОКТМО", value: "45308000000" },
+  { label: "ОКФС", value: "16" },
+  { label: "Юридический адрес", value: "111675, город Москва, Лухмановская ул, д. 34, помещ. 15/1" },
 ];
 
 export default function ProjectStatusSection() {
@@ -165,7 +166,7 @@ export default function ProjectStatusSection() {
             <div className="bg-primary p-5 flex items-center gap-3">
               <Building className="h-6 w-6 text-accent" />
               <div>
-                <div className="font-inter font-black text-white text-lg">ООО «Братоуверие-СНБ»</div>
+                <div className="font-inter font-black text-white text-lg">ООО «НВС»</div>
                 <div className="font-inter text-white/70 text-sm">Генеральный подрядчик программы</div>
               </div>
             </div>
@@ -182,9 +183,9 @@ export default function ProjectStatusSection() {
                     <Mail className="h-4 w-4 text-accent" />
                     hh@vosstanovim-dnr.ru
                   </a>
-                  <a href="mailto:partner@bratouverie-snb.ru" className="flex items-center gap-3 text-sm font-inter text-foreground hover:text-accent transition-colors">
+                  <a href="mailto:partner@vosstanovim-dnr.ru" className="flex items-center gap-3 text-sm font-inter text-foreground hover:text-accent transition-colors">
                     <Mail className="h-4 w-4 text-accent" />
-                    partner@bratouverie-snb.ru
+                    partner@vosstanovim-dnr.ru
                   </a>
                   <a href="mailto:support@vosstanovim-dnr.ru" className="flex items-center gap-3 text-sm font-inter text-foreground hover:text-accent transition-colors">
                     <Mail className="h-4 w-4 text-accent" />
@@ -192,7 +193,7 @@ export default function ProjectStatusSection() {
                   </a>
                   <div className="flex items-start gap-3 text-sm font-inter text-muted-foreground">
                     <MapPin className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                    г. Хабаровск, ул. Карла Маркса, д. 66
+                    111675, город Москва, Лухмановская ул, д. 34, помещ. 15/1
                   </div>
                   <div className="flex items-start gap-3 text-sm font-inter text-muted-foreground">
                     <MapPin className="h-4 w-4 text-accent shrink-0 mt-0.5" />

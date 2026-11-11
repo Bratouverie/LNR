@@ -9,28 +9,28 @@ const LEADER_PHOTOS = {
 
 const LEADERS = [
 {
-  name: "Прутин Владимир Викторович",
+  name: "Бобровский Станислав Валериевич",
   role: "Генеральный директор, руководитель проекта отбора",
-  experience: "18 лет в кадровом менеджменте, 5 лет гос. контрактов",
-  education: "МГУ им. Ломоносова (экономика)",
-  phone: "+7 (4212) 51-59-30 доб. 702",
-  email: "vladimir.prutin@bratouverie-snb.ru",
+  experience: "Генеральный директор ООО «НВС» с 14 октября 2025 г.",
+  education: "",
+  phone: "8 (800) 222-84-63",
+  email: "bobrovsky@vosstanovim-dnr.ru",
   visualId: 96
 },
 {
   name: "\u0412\u0438\u043A\u0442\u043E\u0440 \u0421\u0435\u0440\u0433\u0435\u0435\u0432\u0438\u0447\xA0\u0411\u0430\u0442\u0440\u0430\u043A\u043E\u0432",
   role: "Начальник отдела безопасности",
   experience: "\u0411\u044B\u0432\u0448\u0438\u0439 \u0441\u043E\u0442\u0440\u0443\u0434\u043D\u0438\u043A \u0441\u043F\u0435\u0446\u0441\u043B\u0443\u0436\u0431, 19 \u043B\u0435\u0442",
-  phone: "+7 (4212) 51-59-30 доб. 703",
-  email: "security@bratouverie-snb.ru",
+  phone: "8 (800) 222-84-63",
+  email: "security@vosstanovim-dnr.ru",
   visualId: 97
 },
 {
   name: "\u041D\u0438\u043D\u0430 \u0412\u0430\u043B\u0435\u0440\u044C\u0435\u0432\u043D\u0430\xA0\u0417\u043E\u0438\u043D\u0430",
   role: "Руководитель юридического отдела",
   experience: "Адвокат, 12 лет трудовое право",
-  phone: "+7 (4212) 51-59-30 доб. 704",
-  email: "legal@bratouverie-snb.ru",
+  phone: "8 (800) 222-84-63",
+  email: "legal@vosstanovim-dnr.ru",
   visualId: 98
 }];
 

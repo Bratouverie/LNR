@@ -222,13 +222,13 @@ export default function ContractView() {
             {/* 1. Стороны */}
             <ContractSection num="1" title="СТОРОНЫ ДОГОВОРА">
               <div className="border border-gray-300 rounded p-3 bg-gray-50 text-sm space-y-0.5">
-                <p><strong>Работодатель:</strong> ООО «Братоуверие-СНБ»</p>
-                <p>ОГРН: 1262500006966 &nbsp;|&nbsp; ИНН: 2511135442 &nbsp;|&nbsp; КПП: 251101001</p>
-                <p>Юридический адрес: 692510, Приморский край, г.о. Уссурийский, г. Уссурийск, пер. Мирный, д. 1</p>
+                <p><strong>Работодатель:</strong> ООО «НВС»</p>
+                <p>ОГРН: 1247700464880 &nbsp;|&nbsp; ИНН: 9725162767 &nbsp;|&nbsp; КПП: 772001001</p>
+                <p>Юридический адрес: 111675, город Москва, Лухмановская ул, д. 34, помещ. 15/1</p>
                 <p>Расчётный счёт: 40702810820110001074</p>
                 <p>Банк: ФИЛИАЛ «ХАБАРОВСКИЙ» АО «АЛЬФА-БАНК»</p>
                 <p>БИК: 040813770 &nbsp;|&nbsp; Корр. счёт: 30101810800000000770</p>
-                <p>Тел.: +7(4212) 51-59-30 &nbsp;|&nbsp; E-mail: hh@bratouverie-snb.ru &nbsp;|&nbsp; Сайт: bratouverie-snb.ru</p>
+                <p>Тел.: 8 (800) 222-84-63 &nbsp;|&nbsp; E-mail: hh@vosstanovim-dnr.ru &nbsp;|&nbsp; Сайт: vosstanovim-dnr.ru</p>
               </div>
               <p className="mt-3">
                 <strong>Работник:</strong> _______________________________ (ФИО), паспорт РФ серия __________, номер __________, выданный _________________________, дата выдачи ______________. Дата рождения: ______________. Постоянное место проживания: _________________________________________________.
@@ -453,17 +453,17 @@ export default function ContractView() {
                 <div>
                   <p className="font-bold text-gray-900 mb-4">РАБОТОДАТЕЛЬ:</p>
                   <div className="text-sm space-y-1">
-                    <p className="font-semibold">ООО «Братоуверие-СНБ»</p>
-                    <p className="text-xs text-gray-600">ОГРН: 1262500006966 | ИНН: 2511135442 | КПП: 251101001</p>
-                    <p className="text-xs text-gray-600">692510, Приморский край, г.о. Уссурийский, г. Уссурийск, пер. Мирный, д. 1</p>
+                    <p className="font-semibold">ООО «НВС»</p>
+                    <p className="text-xs text-gray-600">ОГРН: 1247700464880 | ИНН: 9725162767 | КПП: 772001001</p>
+                    <p className="text-xs text-gray-600">111675, город Москва, Лухмановская ул, д. 34, помещ. 15/1</p>
                     <p className="text-xs text-gray-600">Р/сч: 40702810820110001074</p>
                     <p className="text-xs text-gray-600">Банк: ФИЛИАЛ «ХАБАРОВСКИЙ» АО «АЛЬФА-БАНК»</p>
                     <p className="text-xs text-gray-600">БИК: 040813770 | Корр. счёт: 30101810800000000770</p>
-                    <p className="text-xs text-gray-600">Тел.: +7(4212) 51-59-30 | hh@bratouverie-snb.ru | bratouverie-snb.ru</p>
+                    <p className="text-xs text-gray-600">Тел.: 8 (800) 222-84-63 | hh@vosstanovim-dnr.ru | vosstanovim-dnr.ru</p>
                     <div className="mt-4 space-y-3">
                       <div>
                         <p className="text-gray-500 text-xs mb-1">Генеральный директор:</p>
-                        <p className="text-sm">______________ В.В. Прутин &nbsp;&nbsp;&nbsp;&nbsp; М.П.</p>
+                        <p className="text-sm">______________ С.В. Бобровский &nbsp;&nbsp;&nbsp;&nbsp; М.П.</p>
                       </div>
                       <div>
                         <p className="text-gray-500 text-xs mb-1">Дата:</p>

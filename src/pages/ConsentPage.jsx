@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import { ArrowLeft, Download, FileText } from "lucide-react";
 
-const COMPANY = "ООО «Братоуверие-СНБ»";
-const INN = "2511135442";
-const KPP = "251101001";
-const OGRN = "1262500006966";
-const ADDRESS = "692510, Приморский край, г. о. Уссурийский, г. Уссурийск, пер. Мирный, д. 1";
+const COMPANY = "ООО «НВС»";
+const INN = "9725162767";
+const KPP = "772001001";
+const OGRN = "1247700464880";
+const ADDRESS = "111675, город Москва, Лухмановская ул, д. 34, помещ. 15/1";
 const EMAIL = "support@vosstanovim-dnr.ru";
 const DATE = "01.01.2024";
 

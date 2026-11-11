@@ -55,8 +55,8 @@ export default function ContactsSection({ onCallback }) {
                 <div className="text-xs text-muted-foreground">Приём заявок от агентств, партнёрские программы</div>
               </div>
             </div>
-            <a href="mailto:partner@bratouverie-snb.ru" className="block text-accent font-mono text-sm font-semibold hover:underline">
-              partner@bratouverie-snb.ru
+            <a href="mailto:partner@vosstanovim-dnr.ru" className="block text-accent font-mono text-sm font-semibold hover:underline">
+              partner@vosstanovim-dnr.ru
             </a>
             <p className="text-xs text-muted-foreground mt-2 leading-relaxed">
               По вопросам партнёрства, агентских договоров и передачи кандидатов от кадровых агентств направляйте письма на указанный адрес.
@@ -87,7 +87,7 @@ export default function ContactsSection({ onCallback }) {
           <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-6 px-6 py-4 border-b border-border flex-wrap">
             <div className="flex items-center gap-3">
               <MapPin className="h-5 w-5 text-accent shrink-0" />
-              <span className="font-inter font-medium text-foreground text-sm">г. Хабаровск, ул. Карла Маркса, д. 66</span>
+              <span className="font-inter font-medium text-foreground text-sm">111675, город Москва, Лухмановская ул, д. 34, помещ. 15/1</span>
             </div>
             <div className="flex items-center gap-3">
               <MapPin className="h-5 w-5 text-accent shrink-0" />
