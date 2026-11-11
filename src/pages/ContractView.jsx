@@ -225,9 +225,6 @@ export default function ContractView() {
                 <p><strong>Работодатель:</strong> ООО «НВС»</p>
                 <p>ОГРН: 1247700464880 &nbsp;|&nbsp; ИНН: 9725162767 &nbsp;|&nbsp; КПП: 772001001</p>
                 <p>Юридический адрес: 111675, город Москва, Лухмановская ул, д. 34, помещ. 15/1</p>
-                <p>Расчётный счёт: 40702810820110001074</p>
-                <p>Банк: ФИЛИАЛ «ХАБАРОВСКИЙ» АО «АЛЬФА-БАНК»</p>
-                <p>БИК: 040813770 &nbsp;|&nbsp; Корр. счёт: 30101810800000000770</p>
                 <p>Тел.: 8 (800) 222-84-63 &nbsp;|&nbsp; E-mail: hh@vosstanovim-dnr.ru &nbsp;|&nbsp; Сайт: vosstanovim-dnr.ru</p>
               </div>
               <p className="mt-3">
@@ -457,8 +454,6 @@ export default function ContractView() {
                     <p className="text-xs text-gray-600">ОГРН: 1247700464880 | ИНН: 9725162767 | КПП: 772001001</p>
                     <p className="text-xs text-gray-600">111675, город Москва, Лухмановская ул, д. 34, помещ. 15/1</p>
                     <p className="text-xs text-gray-600">Р/сч: 40702810820110001074</p>
-                    <p className="text-xs text-gray-600">Банк: ФИЛИАЛ «ХАБАРОВСКИЙ» АО «АЛЬФА-БАНК»</p>
-                    <p className="text-xs text-gray-600">БИК: 040813770 | Корр. счёт: 30101810800000000770</p>
                     <p className="text-xs text-gray-600">Тел.: 8 (800) 222-84-63 | hh@vosstanovim-dnr.ru | vosstanovim-dnr.ru</p>
                     <div className="mt-4 space-y-3">
                       <div>
