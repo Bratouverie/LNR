@@ -50,7 +50,7 @@ export default function CollectionPoints() {
 
                 <div className="flex items-start gap-2">
                   <Phone className="h-4 w-4 text-accent shrink-0 mt-0.5" />
-                  <div className="font-inter text-sm text-foreground">{point.phone}</div>
+                  <div className="font-inter text-sm text-foreground">Обратный звонок</div>
                 </div>
 
                 <div className="flex items-start gap-2">

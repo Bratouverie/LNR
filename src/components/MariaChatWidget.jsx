@@ -194,7 +194,7 @@ export default function MariaChatWidget() {
       setPhase(5);
     } catch (err) {
       setSubmitError(true);
-      addBotMessage("❌ Ошибка отправки. Нажми «Повторить» или позвони 8-800-222-84-63.");
+      addBotMessage("❌ Ошибка отправки. Нажми «Повторить» или позвони Обратный звонок.");
     }
     setSubmitting(false);
   };
@@ -276,7 +276,7 @@ export default function MariaChatWidget() {
               <div className="text-xs text-white/80">Консультант · онлайн</div>
             </div>
             <div className="flex items-center gap-1 shrink-0">
-              <a href="tel:88002228463" className="p-1.5 text-white/80 hover:text-white transition-colors" title="Позвонить">
+              <a href="#callback" className="p-1.5 text-white/80 hover:text-white transition-colors" title="Позвонить">
                 <Phone className="h-4 w-4" />
               </a>
               {phase === 5 && (

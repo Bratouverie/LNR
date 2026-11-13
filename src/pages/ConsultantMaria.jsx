@@ -223,7 +223,7 @@ export default function ConsultantMaria() {
             <h1 className="font-bold text-lg">Мария</h1>
             <p className="text-xs text-white/80">Консультант программы восстановления ДНР/ЛНР · онлайн</p>
           </div>
-          <a href="tel:88002228463" className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors" title="Позвонить">
+          <a href="#callback" className="p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors" title="Позвонить">
             <Phone className="h-5 w-5" />
           </a>
           {phase === 5 && (

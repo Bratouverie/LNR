@@ -74,7 +74,7 @@ export default function NotMilitaryContract() {
             <a href="#vacancies" className="text-accent font-semibold hover:underline">Вакансии</a>.
           </p>
           <a
-            href="tel:88002228463"
+            href="#callback"
             className="flex items-center gap-2 border border-border hover:border-accent hover:text-accent font-inter font-semibold px-6 py-3 rounded-xl transition-colors text-sm"
           >
             <MessageSquare className="h-4 w-4" />

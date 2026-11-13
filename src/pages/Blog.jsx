@@ -207,11 +207,11 @@ export default function Blog() {
           </div>
           <div className="flex flex-col sm:flex-row gap-3 shrink-0">
             <a
-              href="tel:88002228463"
+              href="#callback"
               className="flex items-center justify-center gap-2 bg-accent hover:bg-accent/90 text-accent-foreground font-inter font-bold py-3 px-6 rounded-xl transition-colors text-sm"
             >
               <Phone className="h-4 w-4" />
-              8-800-222-84-63
+              Обратный звонок
             </a>
             <button
               onClick={() => setAppModalOpen(true)}

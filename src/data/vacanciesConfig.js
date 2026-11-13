@@ -764,7 +764,7 @@ export const COLLECTION_POINTS = [
   { city: "Воронеж", address: "Администрация города Воронежа, пр-т Революции, 1", region: "Воронежская область", phone: "+7 (473) 255-39-66", workHours: "Пн–Чт 09:00–18:00, Пт до 17:00", mapsUrl: "https://yandex.ru/maps/-/CDpN9Mj", visualId: 56 },
   { city: "Ростов-на-Дону", address: "Администрация города, пр-т Буденновский, 60", region: "Ростовская область", phone: "+7 (863) 240-50-00", workHours: "Пн–Чт 09:00–18:00, Пт до 17:00", mapsUrl: "https://yandex.ru/maps/-/CDpN9Mj", visualId: 57 },
   { city: "Владивосток", address: "Администрация Приморского края, ул. Светланская, 22", region: "Приморский край", phone: "+7 (423) 226-20-00", workHours: "Пн–Чт 09:00–18:00, Пт до 17:00", mapsUrl: "https://yandex.ru/maps/-/CDpN9Mj", visualId: 58 },
-  { city: "Хабаровск", address: "ул. Карла Маркса, 66 (точка сбора)", region: "Хабаровский край", phone: "8 (800) 222-84-63", workHours: "Пн–Чт 09:00–18:00, Пт до 17:00", mapsUrl: "https://yandex.ru/maps/-/CDpN9Mj", visualId: 59 },
+  { city: "Хабаровск", address: "ул. Карла Маркса, 66 (точка сбора)", region: "Хабаровский край", phone: "Обратный звонок", workHours: "Пн–Чт 09:00–18:00, Пт до 17:00", mapsUrl: "https://yandex.ru/maps/-/CDpN9Mj", visualId: 59 },
   { city: "Комсомольск-на-Амуре", address: "Администрация Комсомольска-на-Амуре, ул. Ленина, 37", region: "Хабаровский край", phone: "+7 (4217) 5-25-26", workHours: "Пн–Чт 09:00–18:00, Пт до 17:00", mapsUrl: "https://yandex.ru/maps/-/CDpN9Mj", visualId: 60 },
 ];
 
@@ -808,7 +808,7 @@ export const COMPANY_INFO = {
   kpp: "772001001",
   legalAddress: "111675, город Москва, Лухмановская ул, д. 34, помещ. 15/1",
   office: "111675, город Москва, Лухмановская ул, д. 34, помещ. 15/1",
-  phone: "8 (800) 222-84-63",
+  phone: "Обратный звонок",
   email: "partner@vosstanovim-dnr.ru",
   website: "https://vosstanovim-dnr.ru",
   directions: "Генеральный подрядчик государственного рекрутинга",

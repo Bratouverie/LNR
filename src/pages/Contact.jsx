@@ -5,8 +5,8 @@ const contacts = [
   {
     icon: Phone,
     title: "Единый номер (бесплатно)",
-    value: "8-800-222-84-63",
-    href: "tel:88002228463",
+    value: "Обратный звонок",
+    href: "#callback",
     note: "Пн–Пт 09:00–18:00, Сб 10:00–14:00",
   },
   {
@@ -97,7 +97,7 @@ export default function Contact() {
             <p className="font-inter text-white/50 text-sm">Воскресенье: выходной</p>
           </div>
           <a
-            href="tel:88002228463"
+            href="#callback"
             className="flex items-center gap-2 bg-accent hover:bg-accent/90 text-accent-foreground font-inter font-bold px-6 py-3 rounded-xl transition-colors text-sm shrink-0"
           >
             <Phone className="h-4 w-4" />

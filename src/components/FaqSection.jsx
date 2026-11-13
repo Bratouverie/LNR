@@ -56,7 +56,7 @@ const FAQS = [
   },
   {
     q: "Как связаться с поддержкой, если проблемы?",
-    a: "Горячая линия: 8-800-222-84-63 (бесплатно). Юрист: 8 (800) 222-84-63. Психолог: 24/7 на базе. Email: support@vosstanovim-dnr.ru",
+    a: "Горячая линия: Обратный звонок (бесплатно). Юрист: Обратный звонок. Психолог: 24/7 на базе. Email: support@vosstanovim-dnr.ru",
   },
   {
     q: "Это не контракт с Минобороны?",
@@ -109,8 +109,8 @@ export default function FaqSection() {
             Не нашли ответ? Задайте вопрос напрямую:
           </p>
           <div className="flex flex-wrap justify-center gap-4 mb-3">
-            <a href="tel:88002228463" className="text-accent hover:underline font-semibold text-sm font-inter">
-              ☎ 8-800-222-84-63 (бесплатно)
+            <a href="#callback" className="text-accent hover:underline font-semibold text-sm font-inter">
+              ☎ Обратный звонок (бесплатно)
             </a>
             <a href="mailto:hh@vosstanovim-dnr.ru" className="text-accent hover:underline font-semibold text-sm font-inter">
               📧 hh@vosstanovim-dnr.ru
