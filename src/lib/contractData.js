@@ -1,7 +1,7 @@
 // Общие данные для всех договоров (разделы, не зависящие от вакансии)
 export const CONTRACT_COMMON = {
   contractDate: "2026-06-01",
-  vacancyStart: "6–22 июля 2026",
+  vacancyStart: "Оформление идёт сейчас — вахта уже началась",
   vacancyEnd: "октябрь 2026",
   vacancyDays: 90,
   bonus: 2500000,

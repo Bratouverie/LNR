@@ -91,7 +91,7 @@ export default function HeroSection({ onOpenApplication }) {
       <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 text-center pt-20 pb-16">
         <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/10 rounded-full px-4 py-2 mb-8">
           <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-          <span className="text-white/80 text-sm font-inter">Набор специалистов открыт · Вахта запускается в июле</span>
+          <span className="text-white/80 text-sm font-inter">Набор открыт · Вахта уже идёт — оформление в живом порядке</span>
         </div>
 
         <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-inter font-black text-white leading-tight tracking-tight mb-6">

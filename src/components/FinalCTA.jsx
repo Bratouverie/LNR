@@ -11,7 +11,7 @@ export default function FinalCTA({ onOpenApplication, onCallback }) {
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <div className="inline-flex items-center gap-2 bg-accent/20 border border-accent/30 rounded-full px-4 py-2 mb-6">
           <div className="w-2 h-2 rounded-full bg-accent animate-pulse" />
-          <span className="text-accent font-inter font-bold text-sm">Вахта запускается в июле</span>
+          <span className="text-accent font-inter font-bold text-sm">Вахта уже идёт · оформление сейчас</span>
         </div>
 
         <h2 className="text-3xl sm:text-4xl lg:text-5xl font-inter font-black text-white tracking-tight mb-6">

@@ -124,7 +124,7 @@ export default function FaqSection() {
               💬 Написать в Макс
             </a>
           </div>
-          <p className="font-inter text-xs text-muted-foreground italic">Вахта запускается в июле</p>
+          <p className="font-inter text-xs text-muted-foreground italic">Вахта уже идёт — оформляем в живом порядке</p>
         </div>
       </div>
     </section>

@@ -20,6 +20,8 @@ import CandidateAnketa from './pages/CandidateAnketa';
 import SbReview from './pages/SbReview';
 import CandidateReview from './pages/CandidateReview';
 import CrmLogin from './pages/crm/Login';
+import CallbackModal from "./components/CallbackModal";
+import { useEffect, useState } from "react";
 import CrmLayout from '@/components/crm/CrmLayout';
 import CrmDashboard from './pages/crm/Dashboard';
 import CrmRewards from './pages/crm/Rewards';
@@ -94,6 +96,27 @@ const AuthenticatedApp = () => {
 };
 
 
+
+/** ОБРАТНЫЙ ЗВОНОК В ЛЮБОМ МЕСТЕ (ИИ4 13.11.2026).
+    Мастер: «при нажатии на Обратный звонок ничего не происходит».
+    Причина: кнопки живут на десятке страниц, а окно было смонтировано
+    только на главной. Теперь клик по любой ссылке #callback ловится
+    на уровне всего приложения и открывает окно. */
+function CallbackHost() {
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    const onClick = (e) => {
+      const el = e.target && e.target.closest ? e.target.closest('a[href="#callback"], [data-callback]') : null;
+      if (!el) return;
+      e.preventDefault();
+      setOpen(true);
+    };
+    document.addEventListener('click', onClick);
+    return () => document.removeEventListener('click', onClick);
+  }, []);
+  return <CallbackModal open={open} onClose={() => setOpen(false)} />;
+}
+
 function App() {
 
   return (
@@ -101,6 +124,7 @@ function App() {
       <QueryClientProvider client={queryClientInstance}>
         <Router>
           <AuthenticatedApp />
+          <CallbackHost />
         </Router>
         <Toaster />
       </QueryClientProvider>
