@@ -26,6 +26,9 @@ export default function CallbackModal({ open, onClose }) {
           phone: form.phone,
           comment: 'Запрос обратного звонка',
           source: 'vosstanovim-dnr.ru',
+          /* ИИ4 13.11.2026: звонок — отдельный тип заявки, ему не нужны email
+             и дата рождения. Без этой метки сервер отбивал форму с 400. */
+          call_request: true,
         }),
       });
       if (!res.ok) throw new Error('lead API error: ' + res.status);
