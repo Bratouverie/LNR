@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { Checkbox } from "@/components/ui/checkbox";
+import EmploymentStart from "./EmploymentStart";
 import { Loader2, CheckCircle } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 import { ALL_POSITION_OPTIONS } from "@/data/vacanciesConfig";
@@ -165,6 +166,8 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [successKind, setSuccessKind] = useState("new");
+  const [empOpen, setEmpOpen] = useState(false);
+  const [anketaUrl, setAnketaUrl] = useState(null);
   // ТЗ w 27.09 (П3): МАКС — подтверждение «Сделал» после заявки
   const [maxDone, setMaxDone] = useState(false);
   const [maxDoneSending, setMaxDoneSending] = useState(false);
@@ -263,6 +266,7 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
       const j = await res.json();
       // Антидубль (ТЗ w 27.09): сервер мог ответить «заявка уже принята»
       setSuccessKind(j && j.data && j.data.already ? "already" : "new");
+      if (j && j.data && j.data.anketa_url) setAnketaUrl(j.data.anketa_url);
       setSuccess(true);
       setTimeout(() => {
         setSuccess(false);
@@ -345,6 +349,15 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
                 </div>
               )}
             </div>
+            {/* НАЧАТЬ ТРУДОУСТРОЙСТВО (наряд Мастера 13.11.2026): над кнопкой МАКС,
+                чтобы человек не ушёл в мессенджер, не начав оформление. */}
+            <button
+              type="button"
+              onClick={() => setEmpOpen(true)}
+              className="w-full inline-flex items-center justify-center gap-2 rounded-md bg-primary hover:bg-primary/90 text-primary-foreground font-inter font-bold py-4 px-6 transition-colors mb-3"
+            >
+              🚀 Начать трудоустройство
+            </button>
             <a
               href="https://max.ru/se13611113_bot"
               target="_blank"
@@ -353,6 +366,7 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
             >
               💬 Написать консультанту в MAX
             </a>
+            <EmploymentStart open={empOpen} onClose={() => setEmpOpen(false)} anketaUrl={anketaUrl} />
             <button type="button" onClick={onClose} className="text-xs text-muted-foreground font-inter underline hover:no-underline">
               Закрыть окно
             </button>
