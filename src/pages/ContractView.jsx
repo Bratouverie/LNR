@@ -156,46 +156,7 @@ export default function ContractView() {
     );
   }
 
-  /* Скачивание договора (слово Мастера 24.11.2026): PDF — печать браузера с
-   * сохранением в файл, DOCX — файл Word из той же разметки, что видит человек.
-   * Кнопки на странице вакансии открывают эту страницу с пометкой download,
-   * и файл собирается здесь, в единственном месте, где лежит полный текст. */
-
-  function printPdf() {
-    window.print();
-  }
-
-  function downloadDocx() {
-    const node = document.querySelector("[data-contract-doc]");
-    const inner = node ? node.innerHTML : "";
-    const html =
-      '<html xmlns:o="urn:schemas-microsoft-com:office:office" ' +
-      'xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8">' +
-      '<title>Трудовой договор</title><style>body{font-family:"Times New Roman",serif;' +
-      'font-size:12pt;margin:2cm}table{border-collapse:collapse}td,th{padding:4px}</style>' +
-      "</head><body>" + inner + "</body></html>";
-    const blob = new Blob(["\ufeff", html], { type: "application/msword;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = ("Трудовой_договор_" + id + ".doc").replace(/[\\/:*?"<>|]/g, "_");
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    setTimeout(() => URL.revokeObjectURL(url), 2000);
-  }
-
-  useEffect(() => {
-    const want = searchParams.get("download");
-    if (!want) return;
-    const t = setTimeout(() => {
-      if (want === "pdf") printPdf();
-      else if (want === "docx") downloadDocx();
-    }, 700);
-    return () => clearTimeout(t);
-  }, [searchParams, positions.length]);
-
-  const location = vacancy.conditions?.location || "Мариуполь, Макеевка, Луганск, Алчевск";
+    const location = vacancy.conditions?.location || "Мариуполь, Макеевка, Луганск, Алчевск";
 
   return (
     <div className="min-h-screen bg-gray-100 font-inter">
