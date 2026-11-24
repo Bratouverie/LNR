@@ -134,6 +134,7 @@ export default function ContractView() {
             <ArrowLeft size={18} /> Назад к вакансии
           </Link>
           <div
+            data-contract-doc
             className="bg-white text-black rounded-xl p-8 shadow-sm"
             dangerouslySetInnerHTML={{ __html: buildContractHtml(sampleDoc) }}
           />
