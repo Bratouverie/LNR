@@ -160,7 +160,6 @@ export default function ContractView() {
    * сохранением в файл, DOCX — файл Word из той же разметки, что видит человек.
    * Кнопки на странице вакансии открывают эту страницу с пометкой download,
    * и файл собирается здесь, в единственном месте, где лежит полный текст. */
-  const [searchParams] = useSearchParams();
 
   function printPdf() {
     window.print();
