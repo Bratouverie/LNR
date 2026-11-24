@@ -12,6 +12,8 @@ import EmploymentStart from "./EmploymentStart";
 import { Loader2, CheckCircle } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
 import { ALL_POSITION_OPTIONS } from "@/data/vacanciesConfig";
+/* Должности в форме — из справочника СРМ, со вилками (слово Мастера 24.11.2026). */
+import { loadPositionsFeed, readCachedPositions, positionOptionLabel, positionSalaryHint } from "@/data/positionsFeed";
 
 const VACANCIES = ALL_POSITION_OPTIONS;
 
@@ -174,6 +176,8 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
   const [maxDoneSent, setMaxDoneSent] = useState(false);
   // ТЗ w 27.09 (22:42): подсветка незаполненных обязательных полей
   const [errs, setErrs] = useState({});
+  /* Список должностей с вилками: прошлый ответ показываем сразу, свежий подменяет молча. */
+  const [feed, setFeed] = useState(() => readCachedPositions());
   const phoneRef = useRef("");
 
   const clearErr = (k) => setErrs((p) => (p[k] ? { ...p, [k]: false } : p));
@@ -188,6 +192,15 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
       }));
     }
   }, [open, preselectedVacancy, preselectedObject]);
+
+  /* Свежий справочник должностей при каждом открытии формы: добавили должность
+   * в СРМ — она здесь без правки лендинга. */
+  useEffect(() => {
+    if (!open) return;
+    let alive = true;
+    loadPositionsFeed().then((list) => { if (alive && list && list.length) setFeed(list); });
+    return () => { alive = false; };
+  }, [open]);
 
   // ТЗ w 27.09 (П3): кандидат подтвердил настройку МАКС «Могут все»
   const confirmMaxDone = async () => {
@@ -446,11 +459,21 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
                     <SelectValue placeholder="Выберите вакансию" />
                   </SelectTrigger>
                   <SelectContent>
-                    {VACANCIES.map((v) => (
-                      <SelectItem key={v} value={v}>{v}</SelectItem>
+                    {(feed && feed.length
+                      ? feed.map((p) => ({ value: p.title, label: positionOptionLabel(p), hint: positionSalaryHint(p) }))
+                      : VACANCIES.map((v) => ({ value: v, label: v, hint: "" }))
+                    ).map((o) => (
+                      <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
+                {(() => {
+                  const hit = (feed || []).find((p) => p.title === form.vacancy);
+                  const hint = hit ? positionSalaryHint(hit) : "";
+                  return hint ? (
+                    <p className="text-xs text-slate-500 mt-1">Вилка оклада: {hint} в месяц</p>
+                  ) : null;
+                })()}
               </div>
               <div>
                 <Label className="font-inter">Опыт работы</Label>
