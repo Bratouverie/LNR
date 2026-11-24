@@ -68,7 +68,8 @@ export default function ContractView() {
     || vacancyFromProfile(findProfile(positions, id));
   /* У должностей справочника нет своего файла дополнений — собираем из профиля,
    * иначе страница образца отвечала «Договор не найден». */
-  const extra = CONTRACT_VACANCY_EXTRA[id] || (vacancy && vacancy.sample ? {
+  const isSample = Boolean(vacancy && (vacancy.sample || (vacancy.contract && vacancy.contract.sample)));
+  const extra = CONTRACT_VACANCY_EXTRA[id] || (isSample ? {
     fullTitle: vacancy.position,
     duties: vacancy.duties,
     requirements: {
@@ -82,7 +83,7 @@ export default function ContractView() {
   /* Образец для должностей справочника СРМ: показываем тот же текст, что
    * собирает buildContractBlocks. Длинный ручной рендер ниже рассчитан на поля
    * конфига и на профиле даёт пустой экран (найдено живьём 24.11.2026). */
-  if (vacancy && vacancy.sample) {
+  if (isSample) {
     const sampleDoc = buildContractBlocks(id, positions);
     return (
       <div className="min-h-screen bg-background py-10 px-4">

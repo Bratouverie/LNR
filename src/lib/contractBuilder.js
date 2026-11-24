@@ -12,8 +12,11 @@ export function buildContractBlocks(vacancyId, positionsIn) {
   const vacancy = VACANCIES_DATA.find((v) => v.id === vacancyId)
     || vacancyFromProfile(findProfile(positions, vacancyId));
   if (!vacancy && !CONTRACT_VACANCY_EXTRA[vacancyId]) return null;
+  /* Признак образца у должности справочника лежит в contract.sample, а у
+   * вакансии конфига — на верхнем уровне. Смотрим оба места (24.11.2026). */
+  const isSample = Boolean(vacancy && (vacancy.sample || (vacancy.contract && vacancy.contract.sample)));
   const dutiesOf = (v) => (Array.isArray(v && v.duties) ? v.duties : []);
-  const extra = CONTRACT_VACANCY_EXTRA[vacancyId] || (vacancy && vacancy.sample ? {
+  const extra = isSample ? {
     fullTitle: vacancy.position,
     duties: dutiesOf(vacancy),
     requirements: {
@@ -35,7 +38,7 @@ export function buildContractBlocks(vacancyId, positionsIn) {
       "100% возмещение расходов на проезд туда и обратно",
     ],
     prospects: "рост разряда и оклада вместе с допусками, перевод бригадиром или мастером участка",
-  } : {});
+  } : (CONTRACT_VACANCY_EXTRA[vacancyId] || {});
   if (!vacancy || !extra) return null;
 
   const location =
@@ -44,7 +47,7 @@ export function buildContractBlocks(vacancyId, positionsIn) {
 
   // Header
   b.push({ type: "heading", text: "ТРУДОВОЙ ДОГОВОР" });
-  b.push({ type: "paragraph", text: extra.fullTitle.toUpperCase() });
+  b.push({ type: "paragraph", text: String(extra.fullTitle || (vacancy && vacancy.position) || "Должность").toUpperCase() });
   b.push({ type: "paragraph", text: "ОЗНАКОМИТЕЛЬНАЯ ВЕРСИЯ — официальный договор подписывается на месте несения вахты" });
   b.push({ type: "paragraph", text: `Дата составления: ${CONTRACT_COMMON.contractDate}` });
   b.push({ type: "paragraph", text: "КОНФИДЕНЦИАЛЬНО. Копирование, распространение и передача третьим лицам запрещены." });
@@ -171,7 +174,7 @@ export function buildContractBlocks(vacancyId, positionsIn) {
 
   // Подписи
   b.push({ type: "heading", text: "ПОДПИСИ СТОРОН" });
-  if (vacancy && vacancy.sample) {
+  if (isSample) {
     /* Образец заполнения: выдуманные данные, без росписи и печати — чтобы
      * кандидат видел, как выглядит договор, и не принимал образец за подписанный. */
     b.push({ type: "paragraph", text: "ОБРАЗЕЦ ЗАПОЛНЕНИЯ. Подписи и печать не проставлены." });
