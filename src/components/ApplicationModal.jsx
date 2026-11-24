@@ -470,9 +470,9 @@ export default function ApplicationModal({ open, onClose, preselectedVacancy, pr
                 {(() => {
                   const hit = (feed || []).find((p) => p.title === form.vacancy);
                   const hint = hit ? positionSalaryHint(hit) : "";
-                  return hint ? (
-                    <p className="text-xs text-slate-500 mt-1">Вилка оклада: {hint} в месяц</p>
-                  ) : null;
+                  if (hint) return <p className="text-xs text-slate-500 mt-1">Вилка оклада: {hint} в месяц</p>;
+                  if (!feed || !feed.length) return <p className="text-xs text-slate-400 mt-1">Список должностей обновляется…</p>;
+                  return null;
                 })()}
               </div>
               <div>
