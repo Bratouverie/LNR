@@ -1,10 +1,10 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useParams, Link } from "react-router-dom";
 import { VACANCIES_DATA } from "@/lib/vacanciesData";
 import { CONTRACT_COMMON, CONTRACT_VACANCY_EXTRA } from "@/lib/contractData";
 import { buildContractBlocks } from "@/lib/contractBuilder";
 import { vacancyFromProfile, findProfile } from "@/data/positionCatalog";
-import { readCachedPositions } from "@/data/positionsFeed";
+import { loadPositionsFeed, readCachedPositions } from "@/data/positionsFeed";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Download, Printer, Loader2 } from "lucide-react";
@@ -53,8 +53,19 @@ export default function ContractView() {
   const [downloadingDocx, setDownloadingDocx] = useState(false);
   const [downloadingPdf, setDownloadingPdf] = useState(false);
 
+  /* Должности справочника живут в СРМ: при прямом заходе на образец кэш может
+   * быть пуст, поэтому список грузим сами и перерисовываемся, когда он пришёл. */
+  const [positions, setPositions] = useState(() => readCachedPositions());
+  useEffect(() => {
+    let alive = true;
+    loadPositionsFeed().then((list) => {
+      if (alive && Array.isArray(list) && list.length) setPositions(list);
+    });
+    return () => { alive = false; };
+  }, [id]);
+
   const vacancy = VACANCIES_DATA.find((v) => v.id === id)
-    || vacancyFromProfile(findProfile(readCachedPositions(), id));
+    || vacancyFromProfile(findProfile(positions, id));
   /* У должностей справочника нет своего файла дополнений — собираем из профиля,
    * иначе страница образца отвечала «Договор не найден». */
   const extra = CONTRACT_VACANCY_EXTRA[id] || (vacancy && vacancy.sample ? {
@@ -72,7 +83,7 @@ export default function ContractView() {
    * собирает buildContractBlocks. Длинный ручной рендер ниже рассчитан на поля
    * конфига и на профиле даёт пустой экран (найдено живьём 24.11.2026). */
   if (vacancy && vacancy.sample) {
-    const sampleDoc = buildContractBlocks(id);
+    const sampleDoc = buildContractBlocks(id, positions);
     return (
       <div className="min-h-screen bg-background py-10 px-4">
         <div className="max-w-3xl mx-auto">

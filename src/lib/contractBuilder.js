@@ -5,16 +5,21 @@ import { VACANCIES_DATA } from "./vacanciesData";
 import { vacancyFromProfile, findProfile } from "@/data/positionCatalog";
 import { readCachedPositions } from "@/data/positionsFeed";
 
-export function buildContractBlocks(vacancyId) {
+export function buildContractBlocks(vacancyId, positionsIn) {
+  /* Справочник можно передать готовым: страница договора грузит его сама и
+   * передаёт список, иначе берём прошлый ответ из памяти браузера. */
+  const positions = Array.isArray(positionsIn) ? positionsIn : readCachedPositions();
   const vacancy = VACANCIES_DATA.find((v) => v.id === vacancyId)
-    || vacancyFromProfile(findProfile(readCachedPositions(), vacancyId));
+    || vacancyFromProfile(findProfile(positions, vacancyId));
+  if (!vacancy && !CONTRACT_VACANCY_EXTRA[vacancyId]) return null;
+  const dutiesOf = (v) => (Array.isArray(v && v.duties) ? v.duties : []);
   const extra = CONTRACT_VACANCY_EXTRA[vacancyId] || (vacancy && vacancy.sample ? {
     fullTitle: vacancy.position,
-    duties: vacancy.duties,
+    duties: dutiesOf(vacancy),
     requirements: {
       education: "профессиональная подготовка по должности",
       experience: "опыт по специальности приветствуется",
-      skills: vacancy.duties.slice(0, 5),
+      skills: dutiesOf(vacancy).slice(0, 5),
       age: "от 21 года",
       contraindications: "общие медицинские противопоказания для работ на объекте",
     },
