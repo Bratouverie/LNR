@@ -12,11 +12,24 @@ export function buildContractBlocks(vacancyId) {
     fullTitle: vacancy.position,
     duties: vacancy.duties,
     requirements: {
-      education: vacancy.pageRequirements && vacancy.pageRequirements.education,
-      experience: vacancy.pageRequirements && vacancy.pageRequirements.experience,
+      education: "профессиональная подготовка по должности",
+      experience: "опыт по специальности приветствуется",
+      skills: vacancy.duties.slice(0, 5),
+      age: "от 21 года",
+      contraindications: "общие медицинские противопоказания для работ на объекте",
     },
-    salaryMin: vacancy.salaryMin,
-    salaryMax: vacancy.salaryMax,
+    schedule: "вахта 3 месяца, рабочая неделя 6 дней по 8 часов",
+    salaryBase: Number(vacancy.salaryMin).toLocaleString("ru-RU") + " ₽ (минимум вилки)",
+    salaryBonus: "надбавки за разряд и условия работы по результатам аттестации",
+    salaryTotal: Number(vacancy.salaryMin).toLocaleString("ru-RU") + "–" +
+      Number(vacancy.salaryMax).toLocaleString("ru-RU") + " ₽ в месяц до удержания НДФЛ 13%",
+    perks: [
+      "бесплатное проживание (комнаты 2–3 человека, интернет, телевизор)",
+      "трёхразовое горячее питание за счёт компании",
+      "полная медстраховка и страховка от несчастного случая",
+      "100% возмещение расходов на проезд туда и обратно",
+    ],
+    prospects: "рост разряда и оклада вместе с допусками, перевод бригадиром или мастером участка",
   } : {});
   if (!vacancy || !extra) return null;
 
