@@ -41,7 +41,7 @@ export const CONTRACT_DURATIONS = {
 // ============================================
 // ВАКАНСИИ
 // ============================================
-export const VACANCIES = [
+const VACANCIES_ALL = [
   {
     id: "raznorabochiy",
     position: "Разнорабочий",
@@ -355,6 +355,10 @@ export const VACANCIES = [
     prospects: "Переход на должность старшего охранника или начальника охраны. Продление вахты на дополнительные 3 месяца +10–15% к зарплате. Земельный участок в ЛНР/ДНР после нескольких вах. Трудоустройство в местные структуры безопасности.",
   },
 ];
+/* «Строитель» убран по слову Мастера 24.11.2026: это не отдельная должность,
+ * а собирательное слово. Конкретные работы описаны должностями внутри —
+ * каменщик, бетонщик, арматурщик, монтажник, плотник, кровельщик. */
+export const VACANCIES = VACANCIES_ALL.filter((v) => v.position !== "Строитель");
 
 // ============================================
 // ДЕТАЛЬНЫЕ ДАННЫЕ ВАКАНСИЙ (для страниц вакансий)
@@ -521,11 +525,20 @@ export const VACANCY_DETAILS = {
   },
 };
 
+import { findProfile, vacancyFromProfile } from "@/data/positionCatalog";
+import { readCachedPositions } from "@/data/positionsFeed";
+
 export function getVacancyWithDetails(id) {
   const vacancy = VACANCIES.find((v) => v.id === id);
-  if (!vacancy) return null;
-  const details = VACANCY_DETAILS[id] || {};
-  return { ...vacancy, ...details, slug: vacancy.id };
+  if (vacancy) {
+    const details = VACANCY_DETAILS[id] || {};
+    return { ...vacancy, ...details, slug: vacancy.id };
+  }
+  /* Должности из справочника СРМ: отдельного файла описания у них нет —
+   * страница собирается из профиля одной службой (обязанности, требования,
+   * вилка, образец договора). Так новая должность не требует нового экрана. */
+  const profile = findProfile(readCachedPositions(), id);
+  return profile ? vacancyFromProfile(profile) : null;
 }
 
 // ============================================
@@ -676,6 +689,27 @@ export function calculateSalary(positionKey, durationMonths = 3, multiplier = 1.
   const grossIncome = UPLIFTS + totalSalary;
   const netIncome = UPLIFTS + netSalary;
   return { position: salaryItem.label, monthlySalary, totalSalary, taxes, netSalary, grossIncome, netIncome, uplifts: UPLIFTS };
+}
+
+/* Расчёт по вилке справочника СРМ: те же подъёмные и тот же налог, что у
+ * вакансий из конфига, чтобы калькулятор считал одинаково для всех должностей. */
+export function calculateRangeSalary(min, max, level = "min") {
+  const monthlyBase = level === "max" ? max : min;
+  const stintDuration = GLOBAL_CONFIG.compensation.stintDuration;
+  const totalForMonths = monthlyBase * stintDuration;
+  const oneTimePayment = UPLIFTS;
+  const totalForStint = totalForMonths + oneTimePayment;
+  return {
+    stintDuration,
+    monthlySalary: monthlyBase,
+    monthlySalaryFormatted: formatCurrency(monthlyBase),
+    totalMonths: totalForMonths,
+    totalMonthsFormatted: formatCurrency(totalForMonths),
+    oneTimePayment,
+    oneTimePaymentFormatted: formatCurrency(oneTimePayment),
+    totalForStint,
+    totalForStintFormatted: formatCurrency(totalForStint),
+  };
 }
 
 export function calculateVacancySalary(vacancyId, level = "min", driverCategory = null) {

@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -7,13 +7,35 @@ import ApplicationModal from "@/components/ApplicationModal";
 import VacancyHero from "@/components/Vacancy/VacancyHero";
 import VacancyTabs from "@/components/Vacancy/VacancyTabs";
 import { getVacancyWithDetails } from "@/data/vacanciesConfig";
+import { loadPositionsFeed, readCachedPositions } from "@/data/positionsFeed";
 
 export default function VacancyDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [appOpen, setAppOpen] = useState(false);
 
-  const vacancy = getVacancyWithDetails(id);
+  /* Страница открывается и для должностей из справочника СРМ. Справочник
+   * запрашивается при входе; пока он в пути, показываем ожидание, а не
+   * «вакансия не найдена». */
+  const [feed, setFeed] = useState(() => readCachedPositions());
+  useEffect(() => {
+    let alive = true;
+    loadPositionsFeed().then((l) => { if (alive && l && l.length) setFeed(l); });
+    return () => { alive = false; };
+  }, [id]);
+  const vacancy = useMemo(() => getVacancyWithDetails(id), [id, feed]);
+
+  if (!vacancy && feed.length === 0) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col">
+        <Navbar />
+        <div className="flex-1 flex items-center justify-center">
+          <div className="text-center text-muted-foreground font-inter">Загружаем должность…</div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   if (!vacancy) {
     return (

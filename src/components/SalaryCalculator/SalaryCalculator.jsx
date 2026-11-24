@@ -1,4 +1,7 @@
+import { useEffect, useState } from "react";
 import { useCalculatorState } from "./useCalculatorState";
+import { loadPositionsFeed, readCachedPositions } from "@/data/positionsFeed";
+import { GROUPS } from "@/data/positionCatalog";
 import { getCommonBenefits, GLOBAL_CONFIG, calculateVacancySalaryWithTax } from "@/data/vacanciesConfig";
 
 export default function SalaryCalculator({ preselectedPosition, initialVacancy, onApply }) {
@@ -35,6 +38,18 @@ export default function SalaryCalculator({ preselectedPosition, initialVacancy, 
     }
   };
 
+  /* Список должностей — из справочника СРМ, разложенный по родственным группам:
+   * сорок плиток подряд не читаются, семь групп читаются (слово Мастера 24.11.2026). */
+  const [catalog, setCatalog] = useState(() => readCachedPositions());
+  useEffect(() => {
+    let alive = true;
+    loadPositionsFeed().then((l) => { if (alive && l && l.length) setCatalog(l); });
+    return () => { alive = false; };
+  }, []);
+  const grouped = GROUPS
+    .map((g) => ({ group: g, items: catalog.filter((p) => (p.group || "other") === g.code) }))
+    .filter((x) => x.items.length > 0);
+
   const levelMin = isDriver && selectedDriverCategory
     ? vacancy.salary.categories[selectedDriverCategory]?.min
     : vacancy.salary.min;
@@ -62,19 +77,49 @@ export default function SalaryCalculator({ preselectedPosition, initialVacancy, 
               <div>
                 <label className="block text-accent font-inter font-bold text-sm mb-3 uppercase tracking-wide">1. Выберите должность</label>
                 <div className="space-y-2 max-h-80 overflow-y-auto pr-1">
-                  {allVacancies.map((vac) => (
-                    <button
-                      key={vac.id}
-                      onClick={() => handleVacancyChange(vac.id)}
-                      className={`w-full text-left px-4 py-2.5 rounded-lg transition-all flex items-center gap-3 font-inter text-sm ${
-                        selectedVacancyId === vac.id
-                          ? "bg-primary text-primary-foreground font-semibold shadow-md"
-                          : "bg-secondary border border-border text-foreground hover:border-accent/40"
-                      }`}
-                    >
-                      <span className="text-lg">{vac.icon}</span>
-                      <span>{vac.position}</span>
-                    </button>
+                  {grouped.length === 0 && (
+                    <div className="space-y-1.5">
+                      {allVacancies.map((vac) => (
+                        <button
+                          key={vac.id}
+                          onClick={() => handleVacancyChange(vac.id)}
+                          className={`w-full text-left px-4 py-2.5 rounded-lg transition-all flex items-center gap-3 font-inter text-sm ${
+                            selectedVacancyId === vac.id
+                              ? "bg-primary text-primary-foreground font-semibold shadow-md"
+                              : "bg-secondary border border-border text-foreground hover:border-accent/40"
+                          }`}
+                        >
+                          <span className="text-lg">{vac.icon}</span>
+                          <span>{vac.position}</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+
+                  {grouped.map(({ group, items }) => (
+                    <div key={group.code} className="mb-3 last:mb-0">
+                      <div className="text-[11px] font-mono uppercase tracking-wider text-muted-foreground px-1 mb-1.5">
+                        {group.icon} {group.name}
+                      </div>
+                      <div className="space-y-1.5">
+                        {items.map((p) => (
+                          <button
+                            key={p.code}
+                            onClick={() => handleVacancyChange(p.code)}
+                            className={`w-full text-left px-3 py-2 rounded-lg transition-all flex items-center gap-2 font-inter text-sm ${
+                              selectedVacancyId === p.code
+                                ? "bg-primary text-primary-foreground font-semibold shadow-md"
+                                : "bg-secondary border border-border text-foreground hover:border-accent/40"
+                            }`}
+                          >
+                            <span className="flex-1">{p.title}</span>
+                            <span className="text-[11px] opacity-60 font-mono">
+                              {Number(p.min).toLocaleString("ru-RU")}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    </div>
                   ))}
                 </div>
               </div>

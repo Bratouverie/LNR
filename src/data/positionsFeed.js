@@ -6,15 +6,16 @@
  * уже содержит все должности с вилками. Два списка разошлись, и в форме
  * «не было должностей», хотя в карточке и анкете они есть.
  *
- * Как теперь. Один источник — открытая дверь СРМ (без ключа, только название
- * и вилка). Добавили должность в СРМ — она появилась здесь без правки кода.
+ * Как теперь. Один источник — открытая дверь СРМ (без ключа): название, код,
+ * группа, вилка, обязанности, квалификация. Добавили должность в СРМ — она
+ * появилась здесь без правки кода.
  *
  * Сеть не должна ломать форму: прошлый ответ держим в памяти браузера и
  * показываем сразу, свежий подменяет молча; если сети нет вовсе — форма
  * работает со старым списком из конфига.
  */
 const FEED_URL = 'https://bro-crm.ru/api/positions/public';
-const CACHE_KEY = 'positions_feed_v1';
+const CACHE_KEY = 'positions_feed_v2';
 const TTL_MS = 10 * 60 * 1000;
 
 function readCache() {
@@ -47,9 +48,13 @@ export async function loadPositionsFeed() {
     const clean = list
       .filter((p) => p && p.title)
       .map((p) => ({
+        code: String(p.code || p.title),
         title: String(p.title),
+        group: String(p.group_code || 'other'),
         min: Number(p.salary_min) || 0,
         max: Number(p.salary_max) || 0,
+        duties: Array.isArray(p.duties) ? p.duties : [],
+        qualifications: String(p.qualifications || ''),
       }));
     if (clean.length) {
       try {

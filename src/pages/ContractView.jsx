@@ -3,6 +3,8 @@ import { useParams, Link } from "react-router-dom";
 import { VACANCIES_DATA } from "@/lib/vacanciesData";
 import { CONTRACT_COMMON, CONTRACT_VACANCY_EXTRA } from "@/lib/contractData";
 import { buildContractBlocks } from "@/lib/contractBuilder";
+import { vacancyFromProfile, findProfile } from "@/data/positionCatalog";
+import { readCachedPositions } from "@/data/positionsFeed";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Download, Printer, Loader2 } from "lucide-react";
@@ -51,7 +53,8 @@ export default function ContractView() {
   const [downloadingDocx, setDownloadingDocx] = useState(false);
   const [downloadingPdf, setDownloadingPdf] = useState(false);
 
-  const vacancy = VACANCIES_DATA.find((v) => v.id === id);
+  const vacancy = VACANCIES_DATA.find((v) => v.id === id)
+    || vacancyFromProfile(findProfile(readCachedPositions(), id));
   const extra = CONTRACT_VACANCY_EXTRA[id];
 
   if (!vacancy || !extra) {

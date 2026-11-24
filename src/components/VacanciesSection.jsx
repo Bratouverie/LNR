@@ -1,114 +1,127 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import { Calculator as CalcIcon, ArrowRight } from "lucide-react";
-import { VACANCIES_DATA } from "@/data/vacanciesConfig";
+import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { ChevronDown, ChevronUp } from "lucide-react";
+import VacancyCard from "./VacancyCard";
+import { loadPositionsFeed, readCachedPositions } from "@/data/positionsFeed";
+import { hotProfiles, restByGroup, vacancyFromProfile } from "@/data/positionCatalog";
 
+/**
+ * ВАКАНСИИ НА ГЛАВНОМ ЭКРАНЕ (слово Мастера 24.11.2026).
+ *
+ * Правило экрана: шесть ходовых должностей — плитками, остальные не выброшены,
+ * а спрятаны за кнопкой «Ещё N должностей» и разложены по родственным группам.
+ * Сорок плиток подряд человек не читает, шесть — читает.
+ *
+ * Источник — справочник СРМ через одну дверь. Своего списка должностей у
+ * экрана нет: добавили должность в СРМ, она появилась здесь сама.
+ */
 export default function VacanciesSection({ onApply, onCalculate }) {
-  const [filter, setFilter] = useState("Все");
+  const [list, setList] = useState(() => readCachedPositions());
+  const [openAll, setOpenAll] = useState(false);
 
-  const categories = ["Все", ...new Set(VACANCIES_DATA.map((v) => v.category))];
-  const filtered = filter === "Все" ? VACANCIES_DATA : VACANCIES_DATA.filter((v) => v.category === filter);
+  useEffect(() => {
+    let alive = true;
+    loadPositionsFeed().then((fresh) => {
+      if (alive && fresh && fresh.length) setList(fresh);
+    });
+    return () => { alive = false; };
+  }, []);
+
+  const hot = hotProfiles(list);
+  const rest = restByGroup(list);
+  const restCount = rest.reduce((n, g) => n + g.items.length, 0);
 
   return (
-    <section id="vacancies" className="py-24 sm:py-32 bg-secondary/50">
+    <section id="vacancies" className="py-16 sm:py-24 bg-muted/30">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-12">
-          <span className="text-accent font-mono text-sm font-semibold tracking-widest uppercase">Вакансии</span>
-          <h2 className="text-3xl sm:text-4xl font-inter font-black text-foreground mt-3 tracking-tight">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="text-center mb-10"
+        >
+          <div className="inline-block px-4 py-1.5 rounded-full bg-accent/10 text-accent font-mono text-xs font-semibold uppercase tracking-wider mb-4">
+            Вакансии
+          </div>
+          <h2 className="font-inter font-black text-3xl sm:text-4xl text-foreground mb-3">
             Выберите специальность
           </h2>
-          <p className="text-muted-foreground font-inter mt-4 max-w-xl mx-auto">
-            Подберите направление, соответствующее вашим навыкам и опыту
+          <p className="text-muted-foreground font-inter max-w-2xl mx-auto">
+            {list.length > 0
+              ? `${list.length} должностей на восстановлении ЛНР и ДНР. Здесь — шесть самых востребованных, остальные открываются одной кнопкой.`
+              : "Подбираем список должностей с окладами…"}
           </p>
-        </div>
+        </motion.div>
 
-        {/* Category filter */}
-        <div className="flex flex-wrap justify-center gap-2 mb-10">
-          {categories.map((cat) => (
-            <button
-              key={cat}
-              onClick={() => setFilter(cat)}
-              className={`px-4 py-2 rounded-lg font-inter text-sm font-medium transition-all ${
-                filter === cat
-                  ? "bg-primary text-primary-foreground shadow-lg"
-                  : "bg-card border border-border text-muted-foreground hover:text-foreground hover:border-accent/30"
-              }`}
+        {hot.length === 0 && (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {[0, 1, 2, 3, 4, 5].map((i) => (
+              <div key={i} className="h-64 rounded-xl bg-card border-2 border-border animate-pulse" />
+            ))}
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {hot.map((p, i) => (
+            <motion.div
+              key={p.code}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.35, delay: i * 0.05 }}
             >
-              {cat}
-            </button>
+              <VacancyCard
+                vacancy={vacancyFromProfile(p)}
+                onApply={onApply}
+                onCalculate={onCalculate}
+              />
+            </motion.div>
           ))}
         </div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filtered.map((v) => (
-            <VacancyCard key={v.id} vacancy={v} onApply={onApply} onCalculate={onCalculate} />
-          ))}
-        </div>
+        {restCount > 0 && (
+          <div className="mt-10">
+            <div className="text-center">
+              <button
+                onClick={() => setOpenAll((v) => !v)}
+                className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-card border-2 border-border hover:border-accent/50 text-foreground font-inter font-semibold transition-all"
+              >
+                {openAll ? (
+                  <>Свернуть список <ChevronUp className="h-4 w-4 text-accent" /></>
+                ) : (
+                  <>Ещё {restCount} должностей <ChevronDown className="h-4 w-4 text-accent" /></>
+                )}
+              </button>
+            </div>
+
+            {openAll && (
+              <div className="mt-10 space-y-12">
+                {rest.map(({ group, items }) => (
+                  <div key={group.code}>
+                    <div className="flex items-center gap-3 mb-5">
+                      <span className="text-2xl">{group.icon}</span>
+                      <h3 className="font-inter font-bold text-xl text-foreground">{group.name}</h3>
+                      <span className="text-xs font-mono text-muted-foreground">{items.length}</span>
+                      <div className="flex-1 h-px bg-border" />
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                      {items.map((p) => (
+                        <VacancyCard
+                          key={p.code}
+                          vacancy={vacancyFromProfile(p)}
+                          onApply={onApply}
+                          onCalculate={onCalculate}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </section>
-  );
-}
-
-function VacancyCard({ vacancy, onApply, onCalculate }) {
-  const navigate = useNavigate();
-  const calcKey = vacancy.salary?.type === "by-category"
-    ? Object.values(vacancy.salary.categories)[0]?.calcKey || vacancy.id
-    : vacancy.id;
-
-  const goToVacancy = () => navigate(`/vacancy/${vacancy.id}`);
-
-  return (
-    <div
-      onClick={goToVacancy}
-      className="group bg-card border-2 border-border rounded-xl p-6 hover:border-accent/40 hover:shadow-xl hover:shadow-accent/5 transition-all duration-300 flex flex-col h-full cursor-pointer hover:-translate-y-1"
-    >
-      <div className="flex items-start justify-between mb-4">
-        <span className="text-xs font-mono font-semibold text-accent bg-accent/10 px-3 py-1 rounded-full">
-          {vacancy.category}
-        </span>
-        <div className="font-mono text-xs text-muted-foreground">{vacancy.conditions?.format || "Вахта 3 мес"}</div>
-      </div>
-
-      <h3 className="font-inter font-bold text-lg text-foreground mb-2">{vacancy.title}</h3>
-
-      <div className="mb-4">
-        <div className="font-mono text-sm font-bold text-foreground">
-          {vacancy.salary?.total || `${vacancy.salaryMin?.toLocaleString("ru-RU")} ₽/мес`}
-        </div>
-        <div className="text-xs text-muted-foreground font-inter mt-0.5">
-          + 625 000 ₽ подъёмные
-        </div>
-      </div>
-
-      <p className="font-inter text-xs text-muted-foreground leading-relaxed mb-4 flex-1">
-        {vacancy.role}
-      </p>
-
-      <div className="flex flex-col gap-2 mt-auto">
-        <button
-          onClick={(e) => { e.stopPropagation(); goToVacancy(); }}
-          className="flex items-center justify-center gap-1 text-xs font-inter font-semibold text-muted-foreground hover:text-accent transition-colors text-center"
-        >
-          Подробнее <ArrowRight className="h-3 w-3" />
-        </button>
-        <div className="flex gap-2">
-          <Button
-            onClick={(e) => { e.stopPropagation(); onApply(vacancy.title); }}
-            className="flex-1 bg-primary hover:bg-accent text-primary-foreground font-inter font-semibold transition-all duration-300 group-hover:bg-accent group-hover:text-accent-foreground text-sm"
-          >
-            Откликнуться
-          </Button>
-          <button
-            onClick={(e) => { e.stopPropagation(); onCalculate && onCalculate(calcKey); }}
-            className="shrink-0 flex items-center gap-1.5 border border-border hover:border-accent hover:text-accent rounded-lg px-3 text-xs font-inter font-medium transition-colors"
-            title="Рассчитать доход"
-          >
-            <CalcIcon className="h-3.5 w-3.5" />
-            <span className="hidden sm:inline">Доход</span>
-          </button>
-        </div>
-      </div>
-    </div>
   );
 }

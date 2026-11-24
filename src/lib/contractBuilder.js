@@ -1,9 +1,23 @@
 import { CONTRACT_COMMON, CONTRACT_VACANCY_EXTRA } from "./contractData";
 import { VACANCIES_DATA } from "./vacanciesData";
+/* Образец договора есть у каждой должности: если её нет в конфиге, берём
+ * профиль из справочника СРМ (слово Мастера 24.11.2026). */
+import { vacancyFromProfile, findProfile } from "@/data/positionCatalog";
+import { readCachedPositions } from "@/data/positionsFeed";
 
 export function buildContractBlocks(vacancyId) {
-  const vacancy = VACANCIES_DATA.find((v) => v.id === vacancyId);
-  const extra = CONTRACT_VACANCY_EXTRA[vacancyId];
+  const vacancy = VACANCIES_DATA.find((v) => v.id === vacancyId)
+    || vacancyFromProfile(findProfile(readCachedPositions(), vacancyId));
+  const extra = CONTRACT_VACANCY_EXTRA[vacancyId] || (vacancy && vacancy.sample ? {
+    fullTitle: vacancy.position,
+    duties: vacancy.duties,
+    requirements: {
+      education: vacancy.pageRequirements && vacancy.pageRequirements.education,
+      experience: vacancy.pageRequirements && vacancy.pageRequirements.experience,
+    },
+    salaryMin: vacancy.salaryMin,
+    salaryMax: vacancy.salaryMax,
+  } : {});
   if (!vacancy || !extra) return null;
 
   const location =
@@ -139,20 +153,36 @@ export function buildContractBlocks(vacancyId) {
 
   // Подписи
   b.push({ type: "heading", text: "ПОДПИСИ СТОРОН" });
-  b.push({ type: "paragraph", text: "РАБОТНИК:" });
-  b.push({ type: "paragraph", text: "Фамилия, имя, отчество: _______________________________" });
-  b.push({ type: "paragraph", text: "Паспортные данные: _______________________________" });
-  b.push({ type: "paragraph", text: "Мобильный телефон: _______________________________" });
-  b.push({ type: "paragraph", text: "Электронная почта: _______________________________" });
-  b.push({ type: "paragraph", text: "Дата: ______________   Подпись: ______________" });
-  b.push({ type: "paragraph", text: "" });
-  b.push({ type: "paragraph", text: "РАБОТОДАТЕЛЬ:" });
-  b.push({ type: "paragraph", text: "ООО «НВС»" });
-  b.push({ type: "paragraph", text: "ОГРН: 1247700464880 | ИНН: 9725162767 | КПП: 772001001" });
-  b.push({ type: "paragraph", text: "111675, город Москва, Лухмановская ул, д. 34, помещ. 15/1" });
-  b.push({ type: "paragraph", text: "Тел.: 8 (800) 222-84-63 | hh@vosstanovim-dnr.ru | vosstanovim-dnr.ru" });
-  b.push({ type: "paragraph", text: "Генеральный директор: С.В. Бобровский   М.П." });
-  b.push({ type: "paragraph", text: "Дата: ______________" });
+  if (vacancy && vacancy.sample) {
+    /* Образец заполнения: выдуманные данные, без росписи и печати — чтобы
+     * кандидат видел, как выглядит договор, и не принимал образец за подписанный. */
+    b.push({ type: "paragraph", text: "ОБРАЗЕЦ ЗАПОЛНЕНИЯ. Подписи и печать не проставлены." });
+    b.push({ type: "paragraph", text: "РАБОТНИК: Иванов Иван Иванович" });
+    b.push({ type: "paragraph", text: "Паспортные данные: серия 4500 № 123456, выдан ОВД района Хамовники г. Москвы, 12.03.2019" });
+    b.push({ type: "paragraph", text: "Адрес регистрации: 119034, г. Москва, ул. Пречистенка, д. 12, кв. 45" });
+    b.push({ type: "paragraph", text: "Мобильный телефон: +7 (900) 123-45-67 | Электронная почта: ivanov@example.ru" });
+    b.push({ type: "paragraph", text: "Дата: 01.12.2026" });
+    b.push({ type: "paragraph", text: "" });
+    b.push({ type: "paragraph", text: "РАБОТОДАТЕЛЬ: ООО «НВС»" });
+    b.push({ type: "paragraph", text: "ОГРН: 1247700464880 | ИНН: 9725162767 | КПП: 772001001" });
+    b.push({ type: "paragraph", text: "111675, город Москва, Лухмановская ул, д. 34, помещ. 15/1" });
+    b.push({ type: "paragraph", text: "Генеральный директор: С.В. Бобровский" });
+  } else {
+    b.push({ type: "paragraph", text: "РАБОТНИК:" });
+    b.push({ type: "paragraph", text: "Фамилия, имя, отчество: _______________________________" });
+    b.push({ type: "paragraph", text: "Паспортные данные: _______________________________" });
+    b.push({ type: "paragraph", text: "Мобильный телефон: _______________________________" });
+    b.push({ type: "paragraph", text: "Электронная почта: _______________________________" });
+    b.push({ type: "paragraph", text: "Дата: ______________   Подпись: ______________" });
+    b.push({ type: "paragraph", text: "" });
+    b.push({ type: "paragraph", text: "РАБОТОДАТЕЛЬ:" });
+    b.push({ type: "paragraph", text: "ООО «НВС»" });
+    b.push({ type: "paragraph", text: "ОГРН: 1247700464880 | ИНН: 9725162767 | КПП: 772001001" });
+    b.push({ type: "paragraph", text: "111675, город Москва, Лухмановская ул, д. 34, помещ. 15/1" });
+    b.push({ type: "paragraph", text: "Тел.: 8 (800) 222-84-63 | hh@vosstanovim-dnr.ru | vosstanovim-dnr.ru" });
+    b.push({ type: "paragraph", text: "Генеральный директор: С.В. Бобровский   М.П." });
+    b.push({ type: "paragraph", text: "Дата: ______________" });
+  }
 
   // Приложения
   b.push({ type: "heading", text: "ПРИЛОЖЕНИЯ К ДОГОВОРУ" });
