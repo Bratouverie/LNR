@@ -124,11 +124,23 @@ export default function Navbar({ onOpenApplication }) {
 
           {/* Logo */}
           <div className="flex items-center gap-3 shrink-0">
-            <img
-              src={GOV_LOGO}
-              alt="Правительство РФ"
-              className="h-10 w-auto object-contain rounded"
-            />
+            {/* Клик по логотипу возвращает на главную и поднимает страницу
+             * наверх (слово Мастера 24.11.2026). */}
+            <Link
+              to="/"
+              onClick={() => {
+                setMobileOpen(false);
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }}
+              title="На главную"
+              aria-label="На главную"
+            >
+              <img
+                src={GOV_LOGO}
+                alt="Правительство РФ"
+                className="h-10 w-auto object-contain rounded"
+              />
+            </Link>
             <div className="flex flex-col leading-tight">
               <span className="text-white font-inter font-bold text-sm tracking-tight">
                 Восстановление ДНР и ЛНР

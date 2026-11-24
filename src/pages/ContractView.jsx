@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useSearchParams } from "react-router-dom";
 import { VACANCIES_DATA } from "@/lib/vacanciesData";
 import { CONTRACT_COMMON, CONTRACT_VACANCY_EXTRA } from "@/lib/contractData";
 import { buildContractBlocks } from "@/lib/contractBuilder";
@@ -64,6 +64,45 @@ export default function ContractView() {
     return () => { alive = false; };
   }, [id]);
 
+  /* Скачивание договора (слово Мастера 24.11.2026): PDF — печать браузера с
+   * сохранением в файл, DOCX — файл Word из той же разметки, что видит человек.
+   * Кнопки на странице вакансии открывают эту страницу с пометкой download. */
+  const [searchParams] = useSearchParams();
+
+  function printPdf() {
+    window.print();
+  }
+
+  function downloadDocx() {
+    const node = document.querySelector("[data-contract-doc]");
+    const inner = node ? node.innerHTML : "";
+    const html =
+      '<html xmlns:o="urn:schemas-microsoft-com:office:office" ' +
+      'xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8">' +
+      '<title>Трудовой договор</title><style>body{font-family:"Times New Roman",serif;' +
+      'font-size:12pt;margin:2cm}table{border-collapse:collapse}td,th{padding:4px}</style>' +
+      "</head><body>" + inner + "</body></html>";
+    const blob = new Blob(["\ufeff", html], { type: "application/msword;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = ("Трудовой_договор_" + id + ".doc").replace(/[\\/:*?"<>|]/g, "_");
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+  }
+
+  useEffect(() => {
+    const want = searchParams.get("download");
+    if (!want) return;
+    const t = setTimeout(() => {
+      if (want === "pdf") printPdf();
+      else if (want === "docx") downloadDocx();
+    }, 700);
+    return () => clearTimeout(t);
+  }, [searchParams, positions.length]);
+
   const vacancy = VACANCIES_DATA.find((v) => v.id === id)
     || vacancyFromProfile(findProfile(positions, id));
   /* У должностей справочника нет своего файла дополнений — собираем из профиля,
@@ -117,20 +156,45 @@ export default function ContractView() {
     );
   }
 
-  const handlePrint = () => {
+  /* Скачивание договора (слово Мастера 24.11.2026): PDF — печать браузера с
+   * сохранением в файл, DOCX — файл Word из той же разметки, что видит человек.
+   * Кнопки на странице вакансии открывают эту страницу с пометкой download,
+   * и файл собирается здесь, в единственном месте, где лежит полный текст. */
+  const [searchParams] = useSearchParams();
+
+  function printPdf() {
     window.print();
-  };
-
-  const handleDownloadPdf = () => {
-    // Скачивание отключено навсегда (приказ Мастера 11.11.2026): файл не формируется,
-    // кнопка показывает бесконечную загрузку.
-    setDownloadingPdf(true);
   }
 
-  const handleDownloadDocx = () => {
-    // Скачивание отключено навсегда (приказ Мастера 11.11.2026).
-    setDownloadingDocx(true);
+  function downloadDocx() {
+    const node = document.querySelector("[data-contract-doc]");
+    const inner = node ? node.innerHTML : "";
+    const html =
+      '<html xmlns:o="urn:schemas-microsoft-com:office:office" ' +
+      'xmlns:w="urn:schemas-microsoft-com:office:word"><head><meta charset="utf-8">' +
+      '<title>Трудовой договор</title><style>body{font-family:"Times New Roman",serif;' +
+      'font-size:12pt;margin:2cm}table{border-collapse:collapse}td,th{padding:4px}</style>' +
+      "</head><body>" + inner + "</body></html>";
+    const blob = new Blob(["\ufeff", html], { type: "application/msword;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = ("Трудовой_договор_" + id + ".doc").replace(/[\\/:*?"<>|]/g, "_");
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
   }
+
+  useEffect(() => {
+    const want = searchParams.get("download");
+    if (!want) return;
+    const t = setTimeout(() => {
+      if (want === "pdf") printPdf();
+      else if (want === "docx") downloadDocx();
+    }, 700);
+    return () => clearTimeout(t);
+  }, [searchParams, positions.length]);
 
   const location = vacancy.conditions?.location || "Мариуполь, Макеевка, Луганск, Алчевск";
 
@@ -146,12 +210,12 @@ export default function ContractView() {
             </Button>
           </Link>
           <div className="flex items-center gap-2">
-            <Button onClick={handlePrint} variant="outline" size="sm" className="gap-2">
+            <Button onClick={printPdf} variant="outline" size="sm" className="gap-2">
               <Printer className="h-4 w-4" />
               Печать
             </Button>
             <Button
-              onClick={handleDownloadDocx}
+              onClick={() => { setDownloadingDocx(true); downloadDocx(); setTimeout(() => setDownloadingDocx(false), 800); }}
               disabled={downloadingDocx}
               variant="outline"
               size="sm"
@@ -161,7 +225,7 @@ export default function ContractView() {
               Скачать DOCX
             </Button>
             <Button
-              onClick={handleDownloadPdf}
+              onClick={() => { setDownloadingPdf(true); printPdf(); setTimeout(() => setDownloadingPdf(false), 800); }}
               disabled={downloadingPdf}
               size="sm"
               className="gap-2 bg-accent hover:bg-accent/90 text-white"
@@ -177,6 +241,7 @@ export default function ContractView() {
       <div className="max-w-5xl mx-auto px-4 py-8 print:py-0 print:px-0 print:max-w-none">
         <div
           ref={printRef}
+          data-contract-doc
           className="bg-white shadow-lg print:shadow-none"
           style={{ fontFamily: "'Times New Roman', Times, serif" }}
         >
@@ -200,7 +265,7 @@ export default function ContractView() {
               </h1>
               <div className="text-sm text-gray-600 mt-2">
                 <span className="inline-block border border-gray-300 rounded px-3 py-1">
-                  ОЗНАКОМИТЕЛЬНАЯ ВЕРСИЯ — официальный договор подписывается на месте несения вахты
+                  ОЗНАКОМИТЕЛЬНАЯ ВЕРСИЯ — подписывается дистанционно в процессе трудоустройства, до отправки в точку сбора
                 </span>
               </div>
             </div>
@@ -481,7 +546,7 @@ export default function ContractView() {
               {/* Нижний колонтитул */}
               <div className="mt-6 pt-3 border-t border-gray-200 text-center text-xs text-gray-400">
                 Дата составления: {CONTRACT_COMMON.contractDate} · Ознакомительная версия трудового договора ·
-                Официальная версия подписывается на месте несения вахты ·
+                Подписывается дистанционно в процессе трудоустройства — до отправки в точку сбора ·
                 <strong className="ml-1">КОНФИДЕНЦИАЛЬНО — только для служебного пользования</strong>
               </div>
             </div>

@@ -26,6 +26,14 @@ export default function VacancyRequirements({ vacancy }) {
           onToggle={() => setExpandedSection(expandedSection === section.id ? null : section.id)}
         />
       ))}
+
+      {requirements.disclaimer && (
+        <div className="bg-accent/10 border border-accent/20 rounded-xl p-5">
+          <p className="text-sm text-muted-foreground font-inter leading-relaxed">
+            <span className="font-bold text-accent">Важно:</span> {requirements.disclaimer}
+          </p>
+        </div>
+      )}
     </div>
   );
 }

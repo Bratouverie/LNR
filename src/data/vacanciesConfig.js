@@ -633,6 +633,42 @@ export function calculateRangeSalary(min, max, level = "min") {
   };
 }
 
+/* Тот же расчёт с налогом, но от вилки справочника СРМ: калькулятор обязан
+ * считать любую из 39 должностей, а не только шесть из конфига. */
+export function calculateRangeSalaryWithTax(min, max, level = "min") {
+  const base = calculateRangeSalary(min, max, level);
+  const monthlySalary = base.monthlySalary;
+  const { stintDuration, oneTimePayment } = GLOBAL_CONFIG.compensation;
+  const taxOnSalary = Math.round(monthlySalary * TAX_RATE);
+  const netMonthlySalary = monthlySalary - taxOnSalary;
+  const totalGrossSalary = monthlySalary * stintDuration;
+  const totalTaxOnSalary = taxOnSalary * stintDuration;
+  const totalNetSalary = totalGrossSalary - totalTaxOnSalary;
+  const totalNetWithBonus = totalNetSalary + oneTimePayment;
+  const totalGrossWithBonus = totalGrossSalary + oneTimePayment;
+  return {
+    monthlySalaryGross: monthlySalary,
+    monthlySalaryGrossFormatted: formatCurrency(monthlySalary),
+    monthlySalaryNet: netMonthlySalary,
+    monthlySalaryNetFormatted: formatCurrency(netMonthlySalary),
+    monthlyTax: taxOnSalary,
+    monthlyTaxFormatted: formatCurrency(taxOnSalary),
+    totalGrossSalary,
+    totalGrossSalaryFormatted: formatCurrency(totalGrossSalary),
+    totalTaxOnSalary,
+    totalTaxOnSalaryFormatted: formatCurrency(totalTaxOnSalary),
+    totalNetSalary,
+    totalNetSalaryFormatted: formatCurrency(totalNetSalary),
+    totalNetWithBonus,
+    totalNetWithBonusFormatted: formatCurrency(totalNetWithBonus),
+    totalGrossWithBonus,
+    totalGrossWithBonusFormatted: formatCurrency(totalGrossWithBonus),
+    oneTimePayment,
+    oneTimePaymentFormatted: formatCurrency(oneTimePayment),
+    stintDuration,
+  };
+}
+
 export function calculateVacancySalary(vacancyId, level = "min", driverCategory = null) {
   const vacancy = VACANCIES.find((v) => v.id === vacancyId);
   if (!vacancy) return null;

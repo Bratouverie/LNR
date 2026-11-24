@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useCalculatorState } from "./useCalculatorState";
 import { loadPositionsFeed, readCachedPositions } from "@/data/positionsFeed";
 import { GROUPS } from "@/data/positionCatalog";
-import { getCommonBenefits, GLOBAL_CONFIG, calculateVacancySalaryWithTax } from "@/data/vacanciesConfig";
+import { getCommonBenefits, GLOBAL_CONFIG, calculateVacancySalaryWithTax, calculateRangeSalaryWithTax } from "@/data/vacanciesConfig";
 
 export default function SalaryCalculator({ preselectedPosition, initialVacancy, onApply }) {
   const effectiveInitial = preselectedPosition || initialVacancy || "raznorabochiy";
@@ -19,11 +19,16 @@ export default function SalaryCalculator({ preselectedPosition, initialVacancy, 
   } = useCalculatorState(effectiveInitial);
 
   const benefits = getCommonBenefits();
-  const salaryWithTax = calculateVacancySalaryWithTax(
-    selectedVacancyId,
-    selectedLevel,
-    isDriver ? selectedDriverCategory : null
-  );
+  /* Должность справочника СРМ приходит формой range: считаем её вилку тем же
+   * налогом. Раньше здесь искали только шесть вакансий конфига — любая из 39
+   * должностей давала null, и клик по ней ронял экран (найдено 24.11.2026). */
+  const salaryWithTax = vacancy && vacancy.salary && vacancy.salary.type === "range"
+    ? calculateRangeSalaryWithTax(vacancy.salary.min, vacancy.salary.max, selectedLevel)
+    : calculateVacancySalaryWithTax(
+        selectedVacancyId,
+        selectedLevel,
+        isDriver ? selectedDriverCategory : null
+      );
 
   if (!salaryWithTax || !vacancy) return null;
 

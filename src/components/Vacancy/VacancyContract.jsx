@@ -47,15 +47,14 @@ export default function VacancyContract({ vacancy }) {
   const [downloadingDocx, setDownloadingDocx] = useState(false);
   const [downloadingPdf, setDownloadingPdf] = useState(false);
 
+  /* Файл собирается на странице договора — единственном месте, где лежит
+   * полный текст. Кнопка открывает её с пометкой download (слово Мастера 24.11.2026). */
   const handleDownloadPdf = () => {
-    // Скачивание отключено навсегда (приказ Мастера 11.11.2026): файл не формируется,
-    // кнопка показывает бесконечную загрузку.
-    setDownloadingPdf(true);
+    window.open(`/contract/${vacancy.id}?download=pdf`, "_blank", "noopener,noreferrer");
   }
 
   const handleDownloadDocx = () => {
-    // Скачивание отключено навсегда (приказ Мастера 11.11.2026).
-    setDownloadingDocx(true);
+    window.open(`/contract/${vacancy.id}?download=docx`, "_blank", "noopener,noreferrer");
   }
 
   if (!contract) {
@@ -76,7 +75,7 @@ export default function VacancyContract({ vacancy }) {
           <div className="flex-1">
             <h3 className="text-xl font-inter font-black text-foreground mb-1">Трудовой договор</h3>
             <p className="text-muted-foreground font-inter text-sm leading-relaxed">
-              Ознакомьтесь с полным текстом трудового договора. Вы можете просмотреть его на сайте или скачать в удобном формате. Официальная версия подписывается на месте несения вахты.
+              Ознакомьтесь с полным текстом трудового договора. Вы можете просмотреть его на сайте или скачать в удобном формате. Официальная версия подписывается дистанционно в процессе трудоустройства, до отправки в точку сбора.
             </p>
           </div>
         </div>
@@ -117,8 +116,7 @@ export default function VacancyContract({ vacancy }) {
 
         <div className="mt-5 p-4 bg-accent/10 border border-accent/20 rounded-xl">
           <p className="text-sm text-muted-foreground font-inter leading-snug">
-            <span className="font-bold text-accent">⚠️ Внимание:</span> Договор соответствует условиям, указанным на этой странице. Официальная версия подписывается на месте несения вахты.
-          </p>
+            <span className="font-bold text-accent">⚠️ Внимание:</span> Договор подписывается дистанционно в процессе трудоустройства — до отправки в точку сбора. Условия на этой странице совпадают с текстом договора.</p>
         </div>
       </div>
     </div>
