@@ -68,6 +68,32 @@ export default function ContractView() {
     salaryMax: vacancy.salaryMax,
   } : {});
 
+  /* Образец для должностей справочника СРМ: показываем тот же текст, что
+   * собирает buildContractBlocks. Длинный ручной рендер ниже рассчитан на поля
+   * конфига и на профиле даёт пустой экран (найдено живьём 24.11.2026). */
+  if (vacancy && vacancy.sample) {
+    const sampleDoc = buildContractBlocks(id);
+    return (
+      <div className="min-h-screen bg-background py-10 px-4">
+        <div className="max-w-3xl mx-auto">
+          <Link
+            to={`/vacancy/${id}`}
+            className="inline-flex items-center gap-2 text-muted-foreground hover:text-accent transition-colors mb-6 font-inter"
+          >
+            <ArrowLeft size={18} /> Назад к вакансии
+          </Link>
+          <div
+            className="bg-white text-black rounded-xl p-8 shadow-sm"
+            dangerouslySetInnerHTML={{ __html: buildContractHtml(sampleDoc) }}
+          />
+          <p className="text-xs text-muted-foreground font-inter mt-4">
+            Образец заполнения: данные работника вымышлены, подписи и печать не проставлены.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
   if (!vacancy) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-4">
