@@ -9,12 +9,15 @@ export function buildContractBlocks(vacancyId, positionsIn) {
   /* Справочник можно передать готовым: страница договора грузит его сама и
    * передаёт список, иначе берём прошлый ответ из памяти браузера. */
   const positions = Array.isArray(positionsIn) ? positionsIn : readCachedPositions();
+  const profile = findProfile(positions, vacancyId);
   const vacancy = VACANCIES_DATA.find((v) => v.id === vacancyId)
-    || vacancyFromProfile(findProfile(positions, vacancyId));
+    || vacancyFromProfile(profile);
   if (!vacancy && !CONTRACT_VACANCY_EXTRA[vacancyId]) return null;
   /* Признак образца у должности справочника лежит в contract.sample, а у
    * вакансии конфига — на верхнем уровне. Смотрим оба места (24.11.2026). */
-  const isSample = Boolean(vacancy && (vacancy.sample || (vacancy.contract && vacancy.contract.sample)));
+  /* Должность, которая есть в справочнике СРМ, всегда получает образец —
+   * даже если в старом конфиге у неё остался свой набор разделов. */
+  const isSample = Boolean(profile || (vacancy && (vacancy.sample || (vacancy.contract && vacancy.contract.sample))));
   const dutiesOf = (v) => (Array.isArray(v && v.duties) ? v.duties : []);
   const extra = isSample ? {
     fullTitle: vacancy.position,
