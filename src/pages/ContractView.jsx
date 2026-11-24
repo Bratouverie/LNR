@@ -55,9 +55,20 @@ export default function ContractView() {
 
   const vacancy = VACANCIES_DATA.find((v) => v.id === id)
     || vacancyFromProfile(findProfile(readCachedPositions(), id));
-  const extra = CONTRACT_VACANCY_EXTRA[id];
+  /* У должностей справочника нет своего файла дополнений — собираем из профиля,
+   * иначе страница образца отвечала «Договор не найден». */
+  const extra = CONTRACT_VACANCY_EXTRA[id] || (vacancy && vacancy.sample ? {
+    fullTitle: vacancy.position,
+    duties: vacancy.duties,
+    requirements: {
+      education: vacancy.pageRequirements && vacancy.pageRequirements.education,
+      experience: vacancy.pageRequirements && vacancy.pageRequirements.experience,
+    },
+    salaryMin: vacancy.salaryMin,
+    salaryMax: vacancy.salaryMax,
+  } : {});
 
-  if (!vacancy || !extra) {
+  if (!vacancy) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-4">
         <p className="text-muted-foreground text-lg">Договор не найден</p>

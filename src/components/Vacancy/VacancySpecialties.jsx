@@ -1,7 +1,45 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
+import { GROUPS } from "@/data/positionCatalog";
+import { readCachedPositions } from "@/data/positionsFeed";
 
 export default function VacancySpecialties({ vacancy }) {
   const specialties = vacancy.specialties || [];
+
+  /* «Строитель» убран, вложенных специальностей у должностей справочника нет.
+   * Вместо пустой вкладки показываем родственные должности той же группы —
+   * это и есть вложенность, о которой говорил Мастер (24.11.2026). */
+  if (specialties.length === 0) {
+    const g = GROUPS.find((x) => x.name === vacancy.category);
+    const siblings = g
+      ? readCachedPositions().filter((p) => p.group === g.code && p.code !== vacancy.id).slice(0, 8)
+      : [];
+    if (siblings.length === 0) return null;
+    return (
+      <div className="bg-card border border-border rounded-2xl p-6 sm:p-8">
+        <h3 className="font-inter font-bold text-lg text-foreground mb-1">
+          Рядом в группе «{g.name}»
+        </h3>
+        <p className="text-muted-foreground font-inter text-sm mb-5">
+          Родственные должности с окладами. Если не подходит эта — посмотрите соседние.
+        </p>
+        <div className="grid sm:grid-cols-2 gap-3">
+          {siblings.map((p) => (
+            <Link
+              key={p.code}
+              to={`/vacancy/${p.code}`}
+              className="flex items-center justify-between gap-3 px-4 py-3 rounded-xl bg-secondary border border-border hover:border-accent/50 transition-all"
+            >
+              <span className="font-inter text-sm text-foreground">{p.title}</span>
+              <span className="font-mono text-xs text-accent shrink-0">
+                {Number(p.min).toLocaleString("ru-RU")} ₽
+              </span>
+            </Link>
+          ))}
+        </div>
+      </div>
+    );
+  }
 
   if (specialties.length === 0) {
     return (
