@@ -71,14 +71,14 @@ export default function Contract2255() {
             href={CONTRACT_DOC.urlFull}
             target="_blank"
             rel="noreferrer"
-            className="inline-flex items-center justify-center gap-2 rounded-xl bg-primary px-5 py-3 font-inter font-bold text-sm text-primary-foreground hover:opacity-90 transition"
+            className="inline-flex items-center justify-center gap-2 rounded-xl bg-accent px-5 py-3 font-inter font-bold text-sm text-white shadow-lg shadow-accent/25 hover:bg-accent/90 transition"
           >
             <FileText className="h-4 w-4" />
             Правила № 2255 — PDF, {CONTRACT_DOC.pages} стр.
           </a>
           <a
             href="#callback"
-            className="inline-flex items-center justify-center gap-2 rounded-xl border border-border bg-card px-5 py-3 font-inter font-bold text-sm text-foreground hover:border-accent hover:text-accent transition"
+            className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-accent/30 bg-white px-5 py-3 font-inter font-bold text-sm text-[#0B2545] hover:border-accent hover:bg-accent/5 transition"
           >
             Задать вопрос по документу
           </a>
