@@ -1,4 +1,4 @@
-import { FileText, Phone, ShieldCheck, MapPin, Stethoscope, PenTool, Banknote, Plane, ClipboardCheck } from "lucide-react";
+import { FileText, Phone, ShieldCheck, MapPin, Stethoscope, PenTool, Banknote, Train, ClipboardCheck } from "lucide-react";
 
 const IMG_BASE = "https://media.base44.com/images/public/69f4a665db2c72a42818d397";
 
@@ -6,13 +6,13 @@ const STEPS = [
   { day: "День 1", icon: FileText, title: "Заявка", desc: "Заполните форму на сайте или позвоните", docs: "Паспорт, резюме", photo: `${IMG_BASE}/8b95f93b2_44.png` },
   { day: "День 2–3", icon: Phone, title: "Собеседование", desc: "По телефону или через мессенджер", docs: "Опыт работы, контакты", photo: `${IMG_BASE}/a4316753b_45.png` },
   { day: "День 4", icon: ShieldCheck, title: "Проверка безопасности", desc: "Проверка в органах безопасности (2–3 дня)", docs: "Справка о несудимости", photo: `${IMG_BASE}/ff40ec17c_46.png` },
-  { day: "День 5", icon: MapPin, title: "Приглашение в точку сбора", desc: "При положительном решении — приглашение", docs: "Билет до точки сбора", photo: `${IMG_BASE}/872d8fcd8_47.png` },
+  { day: "День 5", icon: FileText, title: "Приглашение и трудовой договор", desc: "При положительном решении — приглашение. Трудовой договор по ТК РФ подписывается до выезда в точку сбора", docs: "Трудовой договор (2 экз.), билет до точки сбора", photo: `${IMG_BASE}/872d8fcd8_47.png` },
   { day: "День 5–7", icon: ClipboardCheck, title: "Прибытие в точку сбора", desc: "Собрать чемодан + документы ПН", docs: "Все оригиналы документов", photo: `${IMG_BASE}/2df680490_48.png` },
   { day: "День 8–9", icon: Stethoscope, title: "Медкомиссия + допуски", desc: "ВТ–ПТ, 08:00–16:00, оформление секретности", docs: "Медкарта, анализы", photo: `${IMG_BASE}/5dc9f4c1a_49.png` },
-  { day: "День 10", icon: PenTool, title: "Подписание договора", desc: "Трудовой договор по ТК РФ", docs: "Трудовой договор (2 экз.)", photo: `${IMG_BASE}/1a1a48e10_50.png` },
+  { day: "День 10", icon: PenTool, title: "Подписание контракта", desc: "В точке сбора один раз подписывается контракт с Минобороны. Трудовой договор уже подписан до выезда", docs: "Контракт (2 экз.)", photo: `${IMG_BASE}/1a1a48e10_50.png` },
   { day: "День 11", icon: Banknote, title: "Выплата подъёмных", desc: "625 000 ₽ на карту в течение 5 дней", docs: "Банковская карта", photo: `${IMG_BASE}/1295e9837_51.png` },
-  { day: "День 12", icon: Plane, title: "Отправка самолётом", desc: "В Ростов-на-Дону → автобус в Макеевку", docs: "Билет (за счёт программы)", photo: `${IMG_BASE}/37c637a36_52.png` },
-  { day: "День 13–15", icon: MapPin, title: "Первый день работы", desc: "Распределение по объектам, начало работы", docs: "Пропуск на объект", photo: `${IMG_BASE}/73b491507_53.png` },
+  { day: "День 12", icon: Train, title: "Дорога на рабочую базу", desc: "Поездом из Воронежа в Ростов-на-Дону, дальше спецтранспортом до Мариуполя", docs: "Билет (за счёт программы)", photo: `${IMG_BASE}/37c637a36_52.png` },
+  { day: "День 13–15", icon: MapPin, title: "Первый день на базе в Мариуполе", desc: "Распределение по объектам, начало работы", docs: "Пропуск на объект", photo: `${IMG_BASE}/73b491507_53.png` },
 ];
 
 export default function ProcessSection() {

@@ -96,7 +96,7 @@ export default function ContractSection() {
 
         <div className="mt-6 flex flex-col items-center gap-3">
           <p className="font-inter text-xs text-muted-foreground text-center max-w-lg">
-            Трудовой договор по ТК РФ на вахту 3+1 и контракт с Минобороны в пункте сбора. Полный текст —
+            Трудовой договор по ТК РФ на вахту 3+1 подписывается до выезда, контракт с Минобороны — один раз в пункте сбора. Полный текст —
             Приложение № 9 к госпрограмме, {CONTRACT_DOC.pages} страниц.
           </p>
           <div className="grid w-full gap-3 sm:grid-cols-2">
