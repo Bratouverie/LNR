@@ -7,8 +7,7 @@ import DayOfSpecialist from "../components/DayOfSpecialist";
 
 import RecoveryObjects from "../components/RecoveryObjects";
 import InteractiveMap from "../components/InteractiveMap";
-import NotMilitaryContract from "../components/NotMilitaryContract";
-import Contract2255 from "../components/Contract2255";
+import ContractSection from "../components/ContractSection";
 import ProcessSection from "../components/ProcessSection";
 import CollectionPoints from "../components/CollectionPoints";
 import MedicalCommission from "../components/MedicalCommission";
@@ -95,8 +94,7 @@ export default function Home() {
       <InteractiveMap onApply={openApplicationForObject} />
 
       {/* SECTION 7 – NOT MILITARY CONTRACT */}
-      <NotMilitaryContract />
-      <Contract2255 />
+      <ContractSection />
 
       {/* SECTION 8 – PROCESS (10 STEPS) */}
       <ProcessSection />

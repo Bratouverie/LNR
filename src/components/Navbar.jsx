@@ -28,7 +28,7 @@ const NAV_GROUPS = [
     items: [
       { label: "Три уровня защиты", href: "#safety" },
       { label: "Честно о рисках", href: "#risks" },
-      { label: "Не контракт с МО", href: "#not-military" },
+      { label: "Не контракт с МО", href: "#contract" },
       { label: "Отдых в городах", href: "#rest-cities" },
     ],
   },
